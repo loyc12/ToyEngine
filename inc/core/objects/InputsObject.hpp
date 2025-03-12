@@ -1,9 +1,9 @@
-#ifndef PHYSICOBJECT_HPP
-# define PHYSICOBJECT_HPP
+#ifndef INPUTSOBJECT_HPP
+# define INPUTSOBJECT_HPP
 
 # include "./BaseObject.hpp"
 
-class PhysicObject : public BaseObject
+class InputsObject : public BaseObject
 {
 	protected:
 	// ================================ ATTRIBUTES
@@ -15,10 +15,10 @@ class PhysicObject : public BaseObject
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
-		PhysicObject();
-		PhysicObject( const PhysicObject &obj );
-		PhysicObject &operator=( const PhysicObject &obj );
-		~PhysicObject();
+		InputsObject();
+		InputsObject( const InputsObject &obj );
+		InputsObject &operator=( const InputsObject &obj );
+		~InputsObject();
 
 	// ================================ ACCESSORS
 
@@ -27,4 +27,4 @@ class PhysicObject : public BaseObject
 	// ================================ METHODS
 };
 
-#endif // PHYSICOBJECT_HPP
+#endif // INPUTSOBJECT_HPP

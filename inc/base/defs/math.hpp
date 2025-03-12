@@ -1,6 +1,7 @@
 #ifndef MATH_HPP
 # define MATH_HPP
 
+# include <cmath>
 # include "./_libs.hpp"
 
 #define E		2.71828182845904523536f

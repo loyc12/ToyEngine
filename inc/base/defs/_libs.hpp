@@ -2,9 +2,9 @@
 # define LIBS_HPP
 
 # include <iostream>
-# include <iomanip>
+//# include <iomanip>
 # include <sstream>
-# include <fstream>
+//# include <fstream>
 
 # include <string>
 # include <array>
@@ -13,13 +13,13 @@
 # include <map>
 # include <iterator>
 
-# include <algorithm>
+//# include <algorithm>
 
 # include <cstdlib>
 # include <cstdint>
 # include <cmath>
 # include <ctime>
-# include <string.h>
+//# include <string.h>
 # include <raylib.h>
 
 using std::cout;

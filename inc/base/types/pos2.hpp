@@ -9,7 +9,7 @@ typedef struct
 	int y;
 } pos2_s;
 
-typedef list<   pos2_s > posList2_t ;
+typedef 	list< pos2_s > posList2_t ;
 typedef vector< pos2_s > posVect2_t ;
 
 pos2_s getNullPos2();

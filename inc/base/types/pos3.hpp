@@ -10,7 +10,7 @@ typedef struct
 	int z;
 } pos3_s;
 
-typedef list<   pos3_s > posList3_t ;
+typedef 	list< pos3_s > posList3_t ;
 typedef vector< pos3_s > posVect3_t ;
 
 pos3_s getNullPos3();

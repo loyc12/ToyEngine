@@ -3,6 +3,28 @@
 
 # include "./BaseObject.hpp"
 
-// declare functions here
+class ScriptObject : public BaseObject
+{
+	protected:
+	// ================================ ATTRIBUTES
+
+	// ================================ CORE METHODS
+		void onAdd();
+		void onCpy();
+		void ondel();
+
+	public:
+	// ================================ CONSTRUCTORS / DESTRUCTORS
+		ScriptObject();
+		ScriptObject( const ScriptObject &obj );
+		ScriptObject &operator=( const ScriptObject &obj );
+		~ScriptObject();
+
+	// ================================ ACCESSORS
+
+	// ================================ OPERATORS
+
+	// ================================ METHODS
+};
 
 #endif // SCRIPTOBJECT_HPP
