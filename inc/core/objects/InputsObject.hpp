@@ -6,12 +6,15 @@
 class InputsObject : public BaseObject
 {
 	protected:
-	// ================================ ATTRIBUTES
+		// ================================ ATTRIBUTES
+	bool isControlled; // whether this object should check for input
 
 	// ================================ CORE METHODS
-		void onAdd();
-		void onCpy();
-		void ondel();
+		void onInput(); // ENTRYPOINT : acts based on the global engine inputs
+
+		virtual void onAdd();
+		virtual void onCpy( const InputsObject &obj );
+		virtual void onDel();
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
@@ -21,6 +24,7 @@ class InputsObject : public BaseObject
 		~InputsObject();
 
 	// ================================ ACCESSORS
+		bool getIsControlled() const;			void setIsControlled( bool controlled );
 
 	// ================================ OPERATORS
 

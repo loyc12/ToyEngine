@@ -10,11 +10,20 @@ class Object2D : public InputsObject, public ScriptObject, public PhysicObject, 
 {
 	protected:
 	// ================================ ATTRIBUTES
+		// bool isControlled;	// whether this object should check for input
+		// bool isActive;			// whether this object should run its scripts
+		// bool isDynamic;		// whether this object should calculate physics
+		// bool isVisible;		// whether this object should be rendered
 
 	// ================================ CORE METHODS
-		void onAdd();
-		void onCpy();
-		void ondel();
+		// void onInput();		// checks conditions based on the global engine inputs
+		// void onUpdate();		// runs the object's scripts
+		// void onTick();			// calculates the object's physics
+		// void onRefresh();	// (re)renders the object
+
+		virtual void onAdd();
+		virtual void onCpy( const Object2D &obj );
+		virtual void onDel();
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS

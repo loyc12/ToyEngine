@@ -19,10 +19,10 @@ class Engine // make this a static class ???
 
 	// ================================ CORE METHODS
 		void init();
-		void launch();
-			void getInput();
-			void runScripts();
-			void runPhysics();
+		void launch(); // calls the functions below in a loop, each of which itters on every object
+			void readInputs(); // reads the inputs and updates the global var struct
+			void runPhysics(); // calls the onTick() method of every object
+			void runScripts(); // calls the onUpdate() method of every object
 			void renderObjects();
 		void close();
 

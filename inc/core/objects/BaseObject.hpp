@@ -27,16 +27,16 @@ class BaseObject
 {
 	protected:
 	// ================================ ATTRIBUTES
-		objectType_e _type;
+		static objectType_e _type;
 		static uint _id;
 
 	// ================================ CORE METHODS
-		void onAdd();
-		void onCpy();
-		void ondel();
-
 		bool addToRegister();
 		bool delFromRegister();
+
+		virtual void onAdd();
+		virtual void onCpy( const BaseObject &obj );
+		virtual void onDel();
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
@@ -46,6 +46,7 @@ class BaseObject
 		~BaseObject();
 
 	// ================================ ACCESSORS
+		objectType_e getType() const;			uint getID() const;
 
 	// ================================ OPERATORS
 

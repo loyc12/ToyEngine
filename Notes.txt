@@ -6,3 +6,6 @@ Performance
 	- Use fixed_t instead of floats
 	- Use angle_t
 	- Use scalar_t instead of floats
+
+General
+	- For Object2D classes, make sure not to call the onAdd/onCpy/onDel functions multiple times

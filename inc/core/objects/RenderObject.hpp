@@ -7,11 +7,14 @@ class RenderObject : public BaseObject
 {
 	protected:
 	// ================================ ATTRIBUTES
+		bool isVisible; // whether this object should be rendered
 
 	// ================================ CORE METHODS
-		void onAdd();
-		void onCpy();
-		void ondel();
+		void onRefresh(); // ENTRYPOINT : (re)renders the object
+
+		virtual void onAdd();
+		virtual void onCpy( const RenderObject &obj );
+		virtual void onDel();
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
@@ -21,6 +24,7 @@ class RenderObject : public BaseObject
 		~RenderObject();
 
 	// ================================ ACCESSORS
+		bool getIsVisible() const;			void setIsVisible( bool visible );
 
 	// ================================ OPERATORS
 

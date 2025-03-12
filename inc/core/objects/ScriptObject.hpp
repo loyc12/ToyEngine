@@ -7,11 +7,14 @@ class ScriptObject : public BaseObject
 {
 	protected:
 	// ================================ ATTRIBUTES
+		bool isActive; // whether this object should run its scripts
 
 	// ================================ CORE METHODS
-		void onAdd();
-		void onCpy();
-		void ondel();
+		void onUpdate(); // ENTRYPOINT : runs the object's scripts
+
+		virtual void onAdd();
+		virtual void onCpy( const ScriptObject &obj );
+		virtual void onDel();
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
@@ -21,6 +24,7 @@ class ScriptObject : public BaseObject
 		~ScriptObject();
 
 	// ================================ ACCESSORS
+		bool getIsActive() const;			void setIsActive( bool active );
 
 	// ================================ OPERATORS
 
