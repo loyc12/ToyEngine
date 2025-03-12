@@ -1,0 +1,8 @@
+Style
+	- Put colour into the makefile messages
+
+Performance
+	- Improve the performance of log() / get_time_str()
+	- Use fixed_t instead of floats
+	- Use angle_t
+	- Use scalar_t instead of floats
