@@ -3,7 +3,7 @@
 
 # include "./BaseObject.hpp"
 
-class PhysicObject : public BaseObject
+class PhysicObject : virtual public BaseObject
 {
 	protected:
 	// ================================ ATTRIBUTES
@@ -15,12 +15,11 @@ class PhysicObject : public BaseObject
 		Vector2 acceleration;
 
 	// ================================ CORE METHODS
-		void onTick(); // ENTRYPOINT : calculates the object's physics
 		void collideWith( BaseObject *other );
 
-		virtual void onAdd();
-		virtual void onCpy( const PhysicObject &obj );
-		virtual void onDel();
+		void onAdd() override;
+		void onCpy( const PhysicObject &obj );
+		void onDel() override;
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
@@ -30,15 +29,16 @@ class PhysicObject : public BaseObject
 		~PhysicObject();
 
 	// ================================ ACCESSORS
-	bool getIsDynamic() const;						void setIsDynamic( bool dynamic );
-	bool getIsCollide() const;						void setIsCollide( bool collide );
-	Vector2 getPosition() const;					void setPosition( const Vector2 &pos );
-	Vector2 getVelocity() const;					void setVelocity( const Vector2 &vel );
-	Vector2 getAcceleration() const;			void setAcceleration( const Vector2 &acc );
+		bool getIsDynamic() const;						void setIsDynamic( bool dynamic );
+		bool getIsCollide() const;						void setIsCollide( bool collide );
+		Vector2 getPosition() const;					void setPosition( const Vector2 &pos );
+		Vector2 getVelocity() const;					void setVelocity( const Vector2 &vel );
+		Vector2 getAcceleration() const;			void setAcceleration( const Vector2 &acc );
 
 	// ================================ OPERATORS
 
 	// ================================ METHODS
+		void onTick(); // ENTRYPOINT : calculates the object's physics
 };
 
 #endif // PHYSICOBJECT_HPP

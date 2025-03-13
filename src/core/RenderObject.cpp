@@ -2,29 +2,54 @@
 
 // ================================ CORE METHODS
 
-void RenderObject::onRefresh()
-{
-	if ( !isVisible ) return;
-
-	// (re)renders the object
-}
-
 void RenderObject::onAdd()
 {
-	BaseObject::onAdd();
-	_type = E_RENDER;
+	log( "RenderObject::onAdd()" );
+	isVisible = true;
 }
+
 void RenderObject::onCpy( const RenderObject &obj )
 {
-	BaseObject::onCpy( obj );
-	isVisible = obj.isVisible;
+	log( "RenderObject::onCpy()" );
+	isVisible = obj.getIsVisible();
 }
+
 void RenderObject::onDel()
 {
-	BaseObject::onDel();
+	log( "RenderObject::onDel()" );
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
+
+RenderObject::RenderObject() : BaseObject( E_RENDER )
+{
+	BaseObject::onAdd();
+	RenderObject::onAdd();
+}
+
+RenderObject::RenderObject( const RenderObject &obj ) : BaseObject( obj )
+{
+	if ( this == &obj ) return;
+
+	BaseObject::onCpy( obj );
+	RenderObject::onCpy( obj );
+}
+
+RenderObject &RenderObject::operator=( const RenderObject &obj )
+{
+	if ( this == &obj ) return *this;
+
+	BaseObject::operator=( obj );
+	RenderObject::onCpy( obj );
+
+	return *this;
+}
+
+RenderObject::~RenderObject() // inverted call order
+{
+	RenderObject::onDel();
+	BaseObject::onDel();
+}
 
 // ================================ ACCESSORS
 
@@ -34,3 +59,9 @@ void RenderObject::setIsVisible( bool visible ) { isVisible = visible; }
 // ================================ OPERATORS
 
 // ================================ METHODS
+
+void RenderObject::onRefresh() // (re)renders the object
+{
+	log( "RenderObject::onRefresh()" );
+	if ( !isVisible ) return;
+}

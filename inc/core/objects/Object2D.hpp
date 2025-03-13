@@ -6,7 +6,12 @@
 # include "./PhysicObject.hpp"
 # include "./RenderObject.hpp"
 
-class Object2D : public InputsObject, public ScriptObject, public PhysicObject, public RenderObject
+class Object2D :
+	virtual public BaseObject,
+	virtual public InputsObject,
+	virtual public ScriptObject,
+	virtual public PhysicObject,
+	virtual public RenderObject
 {
 	protected:
 	// ================================ ATTRIBUTES
@@ -16,14 +21,9 @@ class Object2D : public InputsObject, public ScriptObject, public PhysicObject, 
 		// bool isVisible;		// whether this object should be rendered
 
 	// ================================ CORE METHODS
-		// void onInput();		// checks conditions based on the global engine inputs
-		// void onUpdate();		// runs the object's scripts
-		// void onTick();			// calculates the object's physics
-		// void onRefresh();	// (re)renders the object
-
-		virtual void onAdd();
-		virtual void onCpy( const Object2D &obj );
-		virtual void onDel();
+		void onAdd() override;
+		void onCpy( const Object2D &obj );
+		void onDel() override;
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
@@ -37,6 +37,10 @@ class Object2D : public InputsObject, public ScriptObject, public PhysicObject, 
 	// ================================ OPERATORS
 
 	// ================================ METHODS
+		// void onInput();		// checks conditions based on the global engine inputs
+		// void onUpdate();		// runs the object's scripts
+		// void onTick();			// calculates the object's physics
+		// void onRefresh();	// (re)renders the object
 };
 
 #endif // OBJECT2D_HPP

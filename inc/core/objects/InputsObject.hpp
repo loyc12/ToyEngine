@@ -3,18 +3,16 @@
 
 # include "./BaseObject.hpp"
 
-class InputsObject : public BaseObject
+class InputsObject : virtual public BaseObject
 {
 	protected:
 		// ================================ ATTRIBUTES
-	bool isControlled; // whether this object should check for input
+		bool isControlled; // whether this object should check for input
 
 	// ================================ CORE METHODS
-		void onInput(); // ENTRYPOINT : acts based on the global engine inputs
-
-		virtual void onAdd();
-		virtual void onCpy( const InputsObject &obj );
-		virtual void onDel();
+		void onAdd() override;
+		void onCpy( const InputsObject &obj );
+		void onDel() override;
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
@@ -29,6 +27,7 @@ class InputsObject : public BaseObject
 	// ================================ OPERATORS
 
 	// ================================ METHODS
+		void onInput(); // ENTRYPOINT : acts based on the global engine inputs
 };
 
 #endif // INPUTSOBJECT_HPP

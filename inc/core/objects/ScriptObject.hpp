@@ -3,18 +3,16 @@
 
 # include "./BaseObject.hpp"
 
-class ScriptObject : public BaseObject
+class ScriptObject : virtual public BaseObject
 {
 	protected:
 	// ================================ ATTRIBUTES
 		bool isActive; // whether this object should run its scripts
 
 	// ================================ CORE METHODS
-		void onUpdate(); // ENTRYPOINT : runs the object's scripts
-
-		virtual void onAdd();
-		virtual void onCpy( const ScriptObject &obj );
-		virtual void onDel();
+		void onAdd() override;
+		void onCpy( const ScriptObject &obj );
+		void onDel() override;
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
@@ -29,6 +27,7 @@ class ScriptObject : public BaseObject
 	// ================================ OPERATORS
 
 	// ================================ METHODS
+		void onUpdate(); // ENTRYPOINT : runs the object's scripts
 };
 
 #endif // SCRIPTOBJECT_HPP

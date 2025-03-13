@@ -3,18 +3,16 @@
 
 # include "./BaseObject.hpp"
 
-class RenderObject : public BaseObject
+class RenderObject : virtual public BaseObject
 {
 	protected:
 	// ================================ ATTRIBUTES
 		bool isVisible; // whether this object should be rendered
 
 	// ================================ CORE METHODS
-		void onRefresh(); // ENTRYPOINT : (re)renders the object
-
-		virtual void onAdd();
-		virtual void onCpy( const RenderObject &obj );
-		virtual void onDel();
+		void onAdd() override;
+		void onCpy( const RenderObject &obj );
+		void onDel() override;
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
@@ -29,6 +27,7 @@ class RenderObject : public BaseObject
 	// ================================ OPERATORS
 
 	// ================================ METHODS
+		void onRefresh(); // ENTRYPOINT : (re)renders the object
 };
 
 #endif // RENDEROBJECT_HPP

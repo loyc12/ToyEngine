@@ -1,54 +1,74 @@
 #include "../../inc/core.hpp"
 
-// ================================ CORE METHODS
+// ================================ MEMORY METHODS
+
+uint getNewID() // TMP : put in Engine instead
+{
+	static uint id = 0;
+	return id++;
+}
 
 bool BaseObject::addToRegister()
 {
-	_id = 0; // use global id instead ?
+	log( "BaseObject::addToRegister()" );
+	_id = getNewID();
 
-	// add this object to the register
+	// add this object to the register here
+
 	return true;
 }
 bool BaseObject::delFromRegister()
 {
-	// delete this object from the register
+	log( "BaseObject::delFromRegister()" );
+
+	// delete this object from the register here
+
 	return true;
+
 }
+// ================================ CORE METHODS
 
 void BaseObject::onAdd()
 {
-	_type = E_BASEOBJ;
+	log( "BaseObject::onAdd()" );
+	addToRegister();
 }
+
 void BaseObject::onCpy( const BaseObject &obj )
 {
-	_type = obj._type;
-	// copy the object's attributes
+	log( "BaseObject::onCpy()" );
+	_type = obj.getType();
 }
-void BaseObject::onDel()
+
+void BaseObject::onDel() // inverted call order
 {
+	log( "BaseObject::onDel()" );
+	delFromRegister();
 }
+
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
-BaseObject::BaseObject()
+BaseObject::BaseObject() : _type( E_BASEOBJ ) { BaseObject::onAdd(); }
+BaseObject::BaseObject( objectType_e type ) : _type( type ) { BaseObject::onAdd(); }
+
+BaseObject::BaseObject( const BaseObject &obj ) : _type( E_BASEOBJ )
 {
-	addToRegister();
-	onAdd();
+	if ( this == &obj ) return;
+
+	BaseObject::onCpy( obj );
 }
-BaseObject::BaseObject( const BaseObject &obj )
-{
-	onCpy( obj );
-}
+
 BaseObject &BaseObject::operator=( const BaseObject &obj )
 {
-	onCpy( obj );
+	if ( this == &obj ) return *this;
+
+	BaseObject::onCpy( obj );
+
 	return *this;
 }
-BaseObject::~BaseObject()
-{
-	delFromRegister();
-	onDel();
-}
+
+BaseObject::~BaseObject() { BaseObject::onDel(); }
 
 // ================================ ACCESSORS
 

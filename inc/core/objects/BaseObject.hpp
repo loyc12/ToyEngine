@@ -12,41 +12,46 @@ typedef enum : byte_t
 	E_PHYSIC,
 	E_RENDER,
 
-	E_CNTRLR, // INPUTS + SCRIPT
-	E_SPRITE, // PHYSIC + RENDER
+	E_CNTRLR, // INPUTS + SCRIPT ?
+	E_SPRITE, // PHYSIC + RENDER ?
 
 	E_OBJ2D,  // CNTRLR + SPRITE
 	//E_OBJ3D,
 
-	E_MENU,   // CNTRLR + RENDER
+	E_MENU,   // CNTRLR + RENDER ???
 
 } objectType_e;
 
 
 class BaseObject
 {
-	protected:
-	// ================================ ATTRIBUTES
-		static objectType_e _type;
-		static uint _id;
-
-	// ================================ CORE METHODS
+	private:
+	// ================================ MEMORY METHODS
 		bool addToRegister();
 		bool delFromRegister();
 
-		virtual void onAdd();
-		virtual void onCpy( const BaseObject &obj );
-		virtual void onDel();
+		protected:
+		// ================================ ATTRIBUTES
+		objectType_e _type;
+		uint _id;
+
+		virtual void onAdd() = 0;
+		void onCpy( const BaseObject &obj );
+		virtual void onDel() = 0;;
+
+	// ================================ CORE METHODS
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		BaseObject();
+		BaseObject( objectType_e type );
 		BaseObject( const BaseObject &obj );
 		BaseObject &operator=( const BaseObject &obj );
-		~BaseObject();
+		virtual ~BaseObject();
 
 	// ================================ ACCESSORS
-		objectType_e getType() const;			uint getID() const;
+		objectType_e getType() const;
+		uint getID() const;
 
 	// ================================ OPERATORS
 

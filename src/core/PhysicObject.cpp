@@ -2,40 +2,65 @@
 
 // ================================ CORE METHODS
 
-void PhysicObject::onTick()
-{
-	if ( !isDynamic ) return;
-
-	// calculates the object's physics
-}
-
-void PhysicObject::collideWith( BaseObject *other )
-{
-	if ( !isCollide ) return;
-
-	// checks for collision with another object
-}
-
 void PhysicObject::onAdd()
 {
-	BaseObject::onAdd();
-	_type = E_PHYSIC;
+	log( "PhysicObject::onAdd()" );
+	isDynamic = true;
+	isCollide = true;
+
+	position = Vector2();
+	velocity = Vector2();
+	acceleration = Vector2();
 }
+
 void PhysicObject::onCpy( const PhysicObject &obj )
 {
-	BaseObject::onCpy( obj );
-	isDynamic = obj.isDynamic;
-	isCollide = obj.isCollide;
-	position = obj.position;
-	velocity = obj.velocity;
-	acceleration = obj.acceleration;
+	log( "PhysicObject::onCpy()" );
+	isDynamic = obj.getIsDynamic();
+	isCollide = obj.getIsCollide();
+
+	position = obj.getPosition();
+	velocity = obj.getVelocity();
+	acceleration = obj.getAcceleration();
 }
+
 void PhysicObject::onDel()
 {
-	BaseObject::onDel();
+	log( "PhysicObject::onDel()" );
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
+
+PhysicObject::PhysicObject() : BaseObject( E_PHYSIC )
+{
+	BaseObject::onAdd();
+	PhysicObject::onAdd();
+}
+
+PhysicObject::PhysicObject( const PhysicObject &obj ) : BaseObject( obj )
+{
+	if ( this == &obj ) return;
+
+	BaseObject::onCpy( obj );
+	PhysicObject::onCpy( obj );
+}
+
+PhysicObject &PhysicObject::operator=( const PhysicObject &obj )
+{
+	if ( this == &obj ) return *this;
+
+	BaseObject::operator=( obj );
+	PhysicObject::onCpy( obj );
+
+	return *this;
+}
+
+PhysicObject::~PhysicObject() // inverted call order
+{
+	PhysicObject::onDel();
+	BaseObject::onDel();
+}
+
 
 // ================================ ACCESSORS
 
@@ -56,3 +81,9 @@ void PhysicObject::setAcceleration( const Vector2 &acc ) { acceleration = acc; }
 // ================================ OPERATORS
 
 // ================================ METHODS
+
+void PhysicObject::onTick() // calculates the object's physics
+{
+	log( "PhysicObject::onTick()" );
+	if ( !isDynamic ) return;
+}
