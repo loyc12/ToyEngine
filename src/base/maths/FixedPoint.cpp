@@ -1,4 +1,4 @@
-#include "../../../inc/class/FixedPoint.hpp"
+#include "../../../inc/base.hpp"
 
 ostream &operator<<( ostream &out, const FixedPoint &fp )
 {

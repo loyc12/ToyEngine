@@ -1,33 +1,23 @@
-#include "../../inc/deps.hpp"
+#include "../../inc/base.hpp"
 
+
+void log_time()
+{
+	log( "< clock time", INFO );
+}
+
+int log( strstr msg, log_level_e lvl ){ return log( msg.str().c_str(), lvl ); }
+int log( string msg, log_level_e lvl ){ return log( msg.c_str(), lvl ); }
 int log( const char *msg, log_level_e lvl )
 {
 	if ( lvl > LOG_LVL ) return 1;
-
-	string	time_str = get_time_str();
-	const char *time = time_str.c_str();
-
 	switch ( lvl )
 	{
-		case DEBUG:
-			cout << time << " " << CLR_BLU << "[DEBUG] " << CLR_RST << msg << endl;
-			break;
-
-		case INFO:
-			cout << time << " " << CLR_GRN << "[INFO]  " << CLR_RST << msg << endl;
-			break;
-
-		case WARN:
-			cout << time << " " << CLR_YEL << "[WARN]  " << CLR_RST << msg << endl;
-			break;
-
-		case ERROR:
-			cout << time << " " << CLR_RED << "[ERROR] " << CLR_RST << msg << endl;
-			break;
-
-		default:
-			cout << time << " " << CLR_MAG << "[????]  " << CLR_RST << msg << endl;
-			break;
+		case DEBUG: cout << get_time_str() << " " << CLR_BLU << "[DEBUG] " << CLR_RST << msg << endl; break;
+		case INFO:  cout << get_time_str() << " " << CLR_GRN << "[INFO]  " << CLR_RST << msg << endl; break;
+		case WARN:  cout << get_time_str() << " " << CLR_YEL << "[WARN]  " << CLR_RST << msg << endl; break;
+		case ERROR: cout << get_time_str() << " " << CLR_RED << "[ERROR] " << CLR_RST << msg << endl; break;
+		default:    cout << get_time_str() << " " << CLR_MAG << "[?????] " << CLR_RST << msg << endl;
 	}
 	return 0;
 }

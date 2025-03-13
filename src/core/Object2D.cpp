@@ -20,6 +20,8 @@ void Object2D::onCpy( const Object2D &obj )
 	// isDynamic = obj.getIsDynamic();
 	// isCollide = obj.getIsCollide();
 	// isVisible = obj.getIsVisible();
+
+	( void )obj;
 }
 
 void Object2D::onDel()
@@ -29,19 +31,22 @@ void Object2D::onDel()
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
-Object2D::Object2D() : BaseObject( E_OBJ2D )
+Object2D::Object2D() :
+	BaseObject( E_OBJ2D ),
+	InputsObject(),
+	ScriptObject(),
+	PhysicObject(),
+	RenderObject()
 {
-	BaseObject::onAdd();
-
-	InputsObject::onAdd();
-	ScriptObject::onAdd();
-	PhysicObject::onAdd();
-	RenderObject::onAdd();
-
 	Object2D::onAdd();
 }
 
-Object2D::Object2D( const Object2D &obj )
+Object2D::Object2D( const Object2D &obj ) :
+	BaseObject( E_OBJ2D ),
+	InputsObject( obj ),
+	ScriptObject( obj ),
+	PhysicObject( obj ),
+	RenderObject( obj )
 {
 	if ( this == &obj ) return;
 
@@ -73,13 +78,6 @@ Object2D &Object2D::operator=( const Object2D &obj )
 
 Object2D::~Object2D() // inverted call order
 {
-	Object2D::onDel();
-
-	RenderObject::onDel();
-	PhysicObject::onDel();
-	ScriptObject::onDel();
-	InputsObject::onDel();
-
 	BaseObject::onDel();
 }
 

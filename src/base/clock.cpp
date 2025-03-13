@@ -1,5 +1,4 @@
-#include "../../inc/deps.hpp"
-#include <cstdio>
+#include "../../inc/base.hpp"
 
 clock_t start_time;
 struct timespec clock_res;
@@ -31,10 +30,10 @@ void start_clock()
 
 string get_time_str()
 {
-	std::stringstream ss;
+	strstr ss;
 	ss << std::setfill( '0' );
 
-	clock_t time = get_time();
+	clock_t time = get_runtime();
 
 	// uint years = time / clock_per_year;
 	// ss << years << "y";
@@ -68,8 +67,8 @@ string get_time_str()
 
 string get_time_str_raw()
 {
-	stringstream ss;
-	clock_t time = get_time();
+	strstr ss;
+	clock_t time = get_runtime();
 
 	uint seconds = time / clock_per_sec;
 	ss << seconds << ".";
@@ -81,6 +80,6 @@ string get_time_str_raw()
 	return ss.str();
 }
 
-ulong  get_time() { return ( double )( clock() - start_time ); }
+ulong  get_runtime() { return ( double )( clock() - start_time ); }
 ulong  get_time_since( clock_t start ) { return ( double )( clock() - start ); }
 ulong  get_time_diff( clock_t start, clock_t end ) { return ( double )( end - start ); }

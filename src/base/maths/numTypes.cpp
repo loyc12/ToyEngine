@@ -1,5 +1,4 @@
-#include "../../../inc/def/numTypes.hpp"
-#include "../../../inc/deps.hpp"
+#include "../../../inc/base.hpp"
 
 // ================================ SCALAR
 

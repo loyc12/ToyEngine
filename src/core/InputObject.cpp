@@ -23,7 +23,6 @@ void InputsObject::onDel()
 
 InputsObject::InputsObject() : BaseObject( E_INPUTS )
 {
-	BaseObject::onAdd();
 	InputsObject::onAdd();
 }
 
@@ -39,7 +38,7 @@ InputsObject &InputsObject::operator=( const InputsObject &obj )
 {
 	if ( this == &obj ) return *this;
 
-	BaseObject::operator=( obj );
+	BaseObject::onCpy( obj );
 	InputsObject::onCpy( obj );
 
 	return *this;
@@ -48,7 +47,6 @@ InputsObject &InputsObject::operator=( const InputsObject &obj )
 InputsObject::~InputsObject() // inverted call order
 {
 	InputsObject::onDel();
-	BaseObject::onDel();
 }
 
 // ================================ ACCESSORS

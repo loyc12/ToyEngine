@@ -33,7 +33,6 @@ void PhysicObject::onDel()
 
 PhysicObject::PhysicObject() : BaseObject( E_PHYSIC )
 {
-	BaseObject::onAdd();
 	PhysicObject::onAdd();
 }
 
@@ -49,7 +48,7 @@ PhysicObject &PhysicObject::operator=( const PhysicObject &obj )
 {
 	if ( this == &obj ) return *this;
 
-	BaseObject::operator=( obj );
+	BaseObject::onCpy( obj );
 	PhysicObject::onCpy( obj );
 
 	return *this;
@@ -58,7 +57,6 @@ PhysicObject &PhysicObject::operator=( const PhysicObject &obj )
 PhysicObject::~PhysicObject() // inverted call order
 {
 	PhysicObject::onDel();
-	BaseObject::onDel();
 }
 
 

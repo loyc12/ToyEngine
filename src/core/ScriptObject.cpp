@@ -23,7 +23,6 @@ void ScriptObject::onDel()
 
 ScriptObject::ScriptObject() : BaseObject( E_SCRIPT )
 {
-	BaseObject::onAdd();
 	ScriptObject::onAdd();
 }
 
@@ -39,7 +38,7 @@ ScriptObject &ScriptObject::operator=( const ScriptObject &obj )
 {
 	if ( this == &obj ) return *this;
 
-	BaseObject::operator=( obj );
+	BaseObject::onCpy( obj );
 	ScriptObject::onCpy( obj );
 
 	return *this;
@@ -48,7 +47,6 @@ ScriptObject &ScriptObject::operator=( const ScriptObject &obj )
 ScriptObject::~ScriptObject() // inverted call order
 {
 	ScriptObject::onDel();
-	BaseObject::onDel();
 }
 
 // ================================ ACCESSORS

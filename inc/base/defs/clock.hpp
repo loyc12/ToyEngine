@@ -16,7 +16,8 @@ extern time_t clock_per_week;
 extern time_t clock_per_year;
 
 void start_clock();
-ulong get_time();
+
+ulong get_runtime();
 ulong get_time_since( clock_t start );
 ulong get_time_diff( clock_t start, clock_t end );
 

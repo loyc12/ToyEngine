@@ -46,10 +46,10 @@ class Noise
 		double extrapolate( int xsb, int ysb, int zsb, int wsb, double dx, double dy, double dz, double dw)	const;
 };
 
-Noise *getNoise();
+//Noise *getNoise();
 
-double getNoiseValue( double x, double y );
-double getNoiseValue( double x, double y, double z );
-double getNoiseValue( double x, double y, double z, double w );
+//double getNoiseValue( double x, double y );
+//double getNoiseValue( double x, double y, double z );
+//double getNoiseValue( double x, double y, double z, double w );
 
 #endif // NOISE_HPP

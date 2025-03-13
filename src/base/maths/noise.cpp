@@ -1,11 +1,12 @@
-#include "../../../inc/def/noise.hpp"
-#include "../../../inc/class/Engine.hpp"
+#include "../../../inc/base.hpp"
 
-Noise *getNoise() { return getEngine()->getNoise(); }
+//#include "../../../inc/class/Engine.hpp"
 
-double getNoiseValue( double x, double y ) { return getNoise()->eval( x, y ); }
-double getNoiseValue( double x, double y, double z ) { return getNoise()->eval( x, y, z ); }
-double getNoiseValue( double x, double y, double z, double w ) { return getNoise()->eval( x, y, z, w ); }
+//Noise *getNoise() { return getEngine()->getNoise(); }
+
+//double getNoiseValue( double x, double y ) { return getNoise()->eval( x, y ); }
+//double getNoiseValue( double x, double y, double z ) { return getNoise()->eval( x, y, z ); }
+//double getNoiseValue( double x, double y, double z, double w ) { return getNoise()->eval( x, y, z, w ); }
 
 using namespace std;
 

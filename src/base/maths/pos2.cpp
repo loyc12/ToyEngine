@@ -1,5 +1,4 @@
-#include "../../../inc/struct/pos2.hpp"
-#include "../../../inc/deps.hpp"
+#include "../../../inc/base.hpp"
 
 pos2_s getNullPos2() { return { 0, 0 }; }
 
@@ -16,90 +15,6 @@ pos2_s getPos2( int v )    { return { v, v }; }
 pos2_s getPos2( long v )   { return { ( int )v, ( int )v }; }
 pos2_s getPos2( float v )  { return { ( int )v, ( int )v }; }
 pos2_s getPos2( double v ) { return { ( int )v, ( int )v }; }
-
-pos2_s getRelPosFromSide2D( side_e side ) { return getRelPosFromDir2D( ( dir_e )side ); }
-pos2_s getRelPosFromDir2D( dir_e dir )
-{
-	pos2_s pos = getNullPos2();
-
-	switch ( dir )
-	{
-		case NOD:
-			break;
-		case XPD:
-			pos.x = 1;
-			break;
-		case XND:
-			pos.x = -1;
-			break;
-		case YPD:
-			pos.y = 1;
-			break;
-		case YND:
-			pos.y = -1;
-			break;
-
-		default:
-			log( "Invalid direction", ERROR );
-			throw std::invalid_argument( "Invalid direction" );
-			break;
-	}
-	return pos;
-}
-
-pos2_s getRelPosFromVertex2D( vertex_e vertex )
-{
-	pos2_s pos = getNullPos2();
-
-	// Ugly af but does the job
-	switch ( vertex )
-	{
-		case MMM:
-			break;
-
-		case NMM:
-			pos.y = 1;
-			break;
-		case SMM:
-			pos.y = -1;
-			break;
-		case MEM:
-			pos.x = 1;
-			break;
-		case MWM:
-			pos.x = -1;
-			break;
-
-		case NEM:
-			pos.x = 1;
-			pos.y = 1;
-			break;
-		case NWM:
-			pos.x = -1;
-			pos.y = 1;
-			break;
-		case SEM:
-			pos.x = 1;
-			pos.y = -1;
-			break;
-		case SWM:
-			pos.x = -1;
-			pos.y = -1;
-			break;
-
-		default:
-			log( "Invalid vertex", ERROR );
-			throw std::invalid_argument( "Invalid vertex" );
-			break;
-	}
-	return pos;
-}
-
-pos2_s getNeighbour( pos2_s const &pos, dir_e dir )
-{
-	pos2_s relPos = getRelPosFromDir2D( dir );
-	return pos + relPos;
-}
 
 // ================================ DISTANCE METHODS
 

@@ -13,7 +13,10 @@ typedef enum
 	DEBUG,
 } log_level_e;
 
-int log( const char *msg, log_level_e lvl = DEBUG );
+void log_time();
+int  log( strstr msg, log_level_e lvl = DEBUG );
+int  log( string msg, log_level_e lvl = DEBUG );
+int  log( const char *msg, log_level_e lvl = DEBUG );
 
 bool divtest( byte_t d );
 bool divtest( word_t d );

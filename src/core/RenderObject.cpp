@@ -23,7 +23,6 @@ void RenderObject::onDel()
 
 RenderObject::RenderObject() : BaseObject( E_RENDER )
 {
-	BaseObject::onAdd();
 	RenderObject::onAdd();
 }
 
@@ -39,7 +38,7 @@ RenderObject &RenderObject::operator=( const RenderObject &obj )
 {
 	if ( this == &obj ) return *this;
 
-	BaseObject::operator=( obj );
+	BaseObject::onCpy( obj );
 	RenderObject::onCpy( obj );
 
 	return *this;
@@ -48,7 +47,6 @@ RenderObject &RenderObject::operator=( const RenderObject &obj )
 RenderObject::~RenderObject() // inverted call order
 {
 	RenderObject::onDel();
-	BaseObject::onDel();
 }
 
 // ================================ ACCESSORS
