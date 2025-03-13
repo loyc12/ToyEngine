@@ -1,7 +1,7 @@
 #include "../../inc/base.hpp"
+#include <bits/types/struct_timeval.h>
 
-clock_t start_time;
-struct timespec clock_res;
+struct timeval start_time;
 time_t clock_per_micro;
 time_t clock_per_milli;
 time_t clock_per_sec;
@@ -13,8 +13,7 @@ time_t clock_per_year;
 
 void start_clock()
 {
-	start_time = clock();
-	clock_getres( CLOCK_REALTIME, &clock_res );
+	gettimeofday( &start_time, NULL );
 
 	clock_per_micro = 1;
 	clock_per_milli = clock_per_micro * 1000;
@@ -33,7 +32,7 @@ string get_time_str()
 	strstr ss;
 	ss << std::setfill( '0' );
 
-	clock_t time = get_runtime();
+	ulong time = get_runtime();
 
 	// uint years = time / clock_per_year;
 	// ss << years << "y";
@@ -64,11 +63,10 @@ string get_time_str()
 
 	return ss.str();
 }
-
 string get_time_str_raw()
 {
 	strstr ss;
-	clock_t time = get_runtime();
+	ulong time = get_runtime();
 
 	uint seconds = time / clock_per_sec;
 	ss << seconds << ".";
@@ -80,6 +78,21 @@ string get_time_str_raw()
 	return ss.str();
 }
 
-ulong  get_runtime() { return ( double )( clock() - start_time ); }
-ulong  get_time_since( clock_t start ) { return ( double )( clock() - start ); }
-ulong  get_time_diff( clock_t start, clock_t end ) { return ( double )( end - start ); }
+ulong get_time_diff( struct timeval start, struct timeval end )
+{
+  time_t sec_diff = end.tv_sec - start.tv_sec;
+  suseconds_t usec_diff = end.tv_usec - start.tv_usec;
+
+  return sec_diff * clock_per_sec + usec_diff; // Microseconds
+}
+ulong get_time_since( struct timeval since )
+{
+	struct timeval now;
+	gettimeofday( &now, NULL );
+
+	return get_time_diff( since, now );
+}
+ulong get_runtime()
+{
+	return get_time_since( start_time );
+}

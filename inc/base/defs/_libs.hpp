@@ -15,13 +15,15 @@
 
 # include <algorithm>
 
+# include <sys/time.h>
 # include <unistd.h>
+# include <string.h>
+
 # include <cstdio>
 # include <cstdlib>
 # include <cstdint>
 # include <cmath>
-# include <ctime>
-# include <string.h>
+
 # include <raylib.h>
 
 using std::cout;

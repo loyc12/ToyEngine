@@ -3,8 +3,7 @@
 
 # include "./_libs.hpp"
 
-extern clock_t start_time;
-extern struct timespec clock_res;
+extern struct timeval clock_res;
 
 extern time_t clock_per_micro;
 extern time_t clock_per_milli;
@@ -18,8 +17,8 @@ extern time_t clock_per_year;
 void start_clock();
 
 ulong get_runtime();
-ulong get_time_since( clock_t start );
-ulong get_time_diff( clock_t start, clock_t end );
+ulong get_time_since( struct timeval since );
+ulong get_time_diff( struct timeval start, struct timeval end );
 
 string get_time_str();
 string get_time_str_raw();
