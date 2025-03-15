@@ -13,6 +13,9 @@ typedef enum
 	DEBUG,
 } log_level_e;
 
+#define SHOW_OBJ_MSG true
+#define LOG_LVL DEBUG
+
 void log_time();
 bool log( strstr msg, log_level_e lvl = DEBUG, objID_t id = 0 );
 bool log( string msg, log_level_e lvl = DEBUG, objID_t id = 0 );

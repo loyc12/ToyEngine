@@ -1,4 +1,6 @@
 #include "../../inc/core.hpp"
+#include <cstddef>
+#include <raylib.h>
 
 // ================================ MEMORY METHODS
 
@@ -15,7 +17,7 @@ Engine::~Engine()
 {
 	log( "Engine::~Engine()" );
 
-	if ( state != E_UNINITIALIZED )
+	if ( state > E_UNINITIALIZED )
 		close();
 }
 
@@ -55,7 +57,12 @@ void Engine::close()
 		return;
 	}
 
+	DelAllObjects();
+
 	state = E_UNINITIALIZED;
+
+	CloseWindow();
+
 }
 
 void Engine::launch()
@@ -74,12 +81,24 @@ void Engine::launch()
 
 	while ( state >= E_RUNNING && !WindowShouldClose() )
 	{
-		log( "Engine::launch() : Looping", INFO );
-		readInputs();
-		runPhysics();
-		runScripts();
-		renderObjects();
+		runStep();
 	}
+}
+
+void Engine::runStep()
+{
+	log( "Engine::runeStep()" );
+
+	if ( state < E_INITIALIZED )
+	{
+		log( "Engine::runeStep() : Engine not initialized", ERROR );
+		return;
+	}
+
+	readInputs();
+	runPhysics();
+	runScripts();
+	renderObjects();
 }
 
 void Engine::readInputs()
@@ -190,6 +209,14 @@ bool Engine::delObjectByID( objID_t id )
 	log( "Engine::delObjectByID() : Failed to find requested object", WARN );
 
 	return EXIT_FAILURE;
+}
+
+void Engine::DelAllObjects()
+{
+	log( "Engine::DelAllObjects()" );
+
+	while ( !ObjectContainer.empty() ) { delete ObjectContainer[ 0 ]; }
+	ObjectContainer.clear();
 }
 
 // ================================ ACCESSORS

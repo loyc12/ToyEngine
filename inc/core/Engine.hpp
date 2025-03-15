@@ -39,18 +39,20 @@ class Engine // make this a static class ???
 	// ================================ CORE METHODS
 		void start();
 		void close();
-		void launch(); // calls the functions below in a loop, each of which itters on every object
+		void launch(); // calls the method below in a loop
+		void runStep(); // calls the 4 methods below in order
 
-		void readInputs(); // reads the inputs and updates the global var struct
+		void readInputs(); // reads the inputs, updates the global var struct & calls the onInput() method of every object
 		void runPhysics(); // calls the onTick() method of every object
 		void runScripts(); // calls the onUpdate() method of every object
-		void renderObjects();
+		void renderObjects(); // calls the onRefresh() method of every object
 
 	// ================================ OBJECTS METHODS
 
 		BaseObject *addObject( BaseObject *ob, bool checkForDupID = false ); // NOTE : put to true by default ?
 		bool delObject( BaseObject *obj );
 		bool delObjectByID( objID_t id );
+		void DelAllObjects();
 
 	// ================================ ACCESSORS
 		BaseObject *getObjectByID( objID_t id );

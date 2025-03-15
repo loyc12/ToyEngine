@@ -23,7 +23,7 @@ bool log( const char *msg, log_level_e lvl, objID_t id )
 		default:    cout << CLR_MAG << "[?????] " << CLR_RST << msg; break;
 	}
 
-	if ( id > 0 ) cout << CLR_LGR << " [" << id << "]" << CLR_RST;
+	if ( SHOW_OBJ_MSG && id > 0 ) cout << CLR_LGR << " [" << id << "]" << CLR_RST;
 
 	cout << endl;
 

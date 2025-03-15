@@ -1,5 +1,5 @@
 
-.PHONY += compile tidy run re rerun clear clean fclear fclean
+.PHONY += compile tidy run re rerun clear clean fclear fclean leaks
 
 # Define a recursive wildcard function
 rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
@@ -75,3 +75,9 @@ fclean: clean
 	@printf "Cleaning executable...\n"
 	@rm -f $(PROJECT_NAME)$(EXT)
 	@printf "Executable cleaned\n"
+
+# Check for memory leaks
+leaks:
+	@printf "Checking for memory leaks...\n"
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./$(PROJECT_NAME)$(EXT)
+	@printf "Memory leaks checked\n"
