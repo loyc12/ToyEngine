@@ -24,7 +24,6 @@ class PhysicObject : virtual public BaseObject
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		PhysicObject();
-		PhysicObject( objID_t id );
 		PhysicObject( const PhysicObject &obj );
 		PhysicObject &operator=( const PhysicObject &obj );
 		~PhysicObject();
@@ -39,7 +38,7 @@ class PhysicObject : virtual public BaseObject
 	// ================================ OPERATORS
 
 	// ================================ METHODS
-		void onTick(); // ENTRYPOINT : calculates the object's physics
+		void onTick() override; // ENTRYPOINT : calculates the object's physics
 };
 
 #endif // PHYSICOBJECT_HPP

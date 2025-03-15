@@ -17,7 +17,6 @@ class ScriptObject : virtual public BaseObject
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		ScriptObject();
-		ScriptObject( objID_t id );
 		ScriptObject( const ScriptObject &obj );
 		ScriptObject &operator=( const ScriptObject &obj );
 		~ScriptObject();
@@ -28,7 +27,7 @@ class ScriptObject : virtual public BaseObject
 	// ================================ OPERATORS
 
 	// ================================ METHODS
-		void onUpdate(); // ENTRYPOINT : runs the object's scripts
+		void onUpdate() override; // ENTRYPOINT : runs the object's scripts
 };
 
 #endif // SCRIPTOBJECT_HPP

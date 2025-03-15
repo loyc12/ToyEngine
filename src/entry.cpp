@@ -3,18 +3,23 @@
 int main()
 {
 	start_clock();
+	Engine *engine = Engine::getEngine();
 
-	log( "Entering main()", INFO );
+	log( "Adding object", INFO );
+	Object2D *obj = new Object2D();
 
-	Engine *engine = getEngine();
+	log( "Deleting object", INFO );
+	delete obj;
 
-	engine->addNewObject();
-
-	log( "Launching", INFO );
-
+	//log( "Launching Engine", INFO );
 	engine->launch();
 
-	log( "Exiting main()", INFO );
+	log( "Closing Engine", INFO );
+	engine->close();
 
+	log( "Object count : ", INFO );
+	cout << engine->getObjectCount() << endl;
+
+	log( "Exiting main()", INFO );
 	return 0;
 }

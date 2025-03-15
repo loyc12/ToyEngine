@@ -38,18 +38,16 @@ class BaseObject
 		objID_t _id;
 		objectType_e _type;
 
-		virtual void onAdd() = 0;
+		virtual void onAdd();
 		void onCpy( const BaseObject &obj );
-		virtual void onDel() = 0;;
+		virtual void onDel();
 
 	// ================================ CORE METHODS
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		BaseObject();
-		BaseObject( objID_t id );
 		BaseObject( objectType_e type );
-		BaseObject( objID_t id, objectType_e type );
 
 		BaseObject( const BaseObject &obj );
 		BaseObject &operator=( const BaseObject &obj );
@@ -62,6 +60,10 @@ class BaseObject
 	// ================================ OPERATORS
 
 	// ================================ METHODS
+	virtual void onInput();		// checks conditions based on the global engine inputs
+	virtual void onUpdate();		// runs the object's scripts
+	virtual void onTick();			// calculates the object's physics
+	virtual void onRefresh();	// (re)renders the object
 
 
 

@@ -4,25 +4,24 @@
 
 void ScriptObject::onAdd()
 {
-	log( "ScriptObject::onAdd()" );
+	log( "ScriptObject::onAdd()", DEBUG, _id );
 	isActive = true;
 }
 
 void ScriptObject::onCpy( const ScriptObject &obj )
 {
-	log( "ScriptObject::onCpy()" );
+	log( "ScriptObject::onCpy()", DEBUG, _id );
 	isActive = obj.getIsActive();
 }
 
 void ScriptObject::onDel()
 {
-	log( "ScriptObject::onDel()" );
+	log( "ScriptObject::onDel()", DEBUG, _id );
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
 ScriptObject::ScriptObject() : BaseObject( E_SCRIPT ){ ScriptObject::onAdd();}
-ScriptObject::ScriptObject( objID_t id ) : BaseObject( id, E_SCRIPT ){ ScriptObject::onAdd();}
 
 ScriptObject::ScriptObject( const ScriptObject &obj ) : BaseObject( obj )
 {
@@ -59,5 +58,5 @@ void ScriptObject::setIsActive( bool active ) { isActive = active; }
 void ScriptObject::onUpdate()	// runs the object's scripts
 {
 	if ( !isActive ) return;
-	log( "ScriptObject::onUpdate()" );
+	log( "ScriptObject::onUpdate()", DEBUG, _id );
 }

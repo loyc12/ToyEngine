@@ -5,7 +5,6 @@
 # include "./ScriptObject.hpp"
 # include "./PhysicObject.hpp"
 # include "./RenderObject.hpp"
-#include <cstdint>
 
 class Object2D :
 	virtual public BaseObject,
@@ -29,7 +28,6 @@ class Object2D :
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		Object2D();
-		Object2D( objID_t id );
 		Object2D( const Object2D &obj );
 		Object2D &operator=( const Object2D &obj );
 		~Object2D();
@@ -39,10 +37,10 @@ class Object2D :
 	// ================================ OPERATORS
 
 	// ================================ METHODS
-		// void onInput();		// checks conditions based on the global engine inputs
-		// void onUpdate();		// runs the object's scripts
-		// void onTick();			// calculates the object's physics
-		// void onRefresh();	// (re)renders the object
+		//virtual void onInput();		// checks conditions based on the global engine inputs
+		//virtual void onUpdate();	// runs the object's scripts
+		//virtual void onTick();		// calculates the object's physics
+		//virtual void onRefresh();	// (re)renders the object
 };
 
 #endif // OBJECT2D_HPP

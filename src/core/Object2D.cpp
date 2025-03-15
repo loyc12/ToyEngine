@@ -4,7 +4,7 @@
 
 void Object2D::onAdd()
 {
-	log( "Object2D::onAdd()" );
+	log( "Object2D::onAdd()", DEBUG, _id );
 	// isControlled = true;
 	// isActive = true;
 	// isDynamic = true;
@@ -14,7 +14,7 @@ void Object2D::onAdd()
 
 void Object2D::onCpy( const Object2D &obj )
 {
-	log( "Object2D::onCpy()" );
+	log( "Object2D::onCpy()", DEBUG, _id );
 	// isControlled = obj.getIsControlled();
 	// isActive = obj.getIsActive();
 	// isDynamic = obj.getIsDynamic();
@@ -26,7 +26,7 @@ void Object2D::onCpy( const Object2D &obj )
 
 void Object2D::onDel()
 {
-	log( "Object2D::onDel()" );
+	log( "Object2D::onDel()", DEBUG, _id );
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
@@ -37,19 +37,7 @@ Object2D::Object2D() :
 	ScriptObject(),
 	PhysicObject(),
 	RenderObject()
-{
-	Object2D::onAdd();
-}
-
-Object2D::Object2D( objID_t id ) :
-	BaseObject( id, E_OBJ2D ),
-	InputsObject(),
-	ScriptObject(),
-	PhysicObject(),
-	RenderObject()
-{
-	Object2D::onAdd();
-}
+{ Object2D::onAdd(); }
 
 Object2D::Object2D( const Object2D &obj ) :
 	BaseObject( E_OBJ2D ),
@@ -88,7 +76,7 @@ Object2D &Object2D::operator=( const Object2D &obj )
 
 Object2D::~Object2D() // inverted call order
 {
-	BaseObject::onDel();
+	Object2D::onDel();
 }
 
 // ================================ ACCESSORS

@@ -1,5 +1,4 @@
 #include "../../inc/core.hpp"
-#include <raylib.h>
 
 // ================================ MEMORY METHODS
 
@@ -18,6 +17,17 @@ Engine::~Engine()
 
 	if ( state != E_UNINITIALIZED )
 		close();
+}
+
+Engine *Engine::getEngine()
+{
+	log( "Engine::getInstance()" );
+
+	static Engine *instance;
+
+	if ( instance == nullptr ){ instance = new Engine(); }
+
+	return instance;
 }
 
 // ================================ CORE METHODS
@@ -64,6 +74,7 @@ void Engine::launch()
 
 	while ( state >= E_RUNNING && !WindowShouldClose() )
 	{
+		log( "Engine::launch() : Looping", INFO );
 		readInputs();
 		runPhysics();
 		runScripts();
@@ -75,25 +86,23 @@ void Engine::readInputs()
 {
 	log( "Engine::readInputs()" );
 
-	//if ( IsKeyPressed( KEY_ESCAPE )){ CloseWindow(); }
-
 	// update gloal inputs here
 
-	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { it->onInput(); }
+	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onInput(); }
 }
 
 void Engine::runPhysics()
 {
 	log( "Engine::runPhysics()" );
 
-	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { it->onTick(); }
+	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onTick(); }
 }
 
 void Engine::runScripts()
 {
 	log( "Engine::runScripts()" );
 
-	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { it->onUpdate(); }
+	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onUpdate(); }
 }
 
 void Engine::renderObjects()
@@ -104,58 +113,62 @@ void Engine::renderObjects()
 
 	ClearBackground( { 64, 64, 64, 255 } );
 
-	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { it->onRefresh(); }
+	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onRefresh(); }
 
 	EndDrawing();
 }
 
 // ================================ OBJECTS METHODS
 
-Object2D *Engine::addNewObject()
+BaseObject *Engine::addObject( BaseObject *obj, bool checkForDupID ) // NOTE : false by default for now
 {
-	log( "Engine::addNewObject()" );
+	log( "Engine::addObject()" );
 
-	Object2D *Obj = new Object2D( getNewID() );
-	ObjectContainer.push_back( *Obj );
-
-	return Obj;
-}
-
-Object2D *Engine::getObjectByID( objID_t id )
-{
-	log( "Engine::getObjectByID()" );
-
-	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ )
+	if ( obj == nullptr )
 	{
-		if ( it->getID() == id )
-			return &*it;
+		log( "Engine::addObject() : obj cannot be a nullptr", WARN );
+		return nullptr;
 	}
 
-	log( "Engine::getObjectByID() : Failed to find requested object", WARN );
+	if ( checkForDupID )
+	{
+		for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ )
+		{
+			if ( *it == obj  )
+			{
+				log( "Engine::addObject() : obj already in container", WARN );
+				return nullptr;
+			}
+		}
+	}
 
-	return nullptr;
+	log( "Engine::addObject() : Adding object");
+	ObjectContainer.push_back( obj );
+
+	return obj;
 }
 
-bool Engine::delObject( Object2D *obj )
+bool Engine::delObject( BaseObject *obj )
 {
 	log( "Engine::delObject()" );
 
 	if ( obj == nullptr )
 	{
-		log( "Engine::delObject() : obj cannot be a nullptr", INFO );
+		log( "Engine::delObject() : obj cannot be a nullptr", WARN );
 		return EXIT_FAILURE;
 	}
 
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ )
 	{
-		if ( &*it == obj )
+		if ( *it == obj )
 		{
+			log( "Engine::delObject() : Deleting object" );
 			ObjectContainer.erase( it );
 			return EXIT_SUCCESS;
 		}
 	}
 
-	log( "Engine::delObject() : Failed to find requested object", INFO );
+	log( "Engine::delObject() : Failed to find requested object", WARN );
 
 	return EXIT_FAILURE;
 }
@@ -166,19 +179,39 @@ bool Engine::delObjectByID( objID_t id )
 
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ )
 	{
-		if ( it->getID() == id )
+		if ( (*it)->getID() == id )
 		{
+			log( "Engine::delObjectByID() : Deleting object" );
 			ObjectContainer.erase( it );
 			return EXIT_SUCCESS;
 		}
 	}
 
-	log( "Engine::delObjectByID() : Failed to find requested object", INFO );
+	log( "Engine::delObjectByID() : Failed to find requested object", WARN );
 
 	return EXIT_FAILURE;
 }
 
 // ================================ ACCESSORS
+
+
+BaseObject *Engine::getObjectByID( objID_t id )
+{
+	log( "Engine::getObjectByID()" );
+
+	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ )
+	{
+		if ( (*it)->getID() == id )
+		{
+			log( "Engine::getObjectByID() : Found requested object" );
+			return *it;
+		}
+	}
+
+	log( "Engine::getObjectByID() : Failed to find requested object", WARN );
+
+	return nullptr;
+}
 
 objID_t Engine::getNewID()
 {
@@ -194,18 +227,13 @@ objID_t Engine::getState() const
 	return state;
 }
 
+uint32_t Engine::getObjectCount() const
+{
+	log( "Engine::getObjectCount()" );
+
+	return ObjectContainer.size();
+}
+
 // ================================ OPERATORS
 
 // ================================ METHODS
-
-Engine *getEngine()
-{
-	static Engine *engine = nullptr;
-
-	if ( engine == nullptr )
-	{
-		engine = new Engine();
-	}
-
-	return engine;
-}

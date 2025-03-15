@@ -1,72 +1,45 @@
 #include "../../inc/core.hpp"
-#include <cstdlib>
 
 // ================================ MEMORY METHODS
 
-bool BaseObject::setID( objID_t id )
-{
-	log( "BaseObject::setID()" );
-
-	if ( id == 0 )
-	{
-		log( "BaseObject::setID() : id cannot be 0", WARN );
-		return EXIT_FAILURE;
-	}
-
-	_id = id;
-
-	return EXIT_SUCCESS;
-}
-
-bool BaseObject::delID()
-{
-	log( "BaseObject::addToRegister()" );
-
-	if ( _id == 0 )
-	{
-		log( "BaseObject::setID() : id already 0", INFO );
-		return EXIT_FAILURE;
-	}
-
-	return EXIT_SUCCESS;
-}
-
 bool BaseObject::addToRegister()
 {
-	log( "BaseObject::addToRegister()" );
+	log( "BaseObject::addToRegister()", DEBUG, _id );
 
-	// add this object to the register here
+	Engine *engine = Engine::getEngine();
+
+	_id = Engine::getEngine()->getNewID();
+
+	engine->addObject( this );
 
 	return EXIT_SUCCESS;
-
 }
 
 bool BaseObject::delFromRegister()
 {
-	log( "BaseObject::delFromRegister()" );
+	log( "BaseObject::delFromRegister()", DEBUG, _id );
 
-	// delete this object from the register here
+	Engine::getEngine()->delObjectByID( _id ); _id = 0;
 
 	return EXIT_SUCCESS;
-
 }
 // ================================ CORE METHODS
 
 void BaseObject::onAdd()
 {
-	log( "BaseObject::onAdd()" );
-	if ( _id == 0 ) addToRegister();
+	log( "BaseObject::onAdd()", DEBUG, _id );
+	addToRegister();
 }
 
 void BaseObject::onCpy( const BaseObject &obj )
 {
-	log( "BaseObject::onCpy()" );
+	log( "BaseObject::onCpy()", DEBUG, _id );
 	_type = obj.getType();
 }
 
 void BaseObject::onDel() // inverted call order
 {
-	log( "BaseObject::onDel()" );
+	log( "BaseObject::onDel()", DEBUG, _id );
 	if ( _id != 0 ) delFromRegister();
 }
 
@@ -74,9 +47,7 @@ void BaseObject::onDel() // inverted call order
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
 BaseObject::BaseObject() : _id( 0 ), _type( E_BASEOBJ ){ BaseObject::onAdd(); }
-BaseObject::BaseObject( objID_t id ) : _id( id ), _type( E_BASEOBJ ){ BaseObject::onAdd(); }
-BaseObject::BaseObject( objectType_e type ) : _type( type ){ BaseObject::onAdd(); }
-BaseObject::BaseObject( objID_t id, objectType_e type = E_BASEOBJ ) :  _id( id ), _type( type ){ BaseObject::onAdd(); }
+BaseObject::BaseObject( objectType_e type ) : _id( 0 ),  _type( type ){ BaseObject::onAdd(); }
 
 BaseObject::BaseObject( const BaseObject &obj ) : _type( E_BASEOBJ )
 {
@@ -104,3 +75,8 @@ uint BaseObject::getID() const { return _id; }
 // ================================ OPERATORS
 
 // ================================ METHODS
+
+void BaseObject::onInput()   { return; }
+void BaseObject::onUpdate()  { return; }
+void BaseObject::onTick()    { return; }
+void BaseObject::onRefresh() { return; }

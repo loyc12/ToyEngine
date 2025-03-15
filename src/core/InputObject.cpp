@@ -4,25 +4,24 @@
 
 void InputsObject::onAdd()
 {
-	log( "InputsObject::onAdd()" );
+	log( "InputsObject::onAdd()", DEBUG, _id );
 	isControlled = true;
 }
 
 void InputsObject::onCpy( const InputsObject &obj )
 {
-	log( "InputsObject::onCpy()" );
+	log( "InputsObject::onCpy()", DEBUG, _id );
 	isControlled = obj.getIsControlled();
 }
 
 void InputsObject::onDel()
 {
-	log( "InputsObject::onDel()" );
+	log( "InputsObject::onDel()", DEBUG, _id );
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
 InputsObject::InputsObject() : BaseObject( E_INPUTS ){ InputsObject::onAdd();}
-InputsObject::InputsObject( uint32_t id ) : BaseObject( id, E_INPUTS ){ InputsObject::onAdd();}
 
 InputsObject::InputsObject( const InputsObject &obj ) : BaseObject( obj )
 {
@@ -59,5 +58,5 @@ void InputsObject::setIsControlled( bool controlled ) { isControlled = controlle
 void InputsObject::onInput() // checks conditions based on the global engine inputs
 {
 	if ( !isControlled ) return;
-	log( "InputsObject::onInput()" );
+	log( "InputsObject::onInput()", DEBUG, _id );
 }

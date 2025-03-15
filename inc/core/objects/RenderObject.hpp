@@ -17,7 +17,6 @@ class RenderObject : virtual public BaseObject
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		RenderObject();
-		RenderObject( objID_t id );
 		RenderObject( const RenderObject &obj );
 		RenderObject &operator=( const RenderObject &obj );
 		~RenderObject();
@@ -28,7 +27,7 @@ class RenderObject : virtual public BaseObject
 	// ================================ OPERATORS
 
 	// ================================ METHODS
-		void onRefresh(); // ENTRYPOINT : (re)renders the object
+		void onRefresh() override; // ENTRYPOINT : (re)renders the object
 };
 
 #endif // RENDEROBJECT_HPP

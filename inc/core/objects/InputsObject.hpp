@@ -17,7 +17,6 @@ class InputsObject : virtual public BaseObject
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		InputsObject();
-		InputsObject( objID_t id );
 		InputsObject( const InputsObject &obj );
 		InputsObject &operator=( const InputsObject &obj );
 		~InputsObject();
@@ -28,7 +27,7 @@ class InputsObject : virtual public BaseObject
 	// ================================ OPERATORS
 
 	// ================================ METHODS
-		void onInput(); // ENTRYPOINT : acts based on the global engine inputs
+		void onInput() override; // ENTRYPOINT : acts based on the global engine inputs
 };
 
 #endif // INPUTSOBJECT_HPP

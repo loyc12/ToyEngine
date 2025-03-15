@@ -4,7 +4,7 @@
 
 void PhysicObject::onAdd()
 {
-	log( "PhysicObject::onAdd()" );
+	log( "PhysicObject::onAdd()", DEBUG, _id );
 	isDynamic = true;
 	isCollide = true;
 
@@ -15,7 +15,7 @@ void PhysicObject::onAdd()
 
 void PhysicObject::onCpy( const PhysicObject &obj )
 {
-	log( "PhysicObject::onCpy()" );
+	log( "PhysicObject::onCpy()", DEBUG, _id );
 	isDynamic = obj.getIsDynamic();
 	isCollide = obj.getIsCollide();
 
@@ -26,13 +26,12 @@ void PhysicObject::onCpy( const PhysicObject &obj )
 
 void PhysicObject::onDel()
 {
-	log( "PhysicObject::onDel()" );
+	log( "PhysicObject::onDel()", DEBUG, _id );
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
 PhysicObject::PhysicObject() : BaseObject( E_PHYSIC ){ PhysicObject::onAdd();}
-PhysicObject::PhysicObject( objID_t id ) : BaseObject( id, E_PHYSIC ){ PhysicObject::onAdd();}
 
 PhysicObject::PhysicObject( const PhysicObject &obj ) : BaseObject( obj )
 {
@@ -81,5 +80,5 @@ void PhysicObject::setAcceleration( const Vector2 &acc ) { acceleration = acc; }
 void PhysicObject::onTick() // calculates the object's physics
 {
 	if ( !isDynamic ) return;
-	log( "PhysicObject::onTick()" );
+	log( "PhysicObject::onTick()", DEBUG, _id );
 }

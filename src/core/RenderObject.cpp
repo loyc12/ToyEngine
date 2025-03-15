@@ -4,25 +4,24 @@
 
 void RenderObject::onAdd()
 {
-	log( "RenderObject::onAdd()" );
+	log( "RenderObject::onAdd()", DEBUG, _id );
 	isVisible = true;
 }
 
 void RenderObject::onCpy( const RenderObject &obj )
 {
-	log( "RenderObject::onCpy()" );
+	log( "RenderObject::onCpy()", DEBUG, _id );
 	isVisible = obj.getIsVisible();
 }
 
 void RenderObject::onDel()
 {
-	log( "RenderObject::onDel()" );
+	log( "RenderObject::onDel()", DEBUG, _id );
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
 RenderObject::RenderObject() : BaseObject( E_RENDER ) { RenderObject::onAdd(); }
-RenderObject::RenderObject( objID_t id ) : BaseObject( id, E_RENDER ) { RenderObject::onAdd(); }
 
 RenderObject::RenderObject( const RenderObject &obj ) : BaseObject( obj )
 {
@@ -59,5 +58,5 @@ void RenderObject::setIsVisible( bool visible ) { isVisible = visible; }
 void RenderObject::onRefresh() // (re)renders the object
 {
 	if ( !isVisible ) return;
-	log( "RenderObject::onRefresh()" );
+	log( "RenderObject::onRefresh()", DEBUG, _id );
 }
