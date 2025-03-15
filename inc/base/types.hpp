@@ -6,4 +6,6 @@
 # include "./types/pos2.hpp"
 # include "./types/pos3.hpp"
 
+typedef FixedPoint fixed_t;
+
 #endif // TYPES_HPP

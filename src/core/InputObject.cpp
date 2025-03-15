@@ -21,10 +21,8 @@ void InputsObject::onDel()
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
-InputsObject::InputsObject() : BaseObject( E_INPUTS )
-{
-	InputsObject::onAdd();
-}
+InputsObject::InputsObject() : BaseObject( E_INPUTS ){ InputsObject::onAdd();}
+InputsObject::InputsObject( uint32_t id ) : BaseObject( id, E_INPUTS ){ InputsObject::onAdd();}
 
 InputsObject::InputsObject( const InputsObject &obj ) : BaseObject( obj )
 {
@@ -60,6 +58,6 @@ void InputsObject::setIsControlled( bool controlled ) { isControlled = controlle
 
 void InputsObject::onInput() // checks conditions based on the global engine inputs
 {
-	log( "InputsObject::onInput()" );
 	if ( !isControlled ) return;
+	log( "InputsObject::onInput()" );
 }

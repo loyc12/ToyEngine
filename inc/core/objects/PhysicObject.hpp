@@ -24,6 +24,7 @@ class PhysicObject : virtual public BaseObject
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		PhysicObject();
+		PhysicObject( objID_t id );
 		PhysicObject( const PhysicObject &obj );
 		PhysicObject &operator=( const PhysicObject &obj );
 		~PhysicObject();

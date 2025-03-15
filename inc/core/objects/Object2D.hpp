@@ -5,6 +5,7 @@
 # include "./ScriptObject.hpp"
 # include "./PhysicObject.hpp"
 # include "./RenderObject.hpp"
+#include <cstdint>
 
 class Object2D :
 	virtual public BaseObject,
@@ -28,6 +29,7 @@ class Object2D :
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		Object2D();
+		Object2D( objID_t id );
 		Object2D( const Object2D &obj );
 		Object2D &operator=( const Object2D &obj );
 		~Object2D();

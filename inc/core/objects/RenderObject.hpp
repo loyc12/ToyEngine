@@ -17,6 +17,7 @@ class RenderObject : virtual public BaseObject
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		RenderObject();
+		RenderObject( objID_t id );
 		RenderObject( const RenderObject &obj );
 		RenderObject &operator=( const RenderObject &obj );
 		~RenderObject();

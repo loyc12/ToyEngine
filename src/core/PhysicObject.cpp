@@ -31,10 +31,8 @@ void PhysicObject::onDel()
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
-PhysicObject::PhysicObject() : BaseObject( E_PHYSIC )
-{
-	PhysicObject::onAdd();
-}
+PhysicObject::PhysicObject() : BaseObject( E_PHYSIC ){ PhysicObject::onAdd();}
+PhysicObject::PhysicObject( objID_t id ) : BaseObject( id, E_PHYSIC ){ PhysicObject::onAdd();}
 
 PhysicObject::PhysicObject( const PhysicObject &obj ) : BaseObject( obj )
 {
@@ -82,6 +80,6 @@ void PhysicObject::setAcceleration( const Vector2 &acc ) { acceleration = acc; }
 
 void PhysicObject::onTick() // calculates the object's physics
 {
-	log( "PhysicObject::onTick()" );
 	if ( !isDynamic ) return;
+	log( "PhysicObject::onTick()" );
 }

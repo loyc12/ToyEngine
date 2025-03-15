@@ -8,17 +8,17 @@ class Noise
 	public:
 
 		Noise();
-		Noise(int64_t seed);
+		Noise( int64_t seed );
 		~Noise() = default;
 
 		// The following functions return a value between -1 and 1.
 
 		//2D Open Simplex Noise.
-		double eval(const double x, const double y) const;
+		double eval( const double x, const double y ) const;
 		//3D Open Simplex Noise.
-		double eval(double x, double y, double z) const;
+		double eval( double x, double y, double z ) const;
 		//4D Open Simplex Noise.
-		double eval(double x, double y, double z, double w) const;
+		double eval( double x, double y, double z, double w ) const;
 
 	private:
 

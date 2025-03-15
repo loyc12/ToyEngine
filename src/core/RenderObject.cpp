@@ -21,10 +21,8 @@ void RenderObject::onDel()
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
-RenderObject::RenderObject() : BaseObject( E_RENDER )
-{
-	RenderObject::onAdd();
-}
+RenderObject::RenderObject() : BaseObject( E_RENDER ) { RenderObject::onAdd(); }
+RenderObject::RenderObject( objID_t id ) : BaseObject( id, E_RENDER ) { RenderObject::onAdd(); }
 
 RenderObject::RenderObject( const RenderObject &obj ) : BaseObject( obj )
 {
@@ -60,6 +58,6 @@ void RenderObject::setIsVisible( bool visible ) { isVisible = visible; }
 
 void RenderObject::onRefresh() // (re)renders the object
 {
-	log( "RenderObject::onRefresh()" );
 	if ( !isVisible ) return;
+	log( "RenderObject::onRefresh()" );
 }

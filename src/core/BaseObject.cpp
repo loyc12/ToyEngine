@@ -49,8 +49,11 @@ void BaseObject::onDel() // inverted call order
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
-BaseObject::BaseObject() : _type( E_BASEOBJ ) { BaseObject::onAdd(); }
-BaseObject::BaseObject( objectType_e type ) : _type( type ) { BaseObject::onAdd(); }
+BaseObject::BaseObject() : _type( E_BASEOBJ ){ BaseObject::onAdd(); }
+
+BaseObject::BaseObject( objID_t id ) : _id( id ), _type( E_BASEOBJ ){ BaseObject::onAdd(); }
+BaseObject::BaseObject( objID_t id, objectType_e type = E_BASEOBJ ) :  _id( id ), _type( type ){ BaseObject::onAdd(); }
+BaseObject::BaseObject( objectType_e type ) : _type( type ){ BaseObject::onAdd(); }
 
 BaseObject::BaseObject( const BaseObject &obj ) : _type( E_BASEOBJ )
 {

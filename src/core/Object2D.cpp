@@ -41,6 +41,16 @@ Object2D::Object2D() :
 	Object2D::onAdd();
 }
 
+Object2D::Object2D( objID_t id ) :
+	BaseObject( id, E_OBJ2D ),
+	InputsObject(),
+	ScriptObject(),
+	PhysicObject(),
+	RenderObject()
+{
+	Object2D::onAdd();
+}
+
 Object2D::Object2D( const Object2D &obj ) :
 	BaseObject( E_OBJ2D ),
 	InputsObject( obj ),

@@ -17,6 +17,7 @@ class InputsObject : virtual public BaseObject
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		InputsObject();
+		InputsObject( objID_t id );
 		InputsObject( const InputsObject &obj );
 		InputsObject &operator=( const InputsObject &obj );
 		~InputsObject();

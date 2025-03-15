@@ -17,6 +17,7 @@ class ScriptObject : virtual public BaseObject
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		ScriptObject();
+		ScriptObject( objID_t id );
 		ScriptObject( const ScriptObject &obj );
 		ScriptObject &operator=( const ScriptObject &obj );
 		~ScriptObject();

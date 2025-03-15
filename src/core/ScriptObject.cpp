@@ -21,10 +21,8 @@ void ScriptObject::onDel()
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
-ScriptObject::ScriptObject() : BaseObject( E_SCRIPT )
-{
-	ScriptObject::onAdd();
-}
+ScriptObject::ScriptObject() : BaseObject( E_SCRIPT ){ ScriptObject::onAdd();}
+ScriptObject::ScriptObject( objID_t id ) : BaseObject( id, E_SCRIPT ){ ScriptObject::onAdd();}
 
 ScriptObject::ScriptObject( const ScriptObject &obj ) : BaseObject( obj )
 {
@@ -60,6 +58,6 @@ void ScriptObject::setIsActive( bool active ) { isActive = active; }
 
 void ScriptObject::onUpdate()	// runs the object's scripts
 {
-	log( "ScriptObject::onUpdate()" );
 	if ( !isActive ) return;
+	log( "ScriptObject::onUpdate()" );
 }
