@@ -60,11 +60,11 @@ void Engine::launch()
 
 	state = E_RUNNING;
 
-	InitWindow( 800, 600, "Engine" );
+	InitWindow( SCREEN_STARTING_WIDTH, SCREEN_STARTING_HEIGHT, WINDOW_STARTING_TITLE );
 
 	while ( state >= E_RUNNING && !WindowShouldClose() )
 	{
-		readInputs(); if ( WindowShouldClose() ){ break; }
+		readInputs();
 		runPhysics();
 		runScripts();
 		renderObjects();
@@ -143,7 +143,7 @@ bool Engine::delObject( Object2D *obj )
 	if ( obj == nullptr )
 	{
 		log( "Engine::delObject() : obj cannot be a nullptr", INFO );
-		return false;
+		return EXIT_FAILURE;
 	}
 
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ )
@@ -151,13 +151,13 @@ bool Engine::delObject( Object2D *obj )
 		if ( &*it == obj )
 		{
 			ObjectContainer.erase( it );
-			return true;
+			return EXIT_SUCCESS;
 		}
 	}
 
 	log( "Engine::delObject() : Failed to find requested object", INFO );
 
-	return false;
+	return EXIT_FAILURE;
 }
 
 bool Engine::delObjectByID( objID_t id )
@@ -169,13 +169,13 @@ bool Engine::delObjectByID( objID_t id )
 		if ( it->getID() == id )
 		{
 			ObjectContainer.erase( it );
-			return true;
+			return EXIT_SUCCESS;
 		}
 	}
 
 	log( "Engine::delObjectByID() : Failed to find requested object", INFO );
 
-	return false;
+	return EXIT_FAILURE;
 }
 
 // ================================ ACCESSORS

@@ -10,7 +10,7 @@ bool log( strstr msg, log_level_e lvl, objID_t id ){ return log( msg.str().c_str
 bool log( string msg, log_level_e lvl, objID_t id ){ return log( msg.c_str(), lvl, id ); }
 bool log( const char *msg, log_level_e lvl, objID_t id )
 {
-	if ( lvl > LOG_LVL ) return true;
+	if ( lvl > LOG_LVL ) return EXIT_FAILURE;
 
 	cout << get_time_str() << " ";
 
@@ -27,5 +27,5 @@ bool log( const char *msg, log_level_e lvl, objID_t id )
 
 	cout << endl;
 
-	return false;
+	return EXIT_SUCCESS;
 }

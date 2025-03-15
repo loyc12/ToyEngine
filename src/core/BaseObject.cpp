@@ -1,29 +1,53 @@
 #include "../../inc/core.hpp"
+#include <cstdlib>
 
 // ================================ MEMORY METHODS
 
-uint getNewID() // TMP : put in Engine instead
+bool BaseObject::setID( objID_t id )
 {
-	static uint id = 0;
-	return id++;
+	log( "BaseObject::setID()" );
+
+	if ( id == 0 )
+	{
+		log( "BaseObject::setID() : id cannot be 0", WARN );
+		return EXIT_FAILURE;
+	}
+
+	_id = id;
+
+	return EXIT_SUCCESS;
+}
+
+bool BaseObject::delID()
+{
+	log( "BaseObject::addToRegister()" );
+
+	if ( _id == 0 )
+	{
+		log( "BaseObject::setID() : id already 0", INFO );
+		return EXIT_FAILURE;
+	}
+
+	return EXIT_SUCCESS;
 }
 
 bool BaseObject::addToRegister()
 {
 	log( "BaseObject::addToRegister()" );
-	_id = getNewID();
 
 	// add this object to the register here
 
-	return true;
+	return EXIT_SUCCESS;
+
 }
+
 bool BaseObject::delFromRegister()
 {
 	log( "BaseObject::delFromRegister()" );
 
 	// delete this object from the register here
 
-	return true;
+	return EXIT_SUCCESS;
 
 }
 // ================================ CORE METHODS
@@ -31,7 +55,7 @@ bool BaseObject::delFromRegister()
 void BaseObject::onAdd()
 {
 	log( "BaseObject::onAdd()" );
-	addToRegister();
+	if ( _id == 0 ) addToRegister();
 }
 
 void BaseObject::onCpy( const BaseObject &obj )
@@ -43,17 +67,16 @@ void BaseObject::onCpy( const BaseObject &obj )
 void BaseObject::onDel() // inverted call order
 {
 	log( "BaseObject::onDel()" );
-	delFromRegister();
+	if ( _id != 0 ) delFromRegister();
 }
 
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
-BaseObject::BaseObject() : _type( E_BASEOBJ ){ BaseObject::onAdd(); }
-
+BaseObject::BaseObject() : _id( 0 ), _type( E_BASEOBJ ){ BaseObject::onAdd(); }
 BaseObject::BaseObject( objID_t id ) : _id( id ), _type( E_BASEOBJ ){ BaseObject::onAdd(); }
-BaseObject::BaseObject( objID_t id, objectType_e type = E_BASEOBJ ) :  _id( id ), _type( type ){ BaseObject::onAdd(); }
 BaseObject::BaseObject( objectType_e type ) : _type( type ){ BaseObject::onAdd(); }
+BaseObject::BaseObject( objID_t id, objectType_e type = E_BASEOBJ ) :  _id( id ), _type( type ){ BaseObject::onAdd(); }
 
 BaseObject::BaseObject( const BaseObject &obj ) : _type( E_BASEOBJ )
 {

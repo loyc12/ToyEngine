@@ -3,11 +3,11 @@
 
 # include "../../base.hpp"
 
-#define WINDOW_TITLE		"Elapse Project"
-#define SCREEN_WIDTH		2048
-#define SCREEN_HEIGHT		1024
-#define DEBUG_FONT_SIZE	20
+#define SCREEN_STARTING_WIDTH	 2048
+#define SCREEN_STARTING_HEIGHT 1024
+#define WINDOW_STARTING_TITLE	 "ToyEngine"
 
+#define DEBUG_FONT_SIZE	20
 #define MAX_FPS					60
 
 #endif // VIEWPORT_HPP

@@ -2,7 +2,6 @@
 # define BASEOBJECT_HPP
 
 # include "../../base.hpp"
-#include <sys/types.h>
 
 typedef enum : byte_t
 {
@@ -28,12 +27,15 @@ class BaseObject
 {
 	private:
 	// ================================ MEMORY METHODS
+		bool setID( objID_t id );
+		bool delID();
+
 		bool addToRegister();
 		bool delFromRegister();
 
 	protected:
 	// ================================ ATTRIBUTES
-	objID_t _id;
+		objID_t _id;
 		objectType_e _type;
 
 		virtual void onAdd() = 0;
@@ -48,6 +50,7 @@ class BaseObject
 		BaseObject( objID_t id );
 		BaseObject( objectType_e type );
 		BaseObject( objID_t id, objectType_e type );
+
 		BaseObject( const BaseObject &obj );
 		BaseObject &operator=( const BaseObject &obj );
 		virtual ~BaseObject();
