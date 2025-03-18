@@ -3,9 +3,6 @@
 
 # include "./_libs.hpp"
 
-extern struct timeval clock_res;
-extern struct timeval clock_start_time;
-
 extern time_t clock_per_micro;
 extern time_t clock_per_milli;
 extern time_t clock_per_sec;
@@ -15,6 +12,7 @@ extern time_t clock_per_day;
 extern time_t clock_per_week;
 extern time_t clock_per_year;
 
+extern struct timeval clock_start_time;
 extern bool clock_started;
 
 struct timeval &start_clock();

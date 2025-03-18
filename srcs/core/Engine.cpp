@@ -84,7 +84,7 @@ void Engine::launch()
 
 void Engine::runStep()
 {
-	log( "Engine::runeStep()" );
+	log( "Engine::runStep()" );
 
 	if ( state < E_STARTED ){ log( "Engine::runeStep() : Engine not started", ERROR ); return; }
 

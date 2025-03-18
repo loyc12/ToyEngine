@@ -1,17 +1,15 @@
 #include "../../incs/base.hpp"
 
-struct timeval clock_res;
+time_t clock_per_micro = 1; // implied by the use of timeval
+time_t clock_per_milli = clock_per_micro * 1000;
+time_t clock_per_sec   = clock_per_milli * 1000;
+time_t clock_per_min   = clock_per_sec   * 60;
+time_t clock_per_hour  = clock_per_min   * 60;
+time_t clock_per_day   = clock_per_hour  * 24;
+time_t clock_per_week  = clock_per_day   * 7;
+time_t clock_per_year  = clock_per_day   * 365.2422;
+
 struct timeval clock_start_time;
-
-time_t clock_per_micro = 1;
-time_t clock_per_milli = 1;
-time_t clock_per_sec = 1;
-time_t clock_per_min = 1;
-time_t clock_per_hour = 1;
-time_t clock_per_day = 1;
-time_t clock_per_week = 1;
-time_t clock_per_year = 1;
-
 bool clock_started = false;
 
 struct timeval &start_clock()
@@ -19,15 +17,6 @@ struct timeval &start_clock()
 	if ( clock_started ) { log( "Clock already started", WARN ); return clock_start_time; }
 
 	gettimeofday( &clock_start_time, NULL );
-
-	clock_per_micro = 1;
-	clock_per_milli = clock_per_micro * 1000;
-	clock_per_sec = clock_per_milli * 1000;
-	clock_per_min = clock_per_sec * 60;
-	clock_per_hour = clock_per_min * 60;
-	clock_per_day = clock_per_hour * 24;
-	clock_per_week = clock_per_day * 7;
-	clock_per_year = clock_per_day * 365;
 
 	clock_started = true;
 	log( "Clock started", INFO );
@@ -44,8 +33,7 @@ string get_time_str()
 {
 	if ( !clock_started ) { start_clock(); }
 
-	ostrs out;
-	out << std::setfill( '0' );
+	ostrs out; out << std::setfill( '0' );
 
 	ulong time = get_runtime();
 
@@ -98,14 +86,12 @@ string get_start_time_str()
 {
 	if ( !clock_started ) { log( "Clock not started", WARN ); start_clock(); }
 
-	ostrs out;
+	ostrs out; out << std::setfill( '0' );
 
-	time_t epoch = get_start_time().tv_sec;
-	struct tm *timeinfo = localtime( &epoch );
+	struct tm *timeinfo = localtime( &get_start_time().tv_sec );
 
-	out << std::setfill( '0' );
-	out << timeinfo->tm_year - 100;
-	out << std::setw( 2 ) << timeinfo->tm_mon + 1;
+	out << timeinfo->tm_year - 100; // epoch is 2000 now
+	out << std::setw( 2 ) << timeinfo->tm_mon + 1; // month is 0-indexed, unlike the rest
 	out << std::setw( 2 ) << timeinfo->tm_mday << "_";
 	out << std::setw( 2 ) << timeinfo->tm_hour;
 	out << std::setw( 2 ) << timeinfo->tm_min;
