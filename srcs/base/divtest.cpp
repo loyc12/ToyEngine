@@ -1,4 +1,4 @@
-#include "../../inc/base.hpp"
+#include "../../incs/base.hpp"
 
 bool diverror( const char *dividend, const char *divisor ){ log( "Trying to divide " + string( dividend ) + " by " + string( divisor ), ERROR ); return EXIT_FAILURE; }
 

@@ -1,6 +1,6 @@
-#include "../../../inc/base.hpp"
+#include "../../../incs/base.hpp"
 
-//#include "../../../inc/class/Engine.hpp"
+//#include "../../../incs/class/Engine.hpp"
 
 //Noise *getNoise() { return getEngine()->getNoise(); }
 

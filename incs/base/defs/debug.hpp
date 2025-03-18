@@ -13,11 +13,13 @@ typedef enum
 	DEBUG,
 } log_level_e;
 
-#define SHOW_OBJ_MSG true
 #define LOG_LVL DEBUG
+#define LOG_FILE false
+#define LOG_TIME true
+#define SHOW_OBJ_MSG false
 
 void log_time();
-bool log( strstr msg, log_level_e lvl = DEBUG, objID_t id = 0 );
+bool log( ostrs msg, log_level_e lvl = DEBUG, objID_t id = 0 );
 bool log( string msg, log_level_e lvl = DEBUG, objID_t id = 0 );
 bool log( const char *msg, log_level_e lvl = DEBUG, objID_t id = 0 );
 

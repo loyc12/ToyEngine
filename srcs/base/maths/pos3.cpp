@@ -1,4 +1,4 @@
-#include "../../../inc/base.hpp"
+#include "../../../incs/base.hpp"
 
 pos3_s getNullPos3() { return { 0, 0, 0 }; }
 

@@ -1,6 +1,7 @@
 #ifndef OBJECT2D_HPP
 # define OBJECT2D_HPP
 
+# include "./BaseObject.hpp"
 # include "./InputsObject.hpp"
 # include "./ScriptObject.hpp"
 # include "./PhysicObject.hpp"

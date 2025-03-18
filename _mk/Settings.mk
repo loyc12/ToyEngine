@@ -6,9 +6,10 @@ PROJECT_NAME	= ToyEngine
 BUILD_MODE		= DEBUG
 
 # Define all source files required
-INC_DIR = inc
-SRC_DIR = src
-OBJ_DIR = obj
+INC_DIR = incs
+SRC_DIR = srcs
+OBJ_DIR = objs
+LOG_DIR = logs
 
 # Defines the path for raylib, if different than /usr/local
 # comment out if uneeded

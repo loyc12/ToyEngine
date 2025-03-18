@@ -1,4 +1,4 @@
-#include "../../inc/core.hpp"
+#include "../../incs/core.hpp"
 #include <cstddef>
 #include <raylib.h>
 

@@ -1,4 +1,4 @@
-#include "../inc/core.hpp"
+#include "../incs/core.hpp"
 
 int main()
 {
@@ -18,8 +18,7 @@ int main()
 	InitWindow( SCREEN_STARTING_WIDTH, SCREEN_STARTING_HEIGHT, WINDOW_STARTING_TITLE );
 	engine->runStep();
 
-	log( "Object count : ", INFO );
-	cout << engine->getObjectCount() << endl;
+	log( "Object count : " + tostr( engine->getObjectCount() ), DEBUG );
 
 	log( "Closing Engine", INFO );
 	engine->close();

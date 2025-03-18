@@ -25,6 +25,7 @@ $(PROJECT_NAME): $(OBJS)
 # NOTE: This pattern will compile every module defined on $(OBJS)
 # %.o: %.c
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(LOG_DIR)
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(OBJ_SUB_DIRS)
 	@printf "${YELLOW}Compiling $<...\n${DEFCOL}"

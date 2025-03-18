@@ -1,7 +1,7 @@
-#include "../../inc/base.hpp"
-#include <bits/types/struct_timeval.h>
+#include "../../incs/base.hpp"
 
-struct timeval start_time;
+struct timeval clock_res;
+struct timeval clock_start_time;
 time_t clock_per_micro;
 time_t clock_per_milli;
 time_t clock_per_sec;
@@ -13,7 +13,7 @@ time_t clock_per_year;
 
 void start_clock()
 {
-	gettimeofday( &start_time, NULL );
+	gettimeofday( &clock_start_time, NULL );
 
 	clock_per_micro = 1;
 	clock_per_milli = clock_per_micro * 1000;
@@ -29,54 +29,72 @@ void start_clock()
 
 string get_time_str()
 {
-	strstr ss;
-	ss << std::setfill( '0' );
+	ostrs out;
+	out << std::setfill( '0' );
 
 	ulong time = get_runtime();
 
 	// uint years = time / clock_per_year;
-	// ss << years << "y";
+	// out << years << "y";
 	// time -= years * clock_per_year;
 
 	//uint days = time / clock_per_day;
-	//ss << std::setw( 3 ) << days << "d";
+	//out << std::setw( 3 ) << days << "d";
 	//time -= days * clock_per_day;
 
 	//uint hours = time / clock_per_hour;
-	//ss << std::setw( 2 ) << hours << "h";
+	//out << std::setw( 2 ) << hours << "h";
 	//time -= hours * clock_per_hour;
 
 	uint minutes = time / clock_per_min;
-	ss << std::setw( 2 ) << minutes << "m";
+	out << std::setw( 2 ) << minutes << "m";
 	time -= minutes * clock_per_min;
 
 	uint seconds = time / clock_per_sec;
-	ss << std::setw( 2 ) << seconds << "s";
+	out << std::setw( 2 ) << seconds << "s";
 	time -= seconds * clock_per_sec;
 
 	//uint milliseconds = time / clock_per_milli;
-	//ss << std::setw( 3 ) << milliseconds << "ms";
+	//out << std::setw( 3 ) << milliseconds << "ms";
 	//time -= milliseconds * clock_per_milli;
 
 	uint microseconds = time / clock_per_micro;
-	ss << std::setw( 6 ) << microseconds << "us";
+	out << std::setw( 6 ) << microseconds << "us";
 
-	return ss.str();
+	return out.str();
 }
 string get_time_str_raw()
 {
-	strstr ss;
+	ostrs out;
 	ulong time = get_runtime();
 
 	uint seconds = time / clock_per_sec;
-	ss << seconds << ".";
+	out << seconds << ".";
 	time -= seconds * clock_per_sec;
 
 	uint microseconds = time / clock_per_micro;
-	ss << std::setfill( '0' ) << std::setw( 6 ) << microseconds;
+	out << std::setfill( '0' ) << std::setw( 6 ) << microseconds;
 
-	return ss.str();
+	return out.str();
 }
+string get_start_time_str()
+{
+	ostrs out;
+
+	time_t epoch = clock_start_time.tv_sec;
+	struct tm *timeinfo = localtime( &epoch );
+
+	out << std::setfill( '0' );
+	out << timeinfo->tm_year - 100 << "_";
+	out << std::setw( 2 ) << timeinfo->tm_mon + 1 << "_";
+	out << std::setw( 2 ) << timeinfo->tm_mday << "_";
+	out << std::setw( 2 ) << timeinfo->tm_hour << "h";
+	out << std::setw( 2 ) << timeinfo->tm_min << "m";
+	out << std::setw( 2 ) << timeinfo->tm_sec;
+
+	return out.str();
+}
+
 
 ulong get_time_diff( struct timeval start, struct timeval end )
 {
@@ -94,5 +112,6 @@ ulong get_time_since( struct timeval since )
 }
 ulong get_runtime()
 {
-	return get_time_since( start_time );
+	return get_time_since( clock_start_time );
 }
+

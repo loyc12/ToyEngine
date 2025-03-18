@@ -8,7 +8,6 @@
 
 # include <string>
 # include <array>
-#include <sys/types.h>
 # include <vector>
 # include <list>
 # include <map>
@@ -16,6 +15,7 @@
 
 # include <algorithm>
 
+# include <sys/types.h>
 # include <sys/time.h>
 # include <unistd.h>
 # include <string.h>
@@ -32,11 +32,18 @@ using std::cerr;
 using std::endl;
 
 using std::stringstream;
+using std::istringstream;
+using std::ostringstream;
+
+using std::fstream;
 using std::ifstream;
 using std::ofstream;
+
+using std::istream;
 using std::ostream;
 
 using std::string;
+using std::to_string;
 using std::array;
 using std::vector;
 using std::list;
@@ -47,7 +54,9 @@ using std::iterator;
 // ================================ SHORTHAND
 
 # define elif else if
-# define strstr stringstream
+# define ostrs ostringstream
+
+# define tostr( x ) to_string( x )
 
 typedef bool			bit_t; /// is this even optimized ???
 typedef uint8_t		byte_t;
