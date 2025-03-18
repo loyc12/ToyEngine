@@ -2,17 +2,22 @@
 
 struct timeval clock_res;
 struct timeval clock_start_time;
-time_t clock_per_micro;
-time_t clock_per_milli;
-time_t clock_per_sec;
-time_t clock_per_min;
-time_t clock_per_hour;
-time_t clock_per_day;
-time_t clock_per_week;
-time_t clock_per_year;
 
-void start_clock()
+time_t clock_per_micro = 1;
+time_t clock_per_milli = 1;
+time_t clock_per_sec = 1;
+time_t clock_per_min = 1;
+time_t clock_per_hour = 1;
+time_t clock_per_day = 1;
+time_t clock_per_week = 1;
+time_t clock_per_year = 1;
+
+bool clock_started = false;
+
+struct timeval &start_clock()
 {
+	if ( clock_started ) { log( "Clock already started", WARN ); return clock_start_time; }
+
 	gettimeofday( &clock_start_time, NULL );
 
 	clock_per_micro = 1;
@@ -24,11 +29,21 @@ void start_clock()
 	clock_per_week = clock_per_day * 7;
 	clock_per_year = clock_per_day * 365;
 
+	clock_started = true;
 	log( "Clock started", INFO );
+	return clock_start_time;
+}
+
+struct timeval &get_start_time()
+{
+	if ( !clock_started ) { start_clock(); }
+	return clock_start_time;
 }
 
 string get_time_str()
 {
+	if ( !clock_started ) { start_clock(); }
+
 	ostrs out;
 	out << std::setfill( '0' );
 
@@ -65,6 +80,8 @@ string get_time_str()
 }
 string get_time_str_raw()
 {
+	if ( !clock_started ) { log( "Clock not started", WARN ); start_clock(); }
+
 	ostrs out;
 	ulong time = get_runtime();
 
@@ -79,9 +96,11 @@ string get_time_str_raw()
 }
 string get_start_time_str()
 {
+	if ( !clock_started ) { log( "Clock not started", WARN ); start_clock(); }
+
 	ostrs out;
 
-	time_t epoch = clock_start_time.tv_sec;
+	time_t epoch = get_start_time().tv_sec;
 	struct tm *timeinfo = localtime( &epoch );
 
 	out << std::setfill( '0' );
@@ -96,14 +115,14 @@ string get_start_time_str()
 }
 
 
-ulong get_time_diff( struct timeval start, struct timeval end )
+ulong get_time_diff( struct timeval &start, struct timeval &end )
 {
   time_t sec_diff = end.tv_sec - start.tv_sec;
   suseconds_t usec_diff = end.tv_usec - start.tv_usec;
 
   return sec_diff * clock_per_sec + usec_diff; // Microseconds
 }
-ulong get_time_since( struct timeval since )
+ulong get_time_since( struct timeval &since )
 {
 	struct timeval now;
 	gettimeofday( &now, NULL );
@@ -112,6 +131,6 @@ ulong get_time_since( struct timeval since )
 }
 ulong get_runtime()
 {
-	return get_time_since( clock_start_time );
+	return get_time_since( get_start_time() );
 }
 

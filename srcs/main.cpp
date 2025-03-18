@@ -1,30 +1,28 @@
+#include "../incs/base.hpp"
 #include "../incs/core.hpp"
+#include "../incs/game.hpp"
 
 int main()
 {
+	log( "Initializing the Engine", INFO );
 	start_clock();
+
 	Engine *engine = Engine::getEngine();
 
-	log( "Adding objects", INFO );
+	log( "Starting Engine", INFO );
 
-	new Object2D();
-	new Object2D();
-	new Object2D();
+	engine->start();
+	on_game_start();
 
-	//log( "Launching Engine", INFO );
-	//engine->launch();
+	log( "Launching Engine", INFO );
 
-	log( "Running an Egine step", INFO );
-	InitWindow( SCREEN_STARTING_WIDTH, SCREEN_STARTING_HEIGHT, WINDOW_STARTING_TITLE );
-	engine->runStep();
-
-	log( "Object count : " + tostr( engine->getObjectCount() ), DEBUG );
+	engine->launch();
 
 	log( "Closing Engine", INFO );
+
+	on_game_close();
 	engine->close();
 	delete engine;
 
 	log( "Exiting main()", INFO );
-
-	return 0;
 }

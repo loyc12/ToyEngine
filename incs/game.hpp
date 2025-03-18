@@ -5,6 +5,7 @@
 
 # include "./base.hpp"
 # include "./core.hpp"
+# include "./game/entrypoint.hpp"
 
 // add here the game includes
 

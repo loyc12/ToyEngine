@@ -1,19 +1,21 @@
 #ifndef ENGINE_HPP
 # define ENGINE_HPP
 
+# include "../base.hpp"
 # include "./objects/Object2D.hpp"
 # include "./display/Viewport.hpp"
-#include <cstdint>
+
 
 typedef enum : byte_t
 {
 	E_UNINITIALIZED = 0,
 	E_INITIALIZED,
+	E_STARTED,
 	E_RUNNING
 
 } engineState_e;
 
-class Engine // make this a static class ???
+class Engine
 {
 	private:
 	// ================================ ATTRIBUTES
@@ -37,8 +39,10 @@ class Engine // make this a static class ???
 		static Engine *getEngine();
 
 	// ================================ CORE METHODS
-		void start();
-		void close();
+		void init(); // initializes the engine's data
+		void start(); // opens the window and redies the engine for the game loop
+		void close(); // closes the window and frees the memory
+
 		void launch(); // calls the method below in a loop
 		void runStep(); // calls the 4 methods below in order
 

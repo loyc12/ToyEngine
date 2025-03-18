@@ -1,6 +1,5 @@
 #include "../../incs/core.hpp"
-#include <cstddef>
-#include <raylib.h>
+#include "../../incs/game.hpp"
 
 // ================================ MEMORY METHODS
 
@@ -10,7 +9,7 @@ Engine::Engine() : state( E_UNINITIALIZED ), maxID( 0 )
 {
 	log( "Engine::Engine()" );
 
-	start();
+	init();
 }
 
 Engine::~Engine()
@@ -25,37 +24,41 @@ Engine *Engine::getEngine()
 {
 	log( "Engine::getInstance()" );
 
-	static Engine *instance;
-
-	if ( instance == nullptr ){ instance = new Engine(); }
+	static Engine *instance = new Engine();
 
 	return instance;
 }
 
 // ================================ CORE METHODS
 
+void Engine::init()
+{
+	log( "Engine::init()" );
+
+	if ( state != E_UNINITIALIZED ){ log( "Engine::init() : Engine already initialized", ERROR ); return; }
+
+	state = E_INITIALIZED;
+
+}
+
 void Engine::start()
 {
 	log( "Engine::start()" );
 
-	if ( state != E_UNINITIALIZED )
-	{
-		log( "Engine::start() : Engine already running", ERROR );
-		return;
-	}
+	if ( state < E_INITIALIZED ){ log( "Engine::start() : Engine not initialized", ERROR ); return; }
+	if ( state > E_INITIALIZED ){ log( "Engine::start() : Engine already started", ERROR ); return; }
 
-	state = E_INITIALIZED;
+	InitWindow( SCREEN_STARTING_WIDTH, SCREEN_STARTING_HEIGHT, WINDOW_STARTING_TITLE );
+
+	state = E_STARTED;
+
 }
 
 void Engine::close()
 {
 	log( "Engine::close()" );
 
-	if ( state < E_INITIALIZED )
-	{
-		log( "Engine::close() : Engine not running", ERROR );
-		return;
-	}
+	if ( state < E_INITIALIZED ){ log( "Engine::close() : Engine not initialized", ERROR ); return; }
 
 	DelAllObjects();
 
@@ -69,32 +72,23 @@ void Engine::launch()
 {
 	log( "Engine::launch()" );
 
-	if ( state < E_INITIALIZED )
-	{
-		log( "Engine::launch() : Engine not initialized", ERROR );
-		return;
-	}
+	if ( state < E_STARTED ) { log( "Engine::launch() : Engine not started yet", ERROR ); return; }
+	if ( state > E_STARTED ) { log( "Engine::launch() : Engine already running", ERROR ); return; }
 
 	state = E_RUNNING;
 
-	InitWindow( SCREEN_STARTING_WIDTH, SCREEN_STARTING_HEIGHT, WINDOW_STARTING_TITLE );
+	while ( state >= E_RUNNING && !WindowShouldClose() ){ runStep(); }
 
-	while ( state >= E_RUNNING && !WindowShouldClose() )
-	{
-		runStep();
-	}
+	state = E_STARTED;
 }
 
 void Engine::runStep()
 {
 	log( "Engine::runeStep()" );
 
-	if ( state < E_INITIALIZED )
-	{
-		log( "Engine::runeStep() : Engine not initialized", ERROR );
-		return;
-	}
+	if ( state < E_STARTED ){ log( "Engine::runeStep() : Engine not started", ERROR ); return; }
 
+	on_game_step(); // from game.hpp
 	readInputs();
 	runPhysics();
 	runScripts();

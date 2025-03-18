@@ -31,10 +31,10 @@ bool log( const char *msg, log_level_e lvl, objID_t id )
 	ostream *log_out = &cout;
 
 	static bool disregard_log_file = false;
-	static ofstream log_file;
 
 	if ( LOG_FILE && !disregard_log_file )
 	{
+		static ofstream log_file;
 		if ( open_log_file( log_file ) == EXIT_FAILURE )
 		{
 			disregard_log_file = true;
