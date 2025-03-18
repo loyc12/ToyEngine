@@ -9,16 +9,14 @@ bool open_log_file( ofstream &log_file ) // orivate function
 	{
 		printf( "Generating log file\n" );
 
-		string file_name = "logs/log_" + get_start_time_str() + ".txt";
+		string file_name = "logs/" + get_start_time_str() + ".log";
 		printf( "Log file name : %s\n", file_name.c_str() ); // DEBUG
 
 		log_file.open( file_name, std::ios::out | std::ios::app );
 
-		if ( !log_file.is_open() ) return EXIT_FAILURE;
+		if ( !log_file.is_open() ){ return EXIT_FAILURE; }
 
 		printf( "Log file Generated successfully\n" );
-
-		return EXIT_SUCCESS;
 	}
 	return EXIT_SUCCESS;
 }
@@ -27,48 +25,27 @@ bool log( ostrs msg, log_level_e lvl, objID_t id ){ return log( msg.str().c_str(
 bool log( string msg, log_level_e lvl, objID_t id ){ return log( msg.c_str(), lvl, id ); }
 bool log( const char *msg, log_level_e lvl, objID_t id )
 {
-	static bool disregard_log_file = false;
-	static ofstream log_file;
-
 	if ( lvl > LOG_LVL ) return EXIT_SUCCESS;
-
 	if ( !SHOW_OBJ_MSG && id > 0 ) return EXIT_SUCCESS;
 
 	ostream *log_out = &cout;
 
-	if ( !disregard_log_file && LOG_FILE )
+	static bool disregard_log_file = false;
+	static ofstream log_file;
+
+	if ( LOG_FILE && !disregard_log_file )
 	{
-		/*
-		if ( !log_file.is_open() )
-		{
-			printf( "Generating log file\n" );
-
-			string file_name = "logs/log_" + get_start_time_str() + ".txt";
-			printf( "Log file name : %s\n", file_name.c_str() ); // DEBUG
-
-			log_file.open( file_name, std::ios::out | std::ios::app );
-			if ( !log_file.is_open() )
-			{
-				disregard_log_file = true;
-				log( "Failed to open log file. Logging to console instead", ERROR );
-			}
-			else
-			printf( "Log file Generated successfully\n" );
-	}
-	if ( !disregard_log_file ) log_out = &log_file;
-	*/
-		if ( !open_log_file( log_file ) )
+		if ( open_log_file( log_file ) == EXIT_FAILURE )
 		{
 			disregard_log_file = true;
 			log( "Failed to open log file. Logging to console instead", ERROR );
 		}
-		else
-			log_out = &log_file;
+		else { log_out = &log_file; }
 	}
 
 	if ( LOG_TIME ) *log_out << get_time_str() << " ";
 
-	static bool use_clr = !disregard_log_file && !LOG_FILE;
+	static bool use_clr = ( log_out == &cout );
 
 	switch ( lvl )
 	{

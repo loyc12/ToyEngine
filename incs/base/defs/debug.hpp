@@ -13,7 +13,7 @@ typedef enum
 	DEBUG,
 } log_level_e;
 
-#define LOG_LVL DEBUG
+#define LOG_LVL DEBUG // DEBUG, INFO, WARN, ERROR ( each level excludes the previous one(s) )
 #define LOG_FILE false
 #define LOG_TIME true
 #define SHOW_OBJ_MSG false

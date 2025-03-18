@@ -1,5 +1,5 @@
 
-.PHONY += compile tidy run re rerun clear clean fclear fclean leaks
+.PHONY += compile tidy run re rerun clear clean fclear fclean leaks delogs
 
 # Define a recursive wildcard function
 rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
@@ -82,3 +82,7 @@ leaks:
 	@printf "Checking for memory leaks...\n"
 	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./$(PROJECT_NAME)$(EXT)
 	@printf "Memory leaks checked\n"
+
+delogs:
+	@rm -f $(LOG_DIR)/*.log
+	@printf "Logs deleted\n"

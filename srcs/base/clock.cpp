@@ -85,11 +85,11 @@ string get_start_time_str()
 	struct tm *timeinfo = localtime( &epoch );
 
 	out << std::setfill( '0' );
-	out << timeinfo->tm_year - 100 << "_";
-	out << std::setw( 2 ) << timeinfo->tm_mon + 1 << "_";
+	out << timeinfo->tm_year - 100;
+	out << std::setw( 2 ) << timeinfo->tm_mon + 1;
 	out << std::setw( 2 ) << timeinfo->tm_mday << "_";
-	out << std::setw( 2 ) << timeinfo->tm_hour << "h";
-	out << std::setw( 2 ) << timeinfo->tm_min << "m";
+	out << std::setw( 2 ) << timeinfo->tm_hour;
+	out << std::setw( 2 ) << timeinfo->tm_min;
 	out << std::setw( 2 ) << timeinfo->tm_sec;
 
 	return out.str();

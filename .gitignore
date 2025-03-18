@@ -1,6 +1,6 @@
 ### C++ ###
 ToyEngine
-*/log_*.txt
+*logs/.log
 
 # Prerequisites
 *.d
