@@ -1,18 +1,55 @@
 # include "../../incs/game.hpp"
 
-void on_game_start()
-{
-	log( "on_game_start()", INFO );
+Object2D *PlayerObject;
 
-	new Object2D;
+void OnGameStart()
+{
+	log( "OnGameStart()", INFO );
+
+	PlayerObject = new Object2D;
 }
 
-void on_game_step()
+void OnGameStep()
 {
-	//log( "on_game_step()" );
+
 }
 
-void on_game_close()
+void OnGameClose()
 {
-	log( "on_game_close()", INFO );
+	log( "OnGameClose()", INFO );
 }
+
+void OnReadInputs()
+{
+	log( "OnReadInputs()", INFO );
+
+	inputs_s inputs = Engine::getEngine()->getLastestInputs();
+
+	float moveHor = inputs.RIGHT - inputs.LEFT;
+	if ( moveHor ){ PlayerObject->changePosition( { moveHor, 0 } ); }
+
+	float moveVer = inputs.FORE - inputs.BACK;
+	if ( moveVer ){ PlayerObject->changePosition( { 0, moveVer } ); }
+}
+
+void OnRunPhysics()
+{
+	log( "OnRunPhysics()", INFO );
+}
+
+void OnRunScripts()
+{
+	log( "OnRunScripts()", INFO );
+}
+
+void OnRenderObjects()
+{
+	log( "OnRenderObjects()", INFO );
+
+	string playerPos = "[" + to_string( PlayerObject->getPosition().x ) + ":" + to_string( PlayerObject->getPosition().y ) + "]";
+	log( "Player position : " + playerPos, INFO );
+
+	DrawText( playerPos.c_str(), PlayerObject->getPosition().x, PlayerObject->getPosition().y, DEBUG_FONT_SIZE, WHITE );
+
+}
+

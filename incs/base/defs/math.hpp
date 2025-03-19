@@ -1,12 +1,13 @@
 #ifndef MATH_HPP
 # define MATH_HPP
 
-# include <cmath>
 # include "./_libs.hpp"
 
 #define EUL	2.71828182845904523536f
 #define TAU	6.28318530717958647692f
 #define PHI	1.61803398874989484820f
+#define PI	3.14159265358979323846f
+#define EPS 0.0000000001f
 
 // fabs( ), pow( ) and sqrt( ) are already defined in cmath
 // floor( ), ceil( ) and round( )( ? ) are already defined in cmath

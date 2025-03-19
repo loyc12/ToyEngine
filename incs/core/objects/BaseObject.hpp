@@ -33,10 +33,11 @@ class BaseObject
 		bool addToRegister();
 		bool delFromRegister();
 
-	protected:
-	// ================================ ATTRIBUTES
+		protected:
+		// ================================ ATTRIBUTES
 		objID_t _id;
 		objectType_e _type;
+		Vector2 _position;
 
 		virtual void onAdd();
 		void onCpy( const BaseObject &obj );
@@ -65,6 +66,8 @@ class BaseObject
 	virtual void onTick();			// calculates the object's physics
 	virtual void onRefresh();	// (re)renders the object
 
+	Vector2 getPosition() const;									Vector2 changePosition( const Vector2 &delta );
+	Vector2 setPosition( const Vector2 &pos );		Vector2 getRelPosition( const BaseObject &Obj ) const;
 
 
 };

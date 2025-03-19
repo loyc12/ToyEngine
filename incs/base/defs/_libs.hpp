@@ -17,6 +17,7 @@
 
 # include <sys/types.h>
 # include <sys/time.h>
+# include <memory>
 # include <unistd.h>
 # include <string.h>
 

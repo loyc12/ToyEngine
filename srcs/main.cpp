@@ -12,7 +12,6 @@ int main()
 	log( "Starting Engine", INFO );
 
 	engine->start();
-	on_game_start();
 
 	log( "Launching Engine", INFO );
 
@@ -20,7 +19,6 @@ int main()
 
 	log( "Closing Engine", INFO );
 
-	on_game_close();
 	engine->close();
 	delete engine;
 

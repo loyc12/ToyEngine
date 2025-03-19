@@ -2,6 +2,8 @@
 # define VIEWPORT_HPP
 
 # include "../../base.hpp"
+# include "../objects/BaseObject.hpp"
+#include <raylib.h>
 
 # define WINDOW_DEFAULT_TITLE  "ToyEngine"
 # define SCREEN_DEFAULT_WIDTH  2048
@@ -15,13 +17,18 @@ class Viewport2D
 {
 	private:
 	// ================================ ATTRIBUTES
-		pos2_s	 _windowSize;
-		pos2_s	 _mousePos;
+		pos2_s	_windowSize;
+		pos2_s	_mousePos;
 
-		uint8_t  _targetFPS;
-		float    _zoomLevel;
+		uint8_t	_targetFPS;
+		float		_zoomLevel;
 
-		Camera2D _camera;
+		Camera2D	_camera;
+		bool			_trackingObject;
+
+		// Using a weak pointer to track the object's existence
+		const std::weak_ptr< BaseObject >	_trackedObject;
+
 
 		// ================================ CORE METHODS
 		void init();
@@ -34,7 +41,7 @@ class Viewport2D
 	// ================================ ACCESSORS
 		posint_t getWindowWidth();
 		posint_t getWindowHeight();
-		pos2_s getWindowSize();
+		pos2_s   getWindowSize();
 
 		pos2_s getWindowCenter();
 		pos2_s getWindowTopLeft();
@@ -44,7 +51,17 @@ class Viewport2D
 
 		posint_t getMousePosX();
 		posint_t getMousePosY();
-		pos2_s getMousePos();
+		pos2_s   getMousePos();
+
+		Camera2D &getCamera();
+		bool isTracking() const;
+		BaseObject *getTrackedObject() const;
+
+		void setTarget( Vector2 target, bool overrideTracking = false );
+		void moveTarget( Vector2 offset );
+
+		void setZoom( float zoom );
+		void changeZoom( float factor );
 
 	// ================================ OPERATORS
 
@@ -57,6 +74,10 @@ class Viewport2D
 		void updateWindowSize();
 		void updateMousePos();
 		void updateCamera();
+
+		// Using a shared pointer to track the object's existence
+		bool trackObject( const std::shared_ptr<BaseObject> obj );
+		bool untrackObject();
 };
 
 

@@ -3,8 +3,13 @@
 
 # include "../core.hpp"
 
-void on_game_start();
-void on_game_step();
-void on_game_close();
+void OnGameStart();
+void OnGameStep();
+void OnGameClose();
+
+void OnReadInputs();
+void OnRunPhysics();
+void OnRunScripts();
+void OnRenderObjects();
 
 #endif // ENTRYPOINT_HPP

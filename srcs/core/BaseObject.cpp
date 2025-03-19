@@ -29,6 +29,7 @@ void BaseObject::onAdd()
 {
 	log( "BaseObject::onAdd()", DEBUG, _id );
 	addToRegister();
+	_position = { 0, 0 };
 }
 
 void BaseObject::onCpy( const BaseObject &obj )
@@ -80,3 +81,15 @@ void BaseObject::onInput()   { return; }
 void BaseObject::onUpdate()  { return; }
 void BaseObject::onTick()    { return; }
 void BaseObject::onRefresh() { return; }
+
+Vector2 BaseObject::getPosition() const { return _position; }
+Vector2 BaseObject::setPosition( const Vector2 &pos ) { _position = pos; return _position; }
+
+Vector2 BaseObject::changePosition( const Vector2 &delta ) { _position.x += delta.x; _position.y += delta.y; return _position; }
+Vector2 BaseObject::getRelPosition( const BaseObject &obj ) const
+{
+	Vector2 relPos = Vector2();
+	relPos.x = _position.x - obj.getPosition().x;
+	relPos.y = _position.y - obj.getPosition().y;
+	return relPos;
+}

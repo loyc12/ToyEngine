@@ -1,6 +1,5 @@
 #include "../../incs/core.hpp"
 #include "../../incs/game.hpp"
-#include <raylib.h>
 
 // ================================ MEMORY METHODS
 
@@ -54,6 +53,8 @@ void Engine::start()
 	if ( _state < E_INITIALIZED ){ log( "Engine::start() : Engine not initialized", ERROR ); return; }
 	if ( _state > E_INITIALIZED ){ log( "Engine::start() : Engine already started", ERROR ); return; }
 
+	OnGameStart(); // from game.hpp
+
 	_viewport->open();
 
 	_state = E_STARTED;
@@ -65,6 +66,8 @@ void Engine::close()
 	log( "Engine::close()" );
 
 	if ( _state < E_INITIALIZED ){ log( "Engine::close() : Engine not initialized", ERROR ); return; }
+
+	OnGameClose(); // from game.hpp
 
 	delete _viewport;
 
@@ -94,7 +97,7 @@ void Engine::runStep()
 
 	if ( _state < E_STARTED ){ log( "Engine::runeStep() : Engine not started", ERROR ); return; }
 
-	on_game_step(); // from game.hpp
+	OnGameStep(); // from game.hpp
 	readInputs();
 	runPhysics();
 	runScripts();
@@ -139,6 +142,8 @@ void Engine::readInputs()
 
 	// UPDATE OBJECTS
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onInput(); }
+
+	OnReadInputs(); // from game.hpp
 }
 
 void Engine::runPhysics()
@@ -146,6 +151,8 @@ void Engine::runPhysics()
 	log( "Engine::runPhysics()" );
 
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onTick(); }
+
+	OnRunPhysics(); // from game.hpp
 }
 
 void Engine::runScripts()
@@ -153,20 +160,22 @@ void Engine::runScripts()
 	log( "Engine::runScripts()" );
 
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onUpdate(); }
+
+	OnRunScripts(); // from game.hpp
 }
 
 void Engine::renderObjects()
 {
 	log( "Engine::renderObjects()" );
 
-	BeginDrawing();
-
-	_viewport->update();
-	_viewport->refresh();
+	BeginDrawing(); _viewport->refresh();
+	BeginMode2D( _viewport->getCamera() );
 
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onRefresh(); }
 
-	EndDrawing();
+	OnRenderObjects(); // from game.hpp
+
+	EndMode2D(); EndDrawing();
 }
 
 // ================================ OBJECTS METHODS
