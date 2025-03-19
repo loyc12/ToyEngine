@@ -2,19 +2,19 @@
 
 pos3_s getNullPos3() { return { 0, 0, 0 }; }
 
-pos3_s getPos3( byte_t x, byte_t y, byte_t z ) { return { x, y, z }; }
-pos3_s getPos3( word_t x, word_t y, word_t z ) { return { x, y, z }; }
-pos3_s getPos3( int x, int y, int z )          { return { x, y, z }; }
-pos3_s getPos3( long x, long y, long z )       { return { ( int )x, ( int )y, ( int )z }; }
-pos3_s getPos3( float x, float y, float z )    { return { ( int )x, ( int )y, ( int )z }; }
-pos3_s getPos3( double x, double y, double z ) { return { ( int )x, ( int )y, ( int )z }; }
+pos3_s getPos3( byte_t x, byte_t y, byte_t z ) { return { ( posint_t )x, ( posint_t )y, ( posint_t )z }; }
+pos3_s getPos3( word_t x, word_t y, word_t z ) { return { ( posint_t )x, ( posint_t )y, ( posint_t )z }; }
+pos3_s getPos3( int x, int y, int z )          { return { ( posint_t )x, ( posint_t )y, ( posint_t )z }; }
+pos3_s getPos3( long x, long y, long z )       { return { ( posint_t )x, ( posint_t )y, ( posint_t )z }; }
+pos3_s getPos3( float x, float y, float z )    { return { ( posint_t )x, ( posint_t )y, ( posint_t )z }; }
+pos3_s getPos3( double x, double y, double z ) { return { ( posint_t )x, ( posint_t )y, ( posint_t )z }; }
 
-pos3_s getPos3( byte_t v ) { return { v, v, v }; }
-pos3_s getPos3( word_t v ) { return { v, v, v }; }
-pos3_s getPos3( int v )    { return { v, v, v }; }
-pos3_s getPos3( long v )   { return { ( int )v, ( int )v, ( int )v }; }
-pos3_s getPos3( float v )  { return { ( int )v, ( int )v, ( int )v }; }
-pos3_s getPos3( double v ) { return { ( int )v, ( int )v, ( int )v }; }
+pos3_s getPos3( byte_t v ) { return { ( posint_t )v, ( posint_t )v, ( posint_t )v }; }
+pos3_s getPos3( word_t v ) { return { ( posint_t )v, ( posint_t )v, ( posint_t )v }; }
+pos3_s getPos3( int v )    { return { ( posint_t )v, ( posint_t )v, ( posint_t )v }; }
+pos3_s getPos3( long v )   { return { ( posint_t )v, ( posint_t )v, ( posint_t )v }; }
+pos3_s getPos3( float v )  { return { ( posint_t )v, ( posint_t )v, ( posint_t )v }; }
+pos3_s getPos3( double v ) { return { ( posint_t )v, ( posint_t )v, ( posint_t )v }; }
 
 // ================================ DISTANCE METHODS
 
@@ -28,21 +28,21 @@ float getLongLinearDist( const pos3_s &p1, const pos3_s &p2 ) { return max3( abs
 float getCartesianDist( const pos3_s &p1, const pos3_s &p2 ) { return abs( p1.x - p2.x ) + abs( p1.y - p2.y ) + abs( p1.z - p2.z ); }
 float getSphericalDist( const pos3_s &p1, const pos3_s &p2 )
 {
-	int x = abs( p2.x - p1.x );
-	int y = abs( p2.y - p1.y );
-	int z = abs( p2.z - p1.z );
+	posint_t x = abs( p2.x - p1.x );
+	posint_t y = abs( p2.y - p1.y );
+	posint_t z = abs( p2.z - p1.z );
 
-	int dsquare = sqr( y ) + sqr( x ) + sqr( z );
+	posint_t dsquare = sqr( y ) + sqr( x ) + sqr( z );
 
 	return sqrt( dsquare );
 }
 
 float getCylindricalDist( const pos3_s &p1, const pos3_s &p2 )
 {
-	int x = abs( p2.x - p1.x );
-	int z = abs( p2.z - p1.z );
+	posint_t x = abs( p2.x - p1.x );
+	posint_t z = abs( p2.z - p1.z );
 
-	int dsquare = sqr( x ) + sqr( z );
+	posint_t dsquare = sqr( x ) + sqr( z );
 
 	return sqrt( dsquare );
 }
@@ -362,18 +362,18 @@ pos3_s &operator*=( pos3_s &lhs, float rhs )
 pos3_s &operator/=( pos3_s &lhs, float rhs )
 {
 	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
-	lhs.x = ( int )fmod( lhs.x, rhs );
-	lhs.y = ( int )fmod( lhs.y, rhs );
-	lhs.z = ( int )fmod( lhs.z, rhs );
+	lhs.x = ( posint_t )fmod( lhs.x, rhs );
+	lhs.y = ( posint_t )fmod( lhs.y, rhs );
+	lhs.z = ( posint_t )fmod( lhs.z, rhs );
 	return lhs;
 }
 
 pos3_s &operator%=( pos3_s &lhs, float rhs )
 {
 	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
-	lhs.x = ( int )fmod( lhs.x, rhs );
-	lhs.y = ( int )fmod( lhs.y, rhs );
-	lhs.z = ( int )fmod( lhs.z, rhs );
+	lhs.x = ( posint_t )fmod( lhs.x, rhs );
+	lhs.y = ( posint_t )fmod( lhs.y, rhs );
+	lhs.z = ( posint_t )fmod( lhs.z, rhs );
 	return lhs;
 }
 
@@ -390,17 +390,17 @@ pos3_s &operator*=( pos3_s &lhs, double rhs )
 pos3_s &operator/=( pos3_s &lhs, double rhs )
 {
 	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
-	lhs.x = ( int )fmod( lhs.x, rhs );
-	lhs.y = ( int )fmod( lhs.y, rhs );
-	lhs.z = ( int )fmod( lhs.z, rhs );
+	lhs.x = ( posint_t )fmod( lhs.x, rhs );
+	lhs.y = ( posint_t )fmod( lhs.y, rhs );
+	lhs.z = ( posint_t )fmod( lhs.z, rhs );
 	return lhs;
 }
 
 pos3_s &operator%=( pos3_s &lhs, double rhs )
 {
 	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
-	lhs.x = ( int )fmod( lhs.x, rhs );
-	lhs.y = ( int )fmod( lhs.y, rhs );
-	lhs.z = ( int )fmod( lhs.z, rhs );
+	lhs.x = ( posint_t )fmod( lhs.x, rhs );
+	lhs.y = ( posint_t )fmod( lhs.y, rhs );
+	lhs.z = ( posint_t )fmod( lhs.z, rhs );
 	return lhs;
 }

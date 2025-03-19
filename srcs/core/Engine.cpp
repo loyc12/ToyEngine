@@ -1,11 +1,12 @@
 #include "../../incs/core.hpp"
 #include "../../incs/game.hpp"
+#include <raylib.h>
 
 // ================================ MEMORY METHODS
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
-Engine::Engine() : state( E_UNINITIALIZED ), maxID( 0 )
+Engine::Engine() : _state( E_UNINITIALIZED ), maxID( 0 )
 {
 	log( "Engine::Engine()" );
 
@@ -16,7 +17,8 @@ Engine::~Engine()
 {
 	log( "Engine::~Engine()" );
 
-	if ( state > E_UNINITIALIZED )
+
+	if ( _state > E_UNINITIALIZED )
 		close();
 }
 
@@ -35,22 +37,26 @@ void Engine::init()
 {
 	log( "Engine::init()" );
 
-	if ( state != E_UNINITIALIZED ){ log( "Engine::init() : Engine already initialized", ERROR ); return; }
+	if ( _state != E_UNINITIALIZED ){ log( "Engine::init() : Engine already initialized", ERROR ); return; }
 
-	state = E_INITIALIZED;
+	_viewport = new Viewport2D();
 
+	bzero( &_previousInputs, sizeof( inputs_s ) );
+	bzero( &_lastestInputs, sizeof( inputs_s ) );
+
+	_state = E_INITIALIZED;
 }
 
 void Engine::start()
 {
 	log( "Engine::start()" );
 
-	if ( state < E_INITIALIZED ){ log( "Engine::start() : Engine not initialized", ERROR ); return; }
-	if ( state > E_INITIALIZED ){ log( "Engine::start() : Engine already started", ERROR ); return; }
+	if ( _state < E_INITIALIZED ){ log( "Engine::start() : Engine not initialized", ERROR ); return; }
+	if ( _state > E_INITIALIZED ){ log( "Engine::start() : Engine already started", ERROR ); return; }
 
-	InitWindow( SCREEN_STARTING_WIDTH, SCREEN_STARTING_HEIGHT, WINDOW_STARTING_TITLE );
+	_viewport->open();
 
-	state = E_STARTED;
+	_state = E_STARTED;
 
 }
 
@@ -58,13 +64,13 @@ void Engine::close()
 {
 	log( "Engine::close()" );
 
-	if ( state < E_INITIALIZED ){ log( "Engine::close() : Engine not initialized", ERROR ); return; }
+	if ( _state < E_INITIALIZED ){ log( "Engine::close() : Engine not initialized", ERROR ); return; }
+
+	delete _viewport;
 
 	DelAllObjects();
 
-	state = E_UNINITIALIZED;
-
-	CloseWindow();
+	_state = E_UNINITIALIZED;
 
 }
 
@@ -72,21 +78,21 @@ void Engine::launch()
 {
 	log( "Engine::launch()" );
 
-	if ( state < E_STARTED ) { log( "Engine::launch() : Engine not started yet", ERROR ); return; }
-	if ( state > E_STARTED ) { log( "Engine::launch() : Engine already running", ERROR ); return; }
+	if ( _state < E_STARTED ) { log( "Engine::launch() : Engine not started yet", ERROR ); return; }
+	if ( _state > E_STARTED ) { log( "Engine::launch() : Engine already running", ERROR ); return; }
 
-	state = E_RUNNING;
+	_state = E_RUNNING;
 
-	while ( state >= E_RUNNING && !WindowShouldClose() ){ runStep(); }
+	while ( _state >= E_RUNNING && !WindowShouldClose() ){ runStep(); }
 
-	state = E_STARTED;
+	_state = E_STARTED;
 }
 
 void Engine::runStep()
 {
 	log( "Engine::runStep()" );
 
-	if ( state < E_STARTED ){ log( "Engine::runeStep() : Engine not started", ERROR ); return; }
+	if ( _state < E_STARTED ){ log( "Engine::runeStep() : Engine not started", ERROR ); return; }
 
 	on_game_step(); // from game.hpp
 	readInputs();
@@ -99,8 +105,39 @@ void Engine::readInputs()
 {
 	log( "Engine::readInputs()" );
 
-	// update gloal inputs here
+	// SAVE PREVIOUS INPUTS
+	_previousInputs = _lastestInputs;
 
+	// BASE
+	_lastestInputs.LEFT  = IsKeyDown( KEY_A ) || IsKeyDown( KEY_LEFT );
+	_lastestInputs.RIGHT = IsKeyDown( KEY_D ) || IsKeyDown( KEY_RIGHT );
+	_lastestInputs.FORE  = IsKeyDown( KEY_W ) || IsKeyDown( KEY_UP );
+	_lastestInputs.BACK  = IsKeyDown( KEY_S ) || IsKeyDown( KEY_DOWN );
+	_lastestInputs.SPACE = IsKeyDown( KEY_SPACE ) || IsKeyDown( KEY_KP_0 );
+	_lastestInputs.ENTER = IsKeyDown( KEY_ENTER ) || IsKeyDown( KEY_KP_ENTER );
+	_lastestInputs.SHIFT = IsKeyDown( KEY_LEFT_SHIFT ) || IsKeyDown( KEY_RIGHT_SHIFT );
+	_lastestInputs.CTRL  = IsKeyDown( KEY_LEFT_CONTROL ) || IsKeyDown( KEY_RIGHT_CONTROL );
+	_lastestInputs.ALT   = IsKeyDown( KEY_LEFT_ALT ) || IsKeyDown( KEY_RIGHT_ALT );
+	_lastestInputs.TAB   = IsKeyDown( KEY_TAB ) || IsKeyDown( KEY_BACKSLASH );
+
+	// MOUSE
+	_lastestInputs.CLICK_LEFT  = IsMouseButtonDown( MOUSE_LEFT_BUTTON );
+	_lastestInputs.CLICK_MID   = IsMouseButtonDown( MOUSE_MIDDLE_BUTTON );
+	_lastestInputs.CLICK_RIGHT = IsMouseButtonDown( MOUSE_RIGHT_BUTTON );
+	_lastestInputs.SCROLL_UP   = ( GetMouseWheelMove() > 0 );
+	_lastestInputs.SCROLL_DOWN = ( GetMouseWheelMove() < 0 );
+
+	// KEYBOARD
+	_lastestInputs.Q = IsKeyDown( KEY_Q );
+	_lastestInputs.E = IsKeyDown( KEY_E );
+	_lastestInputs.R = IsKeyDown( KEY_R );
+	_lastestInputs.F = IsKeyDown( KEY_F );
+	_lastestInputs.Z = IsKeyDown( KEY_Z );
+	_lastestInputs.X = IsKeyDown( KEY_X );
+	_lastestInputs.C = IsKeyDown( KEY_C );
+	_lastestInputs.V = IsKeyDown( KEY_V );
+
+	// UPDATE OBJECTS
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onInput(); }
 }
 
@@ -124,7 +161,8 @@ void Engine::renderObjects()
 
 	BeginDrawing();
 
-	ClearBackground( { 64, 64, 64, 255 } );
+	_viewport->update();
+	_viewport->refresh();
 
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onRefresh(); }
 
@@ -182,7 +220,6 @@ bool Engine::delObject( BaseObject *obj )
 	}
 
 	log( "Engine::delObject() : Failed to find requested object", WARN );
-
 	return EXIT_FAILURE;
 }
 
@@ -208,13 +245,20 @@ bool Engine::delObjectByID( objID_t id )
 void Engine::DelAllObjects()
 {
 	log( "Engine::DelAllObjects()" );
-
 	while ( !ObjectContainer.empty() ) { delete ObjectContainer[ 0 ]; }
 	ObjectContainer.clear();
 }
 
 // ================================ ACCESSORS
 
+inputs_s &Engine::getLastestInputs(){  return _lastestInputs; }
+inputs_s &Engine::getPreviousInputs(){ return _previousInputs; }
+
+Viewport2D *Engine::getViewport()
+{
+	log( "Engine::getViewport()" );
+	return _viewport;
+}
 
 BaseObject *Engine::getObjectByID( objID_t id )
 {
@@ -230,28 +274,24 @@ BaseObject *Engine::getObjectByID( objID_t id )
 	}
 
 	log( "Engine::getObjectByID() : Failed to find requested object", WARN );
-
 	return nullptr;
 }
 
 objID_t Engine::getNewID()
 {
 	log( "Engine::getNewID()" );
-
 	return ++maxID;
 }
 
 objID_t Engine::getState() const
 {
 	log( "Engine::getState()" );
-
-	return state;
+	return _state;
 }
 
 uint32_t Engine::getObjectCount() const
 {
 	log( "Engine::getObjectCount()" );
-
 	return ObjectContainer.size();
 }
 

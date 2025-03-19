@@ -3,10 +3,12 @@
 
 # include "../defs.hpp"
 
+typedef int32_t posint_t;
+
 typedef struct
 {
-	int x;
-	int y;
+	posint_t x;
+	posint_t y;
 } pos2_s;
 
 typedef 	list< pos2_s > posList2_t ;
@@ -37,7 +39,7 @@ float getShortLinearDist( const pos2_s &p1, const pos2_s &p2 );
 float getLongLinearDist(  const pos2_s &p1, const pos2_s &p2 );
 
 float getCartesianDist(   const pos2_s &p1, const pos2_s &p2 );
-float getCircularDist(   const pos2_s &p1, const pos2_s &p2 );
+float getCircularDist(    const pos2_s &p1, const pos2_s &p2 );
 
 // ================================ BOOLEAN METHODS
 

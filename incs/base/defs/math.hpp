@@ -4,7 +4,7 @@
 # include <cmath>
 # include "./_libs.hpp"
 
-#define E		2.71828182845904523536f
+#define EUL	2.71828182845904523536f
 #define TAU	6.28318530717958647692f
 #define PHI	1.61803398874989484820f
 

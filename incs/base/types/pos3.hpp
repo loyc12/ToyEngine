@@ -2,12 +2,13 @@
 # define POS3_HPP
 
 # include "../defs.hpp"
+# include "./pos2.hpp"
 
 typedef struct
 {
-	int x;
-	int y;
-	int z;
+	posint_t x;
+	posint_t y;
+	posint_t z;
 } pos3_s;
 
 typedef 	list< pos3_s > posList3_t ;
