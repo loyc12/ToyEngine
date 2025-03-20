@@ -36,11 +36,17 @@ void BaseObject::onCpy( const BaseObject &obj )
 {
 	log( "BaseObject::onCpy()", DEBUG, _id );
 	_type = obj.getType();
+	_position = obj.getPosition();
 }
 
 void BaseObject::onDel() // inverted call order
 {
 	log( "BaseObject::onDel()", DEBUG, _id );
+
+	// NOTE : if the object is being tracked, stop tracking it
+	Viewport2D &vp = *Engine::getEngine()->getViewport();
+	if ( vp.isTracking() && vp.getTrackedObject() == this ) vp.untrackObject();
+
 	if ( _id != 0 ) delFromRegister();
 }
 

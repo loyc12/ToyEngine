@@ -1,4 +1,5 @@
 #include "../../incs/core.hpp"
+#include <raylib.h>
 
 // ================================ CORE METHODS
 
@@ -9,10 +10,12 @@ void Viewport2D::init()
 	_windowSize = {SCREEN_DEFAULT_WIDTH, SCREEN_DEFAULT_HEIGHT};
 	_mousePos = {0, 0};
 	_targetFPS = WINDOW_DEFAULT_FPS;
-	_zoomLevel = 1.0f;
 	_trackingObject = false;
 
-	bzero( &_camera, sizeof( Camera2D ) );
+	_camera.target = { 0.0f, 0.0f };
+	_camera.zoom = 1.0f;
+	_camera.rotation = 0.0f;
+	_camera.offset = { ( float )_windowSize.x / 2, ( float )_windowSize.y / 2 };
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
@@ -29,24 +32,39 @@ Viewport2D::~Viewport2D()
 
 // ================================ ACCESSORS
 
-posint_t Viewport2D::getWindowWidth()  { return _windowSize.x; }
-posint_t Viewport2D::getWindowHeight() { return _windowSize.y; }
-pos2_s Viewport2D::getWindowSize()     { return _windowSize; }
+float Viewport2D::getWidth()        const { return _windowSize.x; }
+float Viewport2D::getHeight()       const { return _windowSize.y; }
+float Viewport2D::getZmdWidth()  const { return _windowSize.x / _camera.zoom; } // returns the width of the camera view in world units
+float Viewport2D::getZmdHeight() const { return _windowSize.y / _camera.zoom; } // returns the height of the camera view in world units
 
-pos2_s Viewport2D::getWindowCenter()   { return _windowSize / 2; }
-pos2_s Viewport2D::getWindowTopLeft()  { return { 0, 0 }; }
-pos2_s Viewport2D::getWindowTopRight() { return { _windowSize.x, 0 }; }
-pos2_s Viewport2D::getWindowBotLeft()  { return { 0, _windowSize.y }; }
-pos2_s Viewport2D::getWindowBotRight() { return _windowSize; }
+Vector2 Viewport2D::getSize()     const { return _windowSize; }
+Vector2 Viewport2D::getCenter()   const { return { _camera.target.x, _camera.target.y }; }
+Vector2 Viewport2D::getOrigin()   const { return GetScreenToWorld2D( { 0, 0 }, _camera ); } // returns the origin of the camera view in world units
 
-posint_t Viewport2D::getMousePosX()	{ return _mousePos.x; }
-posint_t Viewport2D::getMousePosY()	{ return _mousePos.y; }
-pos2_s Viewport2D::getMousePos()		{ return _mousePos; }
+Vector2 Viewport2D::getTopLeft()  const { return GetScreenToWorld2D( { 0,             0 }, _camera ); }
+Vector2 Viewport2D::getTopRight() const { return GetScreenToWorld2D( { getZmdWidth(), 0 }, _camera ); }
+Vector2 Viewport2D::getBotLeft()  const { return GetScreenToWorld2D( { 0,             getZmdHeight() }, _camera ); }
+Vector2 Viewport2D::getBotRight() const { return GetScreenToWorld2D( { getZmdWidth(), getZmdHeight() }, _camera ); }
 
-Camera2D &Viewport2D::getCamera() { return _camera; }
-bool Viewport2D::isTracking() const { return _trackingObject; }
-BaseObject *Viewport2D::getTrackedObject() const { return _trackedObject.lock().get(); }
+Vector2 Viewport2D::getTop()      const { return GetScreenToWorld2D( { _camera.target.x, 0 }, _camera ); }
+Vector2 Viewport2D::getBot()      const { return GetScreenToWorld2D( { _camera.target.x, getZmdHeight() }, _camera ); }
+Vector2 Viewport2D::getLeft()     const { return GetScreenToWorld2D( { 0,                _camera.target.y }, _camera ); }
+Vector2 Viewport2D::getRight()    const { return GetScreenToWorld2D( { getZmdWidth(),    _camera.target.y }, _camera ); }
 
+float Viewport2D::getMousePosX()  const { return _mousePos.x; }
+float Viewport2D::getMousePosY()  const { return _mousePos.y; }
+Vector2 Viewport2D::getMousePos() const { return _mousePos;   }
+
+// ================================ CAMERA ACCESSORS
+
+Camera2D Viewport2D::getCamera() { return _camera; }
+
+Vector2 Viewport2D::getTarget() const { return _camera.target; }
+void Viewport2D::moveTarget( Vector2 offset )
+{
+	_camera.target.x += offset.x;
+	_camera.target.y += offset.y;
+}
 void Viewport2D::setTarget( Vector2 target, bool overrideTracking )
 {
 	if ( _trackingObject )
@@ -62,15 +80,24 @@ void Viewport2D::setTarget( Vector2 target, bool overrideTracking )
 	_trackingObject = false;
 	_camera.target = target;
 }
-void Viewport2D::moveTarget( Vector2 offset )
+
+float Viewport2D::getZoom() { return _camera.zoom; }
+void Viewport2D::setZoom(   float zoom ){ _camera.zoom = zoom; }
+void Viewport2D::scaleZoom( float factor ){ _camera.zoom *= factor; }
+
+float Viewport2D::getRotation() { return _camera.rotation; }
+//void Viewport2D::setRotation( float rotation ){ _camera.rotation = rotation; }
+//void Viewport2D::changeRotation( float delta ){ _camera.rotation += delta; }
+
+Vector2 Viewport2D::getOffset() const { return _camera.offset; }
+/*
+void Viewport2D::setOffset( Vector2 &offset ){ _camera.offset = offset; }
+void Viewport2D::moveOffset( Vector2 &delta )
 {
-	_camera.target.x += offset.x;
-	_camera.target.y += offset.y;
+	_camera.offset.x += offset.x;
+	_camera.offset.y += offset.y;
 }
-
-void Viewport2D::setZoom( float zoom ) { _zoomLevel = zoom; }
-void Viewport2D::changeZoom( float factor ) { _zoomLevel *= factor; }
-
+*/
 
 // ================================ METHODS
 
@@ -91,48 +118,80 @@ void Viewport2D::close()
 void Viewport2D::update()
 {
 	log( "Viewport2D::update()" );
-	updateWindowSize();
-	updateMousePos();
 	updateCamera();
+	updateSize();
+	updateMousePos();
 }
 
 void Viewport2D::refresh()
 {
 	log( "Viewport2D::refresh()" );
-
-	update();
-
 	ClearBackground( BACKGROUND_COLOUR );
-
-	DrawText( "Hello, World!", DEBUG_FONT_SIZE, DEBUG_FONT_SIZE, DEBUG_FONT_SIZE, WHITE ); // DEBUG
+	update();
 }
 
-void Viewport2D::updateWindowSize()
+void Viewport2D::updateSize()
 {
-	_windowSize.x = GetScreenWidth();
-	_windowSize.y = GetScreenHeight();
+	// sets _windowSize to the camera view size
+	_windowSize.x = GetScreenWidth()  * _camera.zoom;
+	_windowSize.y = GetScreenHeight() * _camera.zoom;
 }
 void Viewport2D::updateMousePos()
 {
-	_mousePos.x = GetMouseX();
-	_mousePos.y = GetMouseY();
+	// sets _mousePos to were the mouse is in the world, accounting for the camera position
+	_mousePos.x = GetScreenToWorld2D( GetMousePosition(), _camera ).x;
 }
 void Viewport2D::updateCamera()
 {
-	_camera.zoom = _zoomLevel;
+	if ( _trackingObject ){ _camera.target = { _trackedObject->getPosition() }; }
+
+	// Clamping camera values
+	if ( _camera.zoom < MIN_ZOOM ){ _camera.zoom = MIN_ZOOM; }
+	if ( _camera.zoom > MAX_ZOOM ){ _camera.zoom = MAX_ZOOM; }
+
+	if ( _camera.rotation < 0.0f   ) while ( _camera.rotation < 0.0f   ){ _camera.rotation += 360.0f; }
+	if ( _camera.rotation > 360.0f ) while ( _camera.rotation > 360.0f ){ _camera.rotation -= 360.0f; }
+
+	//_camera.offset = { ( float )_windowSize.x / 2, ( float )_windowSize.y / 2 };
+
+}
+
+// ================================ OBJECTS TRACKING
+
+BaseObject *Viewport2D::getTrackedObject() const { return _trackedObject; }
+
+bool Viewport2D::isTracking() const { return _trackingObject; }
+
+bool Viewport2D::trackObject( BaseObject *obj, bool overrideTracking )
+{
+	if ( obj == nullptr )
+	{
+		log( "Viewport2D::trackObject() : cannot track a nullptr", INFO );
+		log( "Viewport2D::trackObject() : Use untrackObject() to stop tracking", DEBUG );
+		return false;
+	}
 
 	if ( _trackingObject )
 	{
-		// Check if the weak pointer is still valid
-		auto trackedObject = _trackedObject.lock();
-		if ( !trackedObject )
+		if ( !overrideTracking )
 		{
-			log( "Viewport2D::updateCamera() : Tracked object no longer exists", INFO );
-			log( "Viewport2D::updateCamera() : Stopping tracking", INFO );
-			_trackingObject = false; return;
+			log( "Viewport2D::trackObject() : Already tracking an object", INFO );
+			log( "Viewport2D::trackObject() : Use overrideTracking = true to override", DEBUG );
+			return false;
 		}
-		_camera.target = { trackedObject->getPosition().x, trackedObject->getPosition().y };
-		_camera.offset = { ( float )_windowSize.x / 2, ( float )_windowSize.y / 2 }; // NOTE : superfluous ?
-		}
-
+		else { log( "Viewport2D::trackObject() : Overriding tracking", INFO ); }
+	}
+	_trackingObject = true;
+	_trackedObject = obj;
+	return true;
 }
+
+bool Viewport2D::untrackObject()
+{
+	_trackedObject = nullptr;
+
+	if ( !_trackingObject ){ return false; }
+
+	_trackingObject = false; return true;
+}
+

@@ -16,6 +16,9 @@ typedef vector< pos2_s > posVect2_t ;
 
 pos2_s getNullPos2();
 
+pos2_s  VtoP2( const Vector2 &vec );
+Vector2 PtoV2( const pos2_s  &pos );
+
 pos2_s getPos2( byte_t x, byte_t y );
 pos2_s getPos2( word_t x, word_t y );
 pos2_s getPos2( int x, int y );

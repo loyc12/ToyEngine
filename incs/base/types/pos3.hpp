@@ -16,6 +16,9 @@ typedef vector< pos3_s > posVect3_t ;
 
 pos3_s getNullPos3();
 
+pos3_s  VtoP3( const Vector3 &vec );
+Vector3 PtoV3( const pos3_s  &pos );
+
 pos3_s getPos3( byte_t x, byte_t y, byte_t z );
 pos3_s getPos3( word_t x, word_t y, word_t z );
 pos3_s getPos3( int x, int y, int z );

@@ -8,9 +8,14 @@ void PhysicObject::onAdd()
 	_isDynamic = true;
 	_isCollide = true;
 
-	_position = Vector2();
+	//_position = Vector2(); // NOTE : BaseObject::onAdd() already sets the position
 	_velocity = Vector2();
 	_acceleration = Vector2();
+
+	_mass = EPS;
+	_radius = EPS;
+	_friction = 0.0f;
+	_elasticity = 0.0f;
 }
 
 void PhysicObject::onCpy( const PhysicObject &obj )
@@ -19,9 +24,14 @@ void PhysicObject::onCpy( const PhysicObject &obj )
 	_isDynamic = obj.getIsDynamic();
 	_isCollide = obj.getIsCollide();
 
-	_position = obj.getPosition();
+	//_position = obj.getPosition(); // NOTE : BaseObject::onCpy() already copies the position
 	_velocity = obj.getVelocity();
 	_acceleration = obj.getAcceleration();
+
+	_mass = obj.getMass();
+	_radius = obj.getRadius();
+	_friction = obj.getFriction();
+	_elasticity = obj.getElasticity();
 }
 
 void PhysicObject::onDel()

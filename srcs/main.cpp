@@ -16,6 +16,7 @@ int main()
 	log( "Launching Engine", INFO );
 
 	engine->launch();
+	//engine->runStep();
 
 	log( "Closing Engine", INFO );
 

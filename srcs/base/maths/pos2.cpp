@@ -2,6 +2,9 @@
 
 pos2_s getNullPos2() { return { 0, 0 }; }
 
+pos2_s  VtoP2( const Vector2 &vec ) { return { ( posint_t )vec.x, ( posint_t )vec.y }; }
+Vector2 PtoV2( const pos2_s  &pos ) { return { ( float )pos.x,    ( float )pos.y }; }
+
 pos2_s getPos2( byte_t x, byte_t y ) { return { ( posint_t )x, ( posint_t )y }; }
 pos2_s getPos2( word_t x, word_t y ) { return { ( posint_t )x, ( posint_t )y }; }
 pos2_s getPos2( int x, int y )       { return { ( posint_t )x, ( posint_t )y }; }

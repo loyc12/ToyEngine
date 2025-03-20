@@ -1,9 +1,10 @@
 #ifndef VIEWPORT_HPP
 # define VIEWPORT_HPP
 
+# include <raylib.h>
 # include "../../base.hpp"
 # include "../objects/BaseObject.hpp"
-#include <raylib.h>
+
 
 # define WINDOW_DEFAULT_TITLE  "ToyEngine"
 # define SCREEN_DEFAULT_WIDTH  2048
@@ -11,24 +12,24 @@
 # define WINDOW_DEFAULT_FPS    120
 # define DEBUG_FONT_SIZE       32
 
+# define MIN_ZOOM 0.5f
+# define MAX_ZOOM 16.0f
+
 # define BACKGROUND_COLOUR { 64, 64, 64, 255 }
 
 class Viewport2D
 {
 	private:
 	// ================================ ATTRIBUTES
-		pos2_s	_windowSize;
-		pos2_s	_mousePos;
+		Vector2	_windowSize;
+		Vector2	_mousePos;
 
 		uint8_t	_targetFPS;
-		float		_zoomLevel;
 
-		Camera2D	_camera;
-		bool			_trackingObject;
+		Camera2D	_camera; // contains target, zoom, rotation, offset
 
-		// Using a weak pointer to track the object's existence
-		const std::weak_ptr< BaseObject >	_trackedObject;
-
+		BaseObject	*_trackedObject;
+		bool				_trackingObject;
 
 		// ================================ CORE METHODS
 		void init();
@@ -39,29 +40,47 @@ class Viewport2D
 		~Viewport2D();
 
 	// ================================ ACCESSORS
-		posint_t getWindowWidth();
-		posint_t getWindowHeight();
-		pos2_s   getWindowSize();
+		float getWidth()        const;
+		float getHeight()       const;
+		float getZmdWidth()  const;
+		float getZmdHeight() const;
 
-		pos2_s getWindowCenter();
-		pos2_s getWindowTopLeft();
-		pos2_s getWindowTopRight();
-		pos2_s getWindowBotLeft();
-		pos2_s getWindowBotRight();
+		Vector2 getSize()   const;
+		Vector2 getOrigin() const;
+		Vector2 getCenter() const;
 
-		posint_t getMousePosX();
-		posint_t getMousePosY();
-		pos2_s   getMousePos();
+		Vector2 getTop()   const;
+		Vector2 getBot()   const;
+		Vector2 getLeft()  const;
+		Vector2 getRight() const;
 
-		Camera2D &getCamera();
-		bool isTracking() const;
-		BaseObject *getTrackedObject() const;
+		Vector2 getTopLeft()  const;
+		Vector2 getTopRight() const;
+		Vector2 getBotLeft()  const;
+		Vector2 getBotRight() const;
 
-		void setTarget( Vector2 target, bool overrideTracking = false );
-		void moveTarget( Vector2 offset );
+		float getMousePosX()  const;
+		float getMousePosY()  const;
+		Vector2 getMousePos() const;
 
-		void setZoom( float zoom );
-		void changeZoom( float factor );
+		// ================================ CAMERA ACCESSORS
+		Camera2D getCamera();
+
+		Vector2	getTarget() const;
+		void    setTarget( Vector2 target, bool overrideTracking = false );
+		void    moveTarget( Vector2 offset );
+
+		float   getZoom();
+		void    setZoom( float zoom );
+		void    scaleZoom( float factor );
+
+		float   getRotation();
+		//void    setRotation( float rotation );
+		//void    changeRotation( float delta );
+
+		Vector2 getOffset() const;
+		//void    setOffset( Vector2 offset );
+		//void    moveOffset( Vector2 delta );
 
 	// ================================ OPERATORS
 
@@ -71,12 +90,16 @@ class Viewport2D
 		void update();
 		void refresh();
 
-		void updateWindowSize();
+		void updateSize();
 		void updateMousePos();
 		void updateCamera();
 
-		// Using a shared pointer to track the object's existence
-		bool trackObject( const std::shared_ptr<BaseObject> obj );
+	// ================================ OBJECT TRACKING
+
+		BaseObject *getTrackedObject() const;
+		bool isTracking() const;
+
+		bool trackObject( BaseObject *obj, bool overrideTracking = false );
 		bool untrackObject();
 };
 
