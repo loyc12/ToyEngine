@@ -8,14 +8,15 @@ void Viewport2D::init()
 	log( "Viewport2D::init()" );
 
 	_windowSize = {SCREEN_DEFAULT_WIDTH, SCREEN_DEFAULT_HEIGHT};
-	_mousePos = {0, 0};
-	_targetFPS = WINDOW_DEFAULT_FPS;
-	_trackingObject = false;
+	_mousePos   = {0, 0};
+	_targetFPS  = WINDOW_DEFAULT_FPS;
 
-	_camera.target = { 0.0f, 0.0f };
-	_camera.zoom = 1.0f;
+	_camera.target   = { 0.0f, 0.0f };
+	_camera.zoom     = 1.0f;
 	_camera.rotation = 0.0f;
-	_camera.offset = { ( float )_windowSize.x / 2, ( float )_windowSize.y / 2 };
+	_camera.offset   = { _windowSize.x / 2, _windowSize.y / 2 };
+
+	_trackingObject = false;
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
@@ -32,24 +33,24 @@ Viewport2D::~Viewport2D()
 
 // ================================ ACCESSORS
 
-float Viewport2D::getWidth()        const { return _windowSize.x; }
-float Viewport2D::getHeight()       const { return _windowSize.y; }
+float Viewport2D::getWidth()     const { return _windowSize.x; }
+float Viewport2D::getHeight()    const { return _windowSize.y; }
 float Viewport2D::getZmdWidth()  const { return _windowSize.x / _camera.zoom; } // returns the width of the camera view in world units
 float Viewport2D::getZmdHeight() const { return _windowSize.y / _camera.zoom; } // returns the height of the camera view in world units
 
-Vector2 Viewport2D::getSize()     const { return _windowSize; }
-Vector2 Viewport2D::getCenter()   const { return { _camera.target.x, _camera.target.y }; }
-Vector2 Viewport2D::getOrigin()   const { return GetScreenToWorld2D( { 0, 0 }, _camera ); } // returns the origin of the camera view in world units
+Vector2 Viewport2D::getSize()   const { return _windowSize; }
+Vector2 Viewport2D::getCenter() const { return { _camera.target.x, _camera.target.y }; }
+Vector2 Viewport2D::getOrigin() const { return GetScreenToWorld2D( { 0, 0 }, _camera ); } // returns the origin of the camera view in world units
 
 Vector2 Viewport2D::getTopLeft()  const { return GetScreenToWorld2D( { 0,             0 }, _camera ); }
 Vector2 Viewport2D::getTopRight() const { return GetScreenToWorld2D( { getZmdWidth(), 0 }, _camera ); }
 Vector2 Viewport2D::getBotLeft()  const { return GetScreenToWorld2D( { 0,             getZmdHeight() }, _camera ); }
 Vector2 Viewport2D::getBotRight() const { return GetScreenToWorld2D( { getZmdWidth(), getZmdHeight() }, _camera ); }
 
-Vector2 Viewport2D::getTop()      const { return GetScreenToWorld2D( { _camera.target.x, 0 }, _camera ); }
-Vector2 Viewport2D::getBot()      const { return GetScreenToWorld2D( { _camera.target.x, getZmdHeight() }, _camera ); }
-Vector2 Viewport2D::getLeft()     const { return GetScreenToWorld2D( { 0,                _camera.target.y }, _camera ); }
-Vector2 Viewport2D::getRight()    const { return GetScreenToWorld2D( { getZmdWidth(),    _camera.target.y }, _camera ); }
+Vector2 Viewport2D::getTop()   const { return GetScreenToWorld2D( { _camera.target.x, 0 }, _camera ); }
+Vector2 Viewport2D::getBot()   const { return GetScreenToWorld2D( { _camera.target.x, getZmdHeight() }, _camera ); }
+Vector2 Viewport2D::getLeft()  const { return GetScreenToWorld2D( { 0,                _camera.target.y }, _camera ); }
+Vector2 Viewport2D::getRight() const { return GetScreenToWorld2D( { getZmdWidth(),    _camera.target.y }, _camera ); }
 
 float Viewport2D::getMousePosX()  const { return _mousePos.x; }
 float Viewport2D::getMousePosY()  const { return _mousePos.y; }
