@@ -10,7 +10,6 @@ void OnGameStart()
 	log( "OnGameStart()", INFO );
 
 	PlayerObject = new Object2D;
-	//PlayerObject->setPosition( PtoV2( vp->getCenter() ));
 }
 
 void OnGameClose()
