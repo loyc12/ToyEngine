@@ -64,7 +64,6 @@ void OnRenderObjects()
 	log( "OnRenderObjects()", INFO );
 
 	string playerPos = "[" + to_string( ( int )PlayerObject->getPosition().x ) + ":" + to_string( ( int )PlayerObject->getPosition().y ) + "]";
-	log( "Player position : " + playerPos, INFO );
 
 	DrawText( playerPos.c_str(), PlayerObject->getPosition().x, PlayerObject->getPosition().y, DEBUG_FONT_SIZE, RED );
 
@@ -75,13 +74,13 @@ void OnRenderUI()
 	string caInfo = "Camera : " + to_string( ( int )vp->getTarget().x ) + ":" + to_string( ( int )vp->getTarget().y ) + " | " + to_string( vp->getZoom() ) + " | " + to_string( ( int )vp->getRotation() );
 	log( caInfo, INFO );
 
-	int32_t FontSizeUI = DEBUG_FONT_SIZE;
+	int FontSizeUI = DEBUG_FONT_SIZE;
 
 	DrawText( caInfo.c_str(), FontSizeUI, ( 2.5f * FontSizeUI ), FontSizeUI, WHITE );
 
 	// DEBUG : drawing to each corner of the screen for debug purposes
-	DrawText( "TL", FontSizeUI,                            FontSizeUI,                             FontSizeUI, WHITE );
+	DrawText( "TL", FontSizeUI,                               FontSizeUI,                             FontSizeUI, WHITE );
 	DrawText( "TR", GetScreenWidth() - ( 2.5f * FontSizeUI ), FontSizeUI,                             FontSizeUI, WHITE );
-	DrawText( "BL", FontSizeUI,                            GetScreenHeight() - ( 2 * FontSizeUI ), FontSizeUI, WHITE );
+	DrawText( "BL", FontSizeUI,                               GetScreenHeight() - ( 2 * FontSizeUI ), FontSizeUI, WHITE );
 	DrawText( "BR", GetScreenWidth() - ( 2.5f * FontSizeUI ), GetScreenHeight() - ( 2 * FontSizeUI ), FontSizeUI, WHITE );
 }
