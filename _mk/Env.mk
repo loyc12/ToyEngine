@@ -24,7 +24,7 @@
 #**************************************************************************************************
 
 # Define required raylib variables
-PROJECT_NAME		?= Unnamed
+PROJECT_NAME		?= Unnamed Project
 RAYLIB_VERSION	?= 5.0.0
 RAYLIB_PATH			?= ../..
 
@@ -181,9 +181,9 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
 endif
 
 ifeq ($(BUILD_MODE),DEBUG)
-	CFLAGS += -g -O0
+	CFLAGS += -g -Og
 else
-	CFLAGS += -s -O1
+	CFLAGS += -s -Ofast
 endif
 
 # Additional flags for compiler (if desired)

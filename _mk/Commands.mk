@@ -1,5 +1,5 @@
 
-.PHONY += compile tidy run re rerun clear clean fclear fclean leaks delogs
+.PHONY += run re rerun drun dre drerun tidy clear clean fclear fclean tidy leaks clogs
 
 # Define a recursive wildcard function
 rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
@@ -11,15 +11,13 @@ OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 # Define all the subdirectories that object files will be placed in
 OBJ_SUB_DIRS = $(sort $(dir $(OBJS)))
 
-# Default target entry
-# NOTE: We call this Makefile target or Makefile.Android target
-compile: $(PROJECT_NAME)
-# @$(MAKE) $(MAKEFILE_PARAMS) # NOTE: Enable this to compile on Android
-	@printf "Compilation finished\n"
 
 # Project target defined by PROJECT_NAME
 $(PROJECT_NAME): $(OBJS)
+	@printf "\n$(BLUE)Linking with flags: $(LDFLAGS)\n$(DEFCOL)"
+	@printf "${MAGENTA}Linking $(PROJECT_NAME)...\n${DEFCOL}"
 	$(CC) -o $(PROJECT_NAME)$(EXT) $(OBJS) $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
+	@printf "${GREEN}$(PROJECT_NAME) linked\n${DEFCOL}"
 
 # Compile source files
 # NOTE: This pattern will compile every module defined on $(OBJS)
@@ -34,24 +32,26 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 # Include dependency files, so that they are recompiled if headers change
 -include $(OBJS:.o=.d)
 
-# Run the clang-tidy static analysis tool
-tidy:
-	@printf "Running clang-tidy...\n"
-	@clang-tidy $(SRCS) -- $(CFLAGS) $(INCLUDE_PATHS) -D$(PLATFORM)
-	@printf "clang-tidy finished\n"
-
 # Redo and/or Run the project
-re: clean compile
+re: clean relc
 rerun: re run
-run: compile
+run: relc
 	@printf "Launching $(PROJECT_NAME)...\n"
+	@./$(PROJECT_NAME)$(EXT)
+	@printf "Project executed\n"
+
+# Redo and/or Debug the project
+dre: clean dbgc
+drerun: dre drun
+drun: dbgc
+	@printf "Launching $(PROJECT_NAME) in debug mode...\n"
 	@./$(PROJECT_NAME)$(EXT)
 	@printf "Project executed\n"
 
 # Clean all .o files
 clear: clean
 clean:
-	@printf "Cleaning .o files...\n"
+	@printf "$(MAGENTA)Cleaning object files...\n$(DEFCOL)"
 	@rm -rf $(OBJ_DIR)
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
 ifeq ($(PLATFORM_OS),WINDOWS)
@@ -68,7 +68,7 @@ else ifeq ($(PLATFORM),PLATFORM_RPI)
 else ifeq ($(PLATFORM),PLATFORM_WEB)
 	@del *.o *.html *.js
 endif
-	@printf "Files cleaned\n"
+	@printf "$(GREEN)Object files cleaned\n$(DEFCOL)"
 
 # Clean all .o files and executable
 fclear: fclean
@@ -77,12 +77,19 @@ fclean: clean
 	@rm -f $(PROJECT_NAME)$(EXT)
 	@printf "Executable cleaned\n"
 
+# Run the clang-tidy static analysis tool
+tidy:
+	@printf "Running clang-tidy...\n"
+	@clang-tidy $(SRCS) -- $(CFLAGS) $(INCLUDE_PATHS) -D$(PLATFORM)
+	@printf "clang-tidy finished\n"
+
+
 # Check for memory leaks
 leaks:
 	@printf "Checking for memory leaks...\n"
 	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./$(PROJECT_NAME)$(EXT)
 	@printf "Memory leaks checked\n"
 
-delogs:
+clogs:
 	@rm -f $(LOG_DIR)/*.log
 	@printf "Logs deleted\n"

@@ -2,9 +2,6 @@
 # Defines executable file name
 PROJECT_NAME	= ToyEngine
 
-# Build mode for project: DEBUG or RELEASE
-BUILD_MODE		= DEBUG
-
 # Define all source files required
 INC_DIR = incs
 SRC_DIR = srcs
@@ -16,8 +13,13 @@ LOG_DIR = logs
 CUSTOM_RALIB_PATH = /home/.brew
 
 # Defines compiler flags:
-#  -O0									defines optimization level (no optimizations, better for debugging)
-#  -O1									defines optimization level (basic optimizations)
+#  -O0									no optimization
+#  -Og									optimization level for debugging
+#  -O1									optimization level 1 (basic)
+#  -O2									optimization level 2 (medium)
+#  -O3									optimization level 3 (maximum)
+#  -Os									optimization for program size
+#  -Ofast								optimization for program speed
 #  -g										include debug information on compilation
 #  -s										strip unnecesiary data from build -> do not use in debug builds
 #  -Wall								turns on most, but not all, compiler warnings
