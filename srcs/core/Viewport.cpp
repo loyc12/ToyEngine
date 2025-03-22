@@ -12,7 +12,7 @@ void Viewport2D::init()
 	_targetFPS  = WINDOW_DEFAULT_FPS;
 
 	_camera.target   = { 0.0f, 0.0f };
-	_camera.zoom     = 1.0f;
+	_camera.zoom     = DEFAULT_ZOOM;
 	_camera.rotation = 0.0f;
 	_camera.offset   = { _windowSize.x / 2, _windowSize.y / 2 };
 
@@ -147,8 +147,8 @@ void Viewport2D::updateCamera()
 	if ( _trackingObject ){ _camera.target = { _trackedObject->getPosition() }; }
 
 	// Clamping camera values
-	if ( _camera.zoom < MIN_ZOOM ){ _camera.zoom = MIN_ZOOM; }
-	if ( _camera.zoom > MAX_ZOOM ){ _camera.zoom = MAX_ZOOM; }
+	if ( _camera.zoom > MIN_ZOOM ){ _camera.zoom = MIN_ZOOM; }
+	if ( _camera.zoom < MAX_ZOOM ){ _camera.zoom = MAX_ZOOM; }
 
 	if ( _camera.rotation < 0.0f   ) while ( _camera.rotation < 0.0f   ){ _camera.rotation += 360.0f; }
 	if ( _camera.rotation > 360.0f ) while ( _camera.rotation > 360.0f ){ _camera.rotation -= 360.0f; }

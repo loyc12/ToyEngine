@@ -1,4 +1,3 @@
-
 .PHONY += run re rerun drun dre drerun tidy clear clean fclear fclean tidy leaks clogs
 
 # Define a recursive wildcard function

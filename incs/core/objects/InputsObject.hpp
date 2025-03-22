@@ -3,6 +3,40 @@
 
 # include "./BaseObject.hpp"
 
+struct inputs_s
+{
+	float DT;
+
+	//BASE
+	bool LEFT;
+	bool RIGHT;
+	bool FORE;
+	bool BACK;
+	bool SPACE;
+	bool ENTER;
+	bool SHIFT;
+	bool CTRL;
+	bool ALT;
+	bool TAB;
+
+	//MOUSE
+	bool CLICK_LEFT;
+	bool CLICK_MID;
+	bool CLICK_RIGHT;
+	bool SCROLL_UP;
+	bool SCROLL_DOWN;
+
+	//KEYBOARD
+	bool Q;
+	bool E;
+	bool R;
+	bool F;
+	bool Z;
+	bool X;
+	bool C;
+	bool V;
+};
+
 class InputsObject : virtual public BaseObject
 {
 	protected:

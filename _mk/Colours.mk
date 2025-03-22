@@ -30,7 +30,7 @@ GRAY=\033[1;90m
 LGRAY=\033[1;37m
 WHITE=\033[1;97m
 
-# Modifiers ( do not all work atm)
+# Modifiers ( do not all work atm )
 DEFCOL=\033[0m
 BOLD=\033[1m
 DIM=\033[2m

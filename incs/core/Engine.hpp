@@ -5,6 +5,8 @@
 # include "./objects/Object2D.hpp"
 # include "./display/Viewport.hpp"
 
+# define MOVE_SPEED 128
+# define ZOOM_SPEED 16
 
 typedef enum : byte_t
 {
@@ -14,38 +16,6 @@ typedef enum : byte_t
 	E_RUNNING
 
 } engineState_e;
-
-struct inputs_s
-{
-	//BASE
-	bool LEFT;
-	bool RIGHT;
-	bool FORE;
-	bool BACK;
-	bool SPACE;
-	bool ENTER;
-	bool SHIFT;
-	bool CTRL;
-	bool ALT;
-	bool TAB;
-
-	//MOUSE
-	bool CLICK_LEFT;
-	bool CLICK_MID;
-	bool CLICK_RIGHT;
-	bool SCROLL_UP;
-	bool SCROLL_DOWN;
-
-	//KEYBOARD
-	bool Q;
-	bool E;
-	bool R;
-	bool F;
-	bool Z;
-	bool X;
-	bool C;
-	bool V;
-};
 
 class Engine
 {

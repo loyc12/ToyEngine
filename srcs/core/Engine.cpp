@@ -110,6 +110,7 @@ void Engine::readInputs()
 
 	// SAVE PREVIOUS INPUTS
 	_previousInputs = _lastestInputs;
+	_lastestInputs.DT = GetFrameTime();
 
 	// BASE
 	_lastestInputs.LEFT  = IsKeyDown( KEY_A ) || IsKeyDown( KEY_LEFT );
@@ -139,6 +140,8 @@ void Engine::readInputs()
 	_lastestInputs.X = IsKeyDown( KEY_X );
 	_lastestInputs.C = IsKeyDown( KEY_C );
 	_lastestInputs.V = IsKeyDown( KEY_V );
+
+	log( "Engine::readInputs() : D_TIME : " + to_string( _lastestInputs.DT ), WARN );
 
 	// UPDATE OBJECTS
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onInput(); }
@@ -174,8 +177,10 @@ void Engine::renderObjects()
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onRefresh(); }
 
 	OnRenderObjects(); // from game.hpp
+	EndMode2D();
 
-	EndMode2D(); EndDrawing();
+	OnRenderUI(); // from game.hpp
+	EndDrawing();
 }
 
 // ================================ OBJECTS METHODS

@@ -12,10 +12,10 @@
 // fabs( ), pow( ) and sqrt( ) are already defined in cmath
 // floor( ), ceil( ) and round( )( ? ) are already defined in cmath
 
-inline int    abs( int a )     { return a < 0 ? -a : a; }
-inline long   abs( long a )    { return a < 0 ? -a : a; }
-inline float  abs( float a )   { return a < 0 ? -a : a; }
-inline double abs( double a )  { return a < 0 ? -a : a; }
+inline int    abs(  int a )     { return a < 0 ? -a : a; }
+inline long   abs(  long a )    { return a < 0 ? -a : a; }
+inline float  abs(  float a )   { return a < 0 ? -a : a; }
+inline double abs(  double a )  { return a < 0 ? -a : a; }
 
 inline int    sign( int a )    { return a < 0 ? -1 : 1; }
 inline long   sign( long a )   { return a < 0 ? -1 : 1; }
@@ -107,8 +107,8 @@ inline float  normTo11( float x, float a, float b )      { return norm( x, a, b,
 inline double normTo11( double x, double a, double b )   { return norm( x, a, b, -1, 1 ); }
 
 
-// float  operator%( float a, float b )   { return fmod( a, b ); }
-// double operator%( double a, double b ) { return fmod( a, b ); }
+//float  operator%( float a, float b )   { return fmod( a, b ); }
+//double operator%( double a, double b ) { return fmod( a, b ); }
 
 // float  &operator%=( float &a, float b )   { a = fmod( a, b ); return a; }
 // double &operator%=( double &a, double b ) { a = fmod( a, b ); return a; }

@@ -7,13 +7,14 @@
 
 
 # define WINDOW_DEFAULT_TITLE  "ToyEngine"
+# define WINDOW_DEFAULT_FPS    128
 # define SCREEN_DEFAULT_WIDTH  2048
 # define SCREEN_DEFAULT_HEIGHT 1024
-# define WINDOW_DEFAULT_FPS    120
-# define DEBUG_FONT_SIZE       32
 
-# define MIN_ZOOM 0.5f
-# define MAX_ZOOM 16.0f
+# define DEBUG_FONT_SIZE 32
+# define MAX_ZOOM        0.25f
+# define DEFAULT_ZOOM    2.00f
+# define MIN_ZOOM        16.0f
 
 # define BACKGROUND_COLOUR { 64, 64, 64, 255 }
 
@@ -40,8 +41,8 @@ class Viewport2D
 		~Viewport2D();
 
 	// ================================ ACCESSORS
-		float getWidth()        const;
-		float getHeight()       const;
+		float getWidth()     const;
+		float getHeight()    const;
 		float getZmdWidth()  const;
 		float getZmdHeight() const;
 

@@ -11,5 +11,6 @@ void OnReadInputs();
 void OnRunPhysics();
 void OnRunScripts();
 void OnRenderObjects();
+void OnRenderUI();
 
 #endif // ENTRYPOINT_HPP
