@@ -47,6 +47,16 @@ void OnReadInputs()
 	if ( np.X ){ vp->untrackObject(); }
 	if ( np.C ){ vp->trackObject( PlayerObject ); }
 
+	if ( np.CLICK_LEFT ) // log the mouse worl and screen position
+	{
+		Vector2 mouseWorldPos = vp->getMouseWorldPos();
+
+		PlayerObject->setPosition( { mouseWorldPos.x, mouseWorldPos.y } );
+		PlayerObject->setVelocity( { 0.0f, 0.0f } );
+		//PlayerObject->setRotation( 0.0f );
+
+	}
+
 }
 
 void OnRunPhysics()
@@ -63,24 +73,62 @@ void OnRenderObjects()
 {
 	log( "OnRenderObjects()", INFO );
 
-	string playerPos = "[" + to_string( ( int )PlayerObject->getPosition().x ) + ":" + to_string( ( int )PlayerObject->getPosition().y ) + "]";
+}
 
-	DrawText( playerPos.c_str(), PlayerObject->getPosition().x, PlayerObject->getPosition().y, DEBUG_FONT_SIZE, RED );
+void OnEach( InputsObject *obj )
+{
+	if ( obj == nullptr ) { return; }
+	log( "OnEach:InputsObject()", INFO, obj->getID() );
 
 }
 
-void OnRenderUI()
+void OnEach( PhysicObject *obj )
 {
-	string caInfo = "Camera : " + to_string( ( int )vp->getTarget().x ) + ":" + to_string( ( int )vp->getTarget().y ) + " | " + to_string( vp->getZoom() ) + " | " + to_string( ( int )vp->getRotation() );
+	if ( obj == nullptr ) { return; }
+	log( "OnEach:PhysicObject()", INFO, obj->getID() );
+
+	//obj->changeAcceleration( { 0.0f, 0.1f } );
+}
+
+void OnEach( ScriptObject *obj )
+{
+	if ( obj == nullptr ) { return; }
+	log( "OnEach:ScriptObject()", INFO, obj->getID() );
+
+	log( "Hello, World!", WARN );
+
+}
+void OnEach( RenderObject *obj )
+{
+	if ( obj == nullptr ) { return; }
+	log( "OnEach:RenderObject()", INFO, obj->getID() );
+
+	DrawCircle( ( int )obj->getPosition().x, ( int )obj->getPosition().y, 16, BLUE );
+}
+
+
+void OnRenderUI() // DEBUG FOR NOW
+{
+	string moInfo = "Mouse  : " + to_string( ( int )vp->getMouseWorldPos().x ) + ":" + to_string( ( int )vp->getMouseWorldPos().y ) + " | " + to_string( ( int )vp->getMousePos().x ) + ":" + to_string( ( int )vp->getMousePos().y );
+	log( moInfo, INFO );
+
+	string caInfo = "Camera : " + to_string( vp->getZoom() ) + " | " + to_string( ( int )vp->getRotation() ) + " | " + to_string( ( int )vp->getTarget().x ) + ":" + to_string( ( int )vp->getTarget().y );
 	log( caInfo, INFO );
+
+	Vector2 playerWorldPos = PlayerObject->getPosition();
+	Vector2 playerScreenPos = GetWorldToScreen2D( playerWorldPos, vp->getCamera() );
+	string plInfo = "Player  : " + to_string( ( int )playerScreenPos.x ) + ":" + to_string( ( int )playerScreenPos.y ) + " | " + to_string( ( int )playerWorldPos.x ) + ":" + to_string( ( int )playerWorldPos.y );
+	log( plInfo, INFO );
 
 	int FontSizeUI = DEBUG_FONT_SIZE;
 
-	DrawText( caInfo.c_str(), FontSizeUI, ( 2.5f * FontSizeUI ), FontSizeUI, WHITE );
+	DrawText( moInfo.c_str(), FontSizeUI, ( 2.5f * FontSizeUI ), FontSizeUI, WHITE );
+	DrawText( caInfo.c_str(), FontSizeUI, ( 4.0f * FontSizeUI ), FontSizeUI, WHITE );
+	DrawText( plInfo.c_str(), FontSizeUI, ( 5.5f * FontSizeUI ), FontSizeUI, WHITE );
 
 	// DEBUG : drawing to each corner of the screen for debug purposes
-	DrawText( "TL", FontSizeUI,                               FontSizeUI,                             FontSizeUI, WHITE );
-	DrawText( "TR", GetScreenWidth() - ( 2.5f * FontSizeUI ), FontSizeUI,                             FontSizeUI, WHITE );
-	DrawText( "BL", FontSizeUI,                               GetScreenHeight() - ( 2 * FontSizeUI ), FontSizeUI, WHITE );
-	DrawText( "BR", GetScreenWidth() - ( 2.5f * FontSizeUI ), GetScreenHeight() - ( 2 * FontSizeUI ), FontSizeUI, WHITE );
+	DrawText( "TL", FontSizeUI,                               FontSizeUI,                               FontSizeUI, WHITE );
+	DrawText( "TR", GetScreenWidth() - ( 2.5f * FontSizeUI ), FontSizeUI,                               FontSizeUI, WHITE );
+	DrawText( "BL", FontSizeUI,                               GetScreenHeight() - ( 2.0 * FontSizeUI ), FontSizeUI, WHITE );
+	DrawText( "BR", GetScreenWidth() - ( 2.5f * FontSizeUI ), GetScreenHeight() - ( 2.0 * FontSizeUI ), FontSizeUI, WHITE );
 }

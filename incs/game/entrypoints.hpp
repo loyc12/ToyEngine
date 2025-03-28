@@ -13,4 +13,11 @@ void OnRunScripts();
 void OnRenderObjects();
 void OnRenderUI();
 
+void OnEach( InputsObject *obj );
+void OnEach( PhysicObject *obj );
+void OnEach( ScriptObject *obj );
+void OnEach( RenderObject *obj );
+
+
+
 #endif // ENTRYPOINT_HPP

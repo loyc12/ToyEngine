@@ -1,4 +1,5 @@
 #include "../../incs/core.hpp"
+#include "../../incs/game.hpp"
 
 // ================================ CORE METHODS
 
@@ -59,4 +60,6 @@ void ScriptObject::onUpdate()	// runs the object's scripts
 {
 	if ( !isActive ) return;
 	log( "ScriptObject::onUpdate()", DEBUG, _id );
+
+	OnEach( this ); // DEBUG ?
 }

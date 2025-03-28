@@ -22,13 +22,13 @@ class Viewport2D
 {
 	private:
 	// ================================ ATTRIBUTES
-		Vector2	_windowSize;
-		Vector2	_mousePos;
-
 		uint8_t	_targetFPS;
 
-		Camera2D	_camera; // contains target, zoom, rotation, offset
+		Vector2	_windowSize;    // latest size of the window in pixels
+		Vector2	_mousePos;      // latest position of the mouse in pixels
+		Vector2	_mouseWorldPos; // latest position of the mouse in world units
 
+		Camera2D	  _camera;      // contains target, zoom, rotation, offset
 		BaseObject	*_trackedObject;
 		bool				_trackingObject;
 
@@ -60,15 +60,14 @@ class Viewport2D
 		Vector2 getBotLeft()  const;
 		Vector2 getBotRight() const;
 
-		float getMousePosX()  const;
-		float getMousePosY()  const;
-		Vector2 getMousePos() const;
+		Vector2 getMousePos()      const;
+		Vector2 getMouseWorldPos() const;
 
 		// ================================ CAMERA ACCESSORS
 		Camera2D getCamera();
 
 		Vector2	getTarget() const;
-		void    setTarget( Vector2 target, bool overrideTracking = false );
+		void    setTarget(  Vector2 target, bool overrideTracking = false );
 		void    moveTarget( Vector2 offset );
 
 		float   getZoom();
@@ -92,7 +91,7 @@ class Viewport2D
 		void refresh();
 
 		void updateSize();
-		void updateMousePos();
+		void updateMouse();
 		void updateCamera();
 
 	// ================================ OBJECT TRACKING

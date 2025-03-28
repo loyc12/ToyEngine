@@ -1,4 +1,5 @@
 #include "../../incs/core.hpp"
+#include "../../incs/game.hpp"
 
 // ================================ CORE METHODS
 
@@ -59,4 +60,6 @@ void InputsObject::onInput() // checks conditions based on the global engine inp
 {
 	if ( !isControlled ) return;
 	log( "InputsObject::onInput()", DEBUG, _id );
+
+	OnEach( this ); // DEBUG ?
 }

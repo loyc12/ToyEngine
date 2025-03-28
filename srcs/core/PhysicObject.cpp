@@ -1,4 +1,5 @@
 #include "../../incs/core.hpp"
+#include "../../incs/game.hpp"
 
 // ================================ CORE METHODS
 
@@ -203,16 +204,18 @@ void PhysicObject::onTick() // calculates the object's physics
 	if ( !_isDynamic ) return;
 	log( "PhysicObject::onTick()", DEBUG, _id );
 
+	OnEach( this ); // DEBUG ?
+
+	// apply & reset acceleration
+	changeVelocity( _acceleration );
+	setAcceleration( Vector2() );
+
+	// apply velocity
+	changePosition( _velocity );
+
 	// apply friction
 	Vector2 friction = Vector2();
 	friction.x = -sign( _velocity.x ) * _friction;
 	friction.y = -sign( _velocity.y ) * _friction;
 	applyForce( friction );
-
-	// apply & resetacceleration
-	changeVelocity( _acceleration );
-	changePosition( _velocity );
-	_acceleration.x = 0;
-	_acceleration.y = 0;
-
 }

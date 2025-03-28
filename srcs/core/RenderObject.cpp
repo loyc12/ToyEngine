@@ -1,4 +1,5 @@
 #include "../../incs/core.hpp"
+#include "../../incs/game.hpp"
 
 // ================================ CORE METHODS
 
@@ -59,4 +60,6 @@ void RenderObject::onRefresh() // (re)renders the object
 {
 	if ( !isVisible ) return;
 	log( "RenderObject::onRefresh()", DEBUG, _id );
+
+	OnEach( this ); // DEBUG ?
 }
