@@ -57,7 +57,7 @@ Vector2 Viewport2D::getMouseWorldPos() const { return _mouseWorldPos; }
 
 // ================================ CAMERA ACCESSORS
 
-Camera2D Viewport2D::getCamera() { return _camera; }
+Camera2D &Viewport2D::getCamera() { return _camera; }
 
 Vector2 Viewport2D::getTarget() const { return _camera.target; }
 void Viewport2D::moveTarget( Vector2 offset )

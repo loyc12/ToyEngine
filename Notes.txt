@@ -1,5 +1,4 @@
 Style
-	- Put colour into the makefile messages
 
 Performance
 	- Improve the performance of log() / get_time_str()
@@ -8,4 +7,4 @@ Performance
 	- Use scalar_t instead of floats
 
 General
-	- For Object2D classes, make sure not to call the onAdd/onCpy/onDel functions multiple times
+	- Use ScriptObject as an Entity Component System Interface

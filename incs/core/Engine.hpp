@@ -1,9 +1,11 @@
 #ifndef ENGINE_HPP
 # define ENGINE_HPP
 
+# include <raylib.h>
 # include "../base.hpp"
 # include "./objects/Object2D.hpp"
-# include "./display/Viewport.hpp"
+# include "./parts/Viewport.hpp"
+# include "./parts/Controller.hpp"
 
 # define MOVE_SPEED 128
 # define ZOOM_SPEED 16
@@ -30,13 +32,14 @@ class Engine
 		void renderObjects(); // calls the onRefresh() method of every object
 
 	// ================================ ATTRIBUTES
-		// gobal var struct
 		Viewport2D *_viewport;
+		Controller *_controller;
+
 		vector< BaseObject* > ObjectContainer;
-		inputs_s _lastestInputs;
-		inputs_s _previousInputs;
+
 		engineState_e _state;
 		objID_t maxID;
+		float _DT;
 
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 	// prevents this singleton from being copied
@@ -45,8 +48,7 @@ class Engine
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
-		Engine();
-		~Engine();
+		Engine();   ~Engine();
 
 		static Engine *getEngine();
 
@@ -57,19 +59,25 @@ class Engine
 
 	// ================================ OBJECTS METHODS
 		BaseObject *addObject( BaseObject *ob, bool checkForDupID = false ); // NOTE : put to true by default ?
+
 		bool delObject( BaseObject *obj );
 		bool delObjectByID( objID_t id );
 		void DelAllObjects();
 
 	// ================================ ACCESSORS
-		inputs_s   &getLastestInputs();
-		inputs_s   &getPreviousInputs();
+	  float getDeltaTime() const;
 
-		Viewport2D   *getViewport();
+		inputs_s   &getLatestInputs();
+		inputs_s   &getPreviousInputs();
+		Controller *getController();
+
+		Camera2D   &getCamera();
+		Viewport2D *getViewport();
+
 		BaseObject *getObjectByID( objID_t id );
 
-		objID_t getNewID();
-		objID_t getState() const;
+		objID_t  getNewID();
+		objID_t  getState() const;
 		uint32_t getObjectCount() const;
 
 	// ================================ OPERATORS

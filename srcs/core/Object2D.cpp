@@ -6,7 +6,6 @@
 void Object2D::onAdd()
 {
 	log( "Object2D::onAdd()", DEBUG, _id );
-	// isControlled = true;
 	// isActive = true;
 	// isDynamic = true;
 	// isCollide = true;
@@ -16,7 +15,6 @@ void Object2D::onAdd()
 void Object2D::onCpy( const Object2D &obj )
 {
 	log( "Object2D::onCpy()", DEBUG, _id );
-	// isControlled = obj.getIsControlled();
 	// isActive = obj.getIsActive();
 	// isDynamic = obj.getIsDynamic();
 	// isCollide = obj.getIsCollide();
@@ -34,7 +32,6 @@ void Object2D::onDel()
 
 Object2D::Object2D() :
 	BaseObject( E_OBJ2D ),
-	InputsObject(),
 	ScriptObject(),
 	PhysicObject(),
 	RenderObject()
@@ -42,7 +39,6 @@ Object2D::Object2D() :
 
 Object2D::Object2D( const Object2D &obj ) :
 	BaseObject( E_OBJ2D ),
-	InputsObject( obj ),
 	ScriptObject( obj ),
 	PhysicObject( obj ),
 	RenderObject( obj )
@@ -51,7 +47,6 @@ Object2D::Object2D( const Object2D &obj ) :
 
 	BaseObject::onCpy( obj );
 
-	InputsObject::onCpy( obj );
 	ScriptObject::onCpy( obj );
 	PhysicObject::onCpy( obj );
 	RenderObject::onCpy( obj );
@@ -65,7 +60,6 @@ Object2D &Object2D::operator=( const Object2D &obj )
 
 	BaseObject::onCpy( obj );
 
-	InputsObject::onCpy( obj );
 	ScriptObject::onCpy( obj );
 	PhysicObject::onCpy( obj );
 	RenderObject::onCpy( obj );

@@ -2,14 +2,12 @@
 # define OBJECT2D_HPP
 
 # include "./BaseObject.hpp"
-# include "./InputsObject.hpp"
 # include "./ScriptObject.hpp"
 # include "./PhysicObject.hpp"
 # include "./RenderObject.hpp"
 
 class Object2D :
 	virtual public BaseObject,
-	virtual public InputsObject,
 	virtual public ScriptObject,
 	virtual public PhysicObject,
 	virtual public RenderObject

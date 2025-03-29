@@ -1,5 +1,6 @@
 #include "../../incs/core.hpp"
 #include "../../incs/game.hpp"
+#include <raylib.h>
 
 // ================================ MEMORY METHODS
 
@@ -38,10 +39,8 @@ void Engine::init()
 
 	if ( _state != E_UNINITIALIZED ){ log( "Engine::init() : Engine already initialized", ERROR ); return; }
 
-	_viewport = new Viewport2D();
-
-	bzero( &_previousInputs, sizeof( inputs_s ) );
-	bzero( &_lastestInputs, sizeof( inputs_s ) );
+	_controller = new Controller();
+	_viewport   = new Viewport2D();
 
 	_state = E_INITIALIZED;
 }
@@ -72,6 +71,8 @@ void Engine::close()
 	delete _viewport;
 
 	DelAllObjects();
+
+	delete _controller;
 
 	_state = E_UNINITIALIZED;
 
@@ -108,40 +109,11 @@ void Engine::readInputs()
 {
 	log( "Engine::readInputs()" );
 
-	// SAVE PREVIOUS INPUTS
-	_previousInputs = _lastestInputs;
-	_lastestInputs.DT = GetFrameTime();
+	_controller->refreshInputs();
 
-	// BASE
-	_lastestInputs.LEFT  = IsKeyDown( KEY_A ) || IsKeyDown( KEY_LEFT );
-	_lastestInputs.RIGHT = IsKeyDown( KEY_D ) || IsKeyDown( KEY_RIGHT );
-	_lastestInputs.FORE  = IsKeyDown( KEY_W ) || IsKeyDown( KEY_UP );
-	_lastestInputs.BACK  = IsKeyDown( KEY_S ) || IsKeyDown( KEY_DOWN );
-	_lastestInputs.SPACE = IsKeyDown( KEY_SPACE ) || IsKeyDown( KEY_KP_0 );
-	_lastestInputs.ENTER = IsKeyDown( KEY_ENTER ) || IsKeyDown( KEY_KP_ENTER );
-	_lastestInputs.SHIFT = IsKeyDown( KEY_LEFT_SHIFT ) || IsKeyDown( KEY_RIGHT_SHIFT );
-	_lastestInputs.CTRL  = IsKeyDown( KEY_LEFT_CONTROL ) || IsKeyDown( KEY_RIGHT_CONTROL );
-	_lastestInputs.ALT   = IsKeyDown( KEY_LEFT_ALT ) || IsKeyDown( KEY_RIGHT_ALT );
-	_lastestInputs.TAB   = IsKeyDown( KEY_TAB ) || IsKeyDown( KEY_BACKSLASH );
+	_DT = GetFrameTime();
 
-	// MOUSE
-	_lastestInputs.CLICK_LEFT  = IsMouseButtonDown( MOUSE_LEFT_BUTTON );
-	_lastestInputs.CLICK_MID   = IsMouseButtonDown( MOUSE_MIDDLE_BUTTON );
-	_lastestInputs.CLICK_RIGHT = IsMouseButtonDown( MOUSE_RIGHT_BUTTON );
-	_lastestInputs.SCROLL_UP   = ( GetMouseWheelMove() > 0 );
-	_lastestInputs.SCROLL_DOWN = ( GetMouseWheelMove() < 0 );
-
-	// KEYBOARD
-	_lastestInputs.Q = IsKeyDown( KEY_Q );
-	_lastestInputs.E = IsKeyDown( KEY_E );
-	_lastestInputs.R = IsKeyDown( KEY_R );
-	_lastestInputs.F = IsKeyDown( KEY_F );
-	_lastestInputs.Z = IsKeyDown( KEY_Z );
-	_lastestInputs.X = IsKeyDown( KEY_X );
-	_lastestInputs.C = IsKeyDown( KEY_C );
-	_lastestInputs.V = IsKeyDown( KEY_V );
-
-	log( "Engine::readInputs() : D_TIME : " + to_string( _lastestInputs.DT ), WARN );
+	log( "DeltaTime : " + to_string( _DT ), WARN );
 
 	// UPDATE OBJECTS
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onInput(); }
@@ -171,15 +143,20 @@ void Engine::renderObjects()
 {
 	log( "Engine::renderObjects()" );
 
-	BeginDrawing(); _viewport->refresh();
+	BeginDrawing();
+
+	_viewport->refresh();
+
 	BeginMode2D( _viewport->getCamera() );
 
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onRefresh(); }
 
 	OnRenderObjects(); // from game.hpp
+
 	EndMode2D();
 
 	OnRenderUI(); // from game.hpp
+
 	EndDrawing();
 }
 
@@ -265,14 +242,24 @@ void Engine::DelAllObjects()
 
 // ================================ ACCESSORS
 
-inputs_s &Engine::getLastestInputs(){  return _lastestInputs; }
-inputs_s &Engine::getPreviousInputs(){ return _previousInputs; }
+float Engine::getDeltaTime() const { return _DT; }
 
+inputs_s   &Engine::getLatestInputs(){  return _controller->getLatestInputs(); }
+inputs_s   &Engine::getPreviousInputs(){ return _controller->getPreviousInputs(); }
+Controller *Engine::getController()
+{
+	log( "Engine::getController()" );
+	return _controller;
+}
+
+Camera2D   &Engine::getCamera() { return _viewport->getCamera(); }
 Viewport2D *Engine::getViewport()
 {
 	log( "Engine::getViewport()" );
 	return _viewport;
 }
+
+
 
 BaseObject *Engine::getObjectByID( objID_t id )
 {

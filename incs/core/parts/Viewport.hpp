@@ -64,7 +64,7 @@ class Viewport2D
 		Vector2 getMouseWorldPos() const;
 
 		// ================================ CAMERA ACCESSORS
-		Camera2D getCamera();
+		Camera2D &getCamera();
 
 		Vector2	getTarget() const;
 		void    setTarget(  Vector2 target, bool overrideTracking = false );
@@ -95,10 +95,9 @@ class Viewport2D
 		void updateCamera();
 
 	// ================================ OBJECT TRACKING
-
 		BaseObject *getTrackedObject() const;
-		bool isTracking() const;
 
+		bool isTracking() const;
 		bool trackObject( BaseObject *obj, bool overrideTracking = false );
 		bool untrackObject();
 };
