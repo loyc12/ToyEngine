@@ -1,5 +1,5 @@
-#include "../../incs/core.hpp"
-#include "../../incs/game.hpp"
+#include "../../../incs/core.hpp"
+#include "../../../incs/game.hpp"
 
 // ================================ CORE METHODS
 

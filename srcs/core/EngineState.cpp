@@ -110,8 +110,8 @@ void Engine::init()
 	if ( getState() > ES_INITIALIZING ){ log( "Engine::init() : Engine already initialized",  ERROR ); return; }
 	if ( getState() < ES_CLOSED){        log( "Engine::init() : how did you even get here ?", ERROR ); return; }
 
-	_controller = new Controller();
-	_viewport   = new Viewport2D();
+	_controller = new Controller();   GCN = _controller;
+	_viewport2D = new Viewport2D();   GVP = _viewport2D;
 
 	OnGameInit(); // from game.hpp
 
@@ -125,7 +125,7 @@ void Engine::start()
 	if ( getState() > ES_STARTING ){    log( "Engine::start() : Engine already started", ERROR ); return; }
 	if ( getState() < ES_INITIALIZED ){ log( "Engine::start() : Engine not initialized", ERROR ); return; }
 
-	_viewport->open();
+	_viewport2D->open();
 
 	OnGameStart(); // from game.hpp
 	setState( ES_STARTED );
@@ -162,7 +162,7 @@ void Engine::stop()
 	if ( getState() < ES_STOPPING ){ log( "Engine::stop() : Engine not yet started",  ERROR ); return; }
 	if ( getState() > ES_STARTED ){  log( "Engine::stop() : Engine is still running", ERROR ); return; }
 
-	_viewport->close();
+	_viewport2D->close();
 
 	OnGameStop(); // from game.hpp
 	setState( ES_INITIALIZED );
@@ -177,8 +177,8 @@ void Engine::close()
 
 	OnGameClose(); // from game.hpp
 
-	delete _viewport;
-	delete _controller;
+	delete _viewport2D;   GVP = nullptr;
+	delete _controller;   GVP = nullptr;
 
 	DelAllObjects();
 	setState( ES_CLOSED );

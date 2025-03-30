@@ -1,4 +1,4 @@
-default: dbgc
+default: release
 .PHONY: default release debug compt comp
 
 include _mk/Colours.mk

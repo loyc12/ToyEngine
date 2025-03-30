@@ -203,8 +203,10 @@ bool Viewport2D::trackObject( BaseObject *obj, bool overrideTracking )
 		}
 		else { log( "Viewport2D::trackObject() : Overriding tracking", INFO ); }
 	}
+
+	_trackedObject  = obj;
 	_trackingObject = true;
-	_trackedObject = obj;
+
 	return true;
 }
 

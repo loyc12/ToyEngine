@@ -71,7 +71,7 @@ void Engine::runRenders()
 	log( "Engine::runRenders()" );
 
 	BeginDrawing();
-	_viewport->refresh();
+	_viewport2D->refresh();
 
 	renderWorld();
 	renderUIs();
@@ -83,7 +83,7 @@ void Engine::renderWorld()
 {
 	log( "Engine::renderObjects()" );
 
-	BeginMode2D( _viewport->getCamera() );
+	BeginMode2D( _viewport2D->getCamera() );
 
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onRenderTick(); }
 

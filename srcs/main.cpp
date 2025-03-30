@@ -6,16 +6,14 @@ int main()
 {
 	log( "Initializing the Engine", INFO );
 
-	Engine *engine = Engine::getEngine();
 
+	GNG->switchState( ES_RUNNING );
 
-	engine->switchState( ES_RUNNING );
+	GNG->launchLoop();
 
-	engine->launchLoop();
+	GNG->switchState( ES_CLOSED );
 
-	engine->switchState( ES_CLOSED );
-
-	delete engine;
+	delete GNG;   GNG = nullptr;
 
 	log( "Exiting main()", INFO );
 }

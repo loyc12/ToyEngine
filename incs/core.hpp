@@ -5,6 +5,7 @@
 
 # include "./base.hpp"
 
+# include "./core/objects/Object2D.hpp"
 # include "./core/Engine.hpp"
 
 // add here the core ( aka engine ) includes

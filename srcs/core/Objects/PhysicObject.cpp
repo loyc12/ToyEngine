@@ -1,5 +1,5 @@
-#include "../../incs/core.hpp"
-#include "../../incs/game.hpp"
+#include "../../../incs/core.hpp"
+#include "../../../incs/game.hpp"
 
 // ================================ CORE METHODS
 
@@ -9,14 +9,13 @@ void PhysicObject::onAdd()
 	_isDynamic = true;
 	_isCollide = true;
 
-	//_position = Vector2(); // NOTE : BaseObject::onAdd() already sets the position
-	_velocity = Vector2();
-	_acceleration = Vector2();
+	//_pos = Vector2(); // NOTE : BaseObject::onAdd() already sets the position
+	_vel = Vector2();
+	_acc = Vector2();
 
-	_mass = EPS;
-	_radius = EPS;
-	_friction = 0.0f;
-	_elasticity = 0.0f;
+	_mass = 1.0f;
+	_fric = 0.0f;
+	_elas = 0.0f;
 }
 
 void PhysicObject::onCpy( const PhysicObject &obj )
@@ -25,14 +24,13 @@ void PhysicObject::onCpy( const PhysicObject &obj )
 	_isDynamic = obj.getIsDynamic();
 	_isCollide = obj.getIsCollide();
 
-	//_position = obj.getPosition(); // NOTE : BaseObject::onCpy() already copies the position
-	_velocity = obj.getVelocity();
-	_acceleration = obj.getAcceleration();
+	//_pos = obj.getPosition(); // NOTE : BaseObject::onCpy() already copies the position
+	_vel = obj.getVelocity();
+	_acc = obj.getAcceleration();
 
 	_mass = obj.getMass();
-	_radius = obj.getRadius();
-	_friction = obj.getFriction();
-	_elasticity = obj.getElasticity();
+	_fric = obj.getFriction();
+	_elas = obj.getElasticity();
 }
 
 void PhysicObject::onDel()
@@ -74,13 +72,13 @@ bool PhysicObject::getIsDynamic() const { return _isDynamic; }
 bool PhysicObject::getIsCollide() const { return _isCollide; }
 
 Vector2 PhysicObject::getPosition() const { return BaseObject::getPosition(); }
-Vector2 PhysicObject::getVelocity() const { return _velocity; }
-Vector2 PhysicObject::getAcceleration() const { return _acceleration; }
+Vector2 PhysicObject::getVelocity() const { return _vel; }
+Vector2 PhysicObject::getAcceleration() const { return _acc; }
 Vector2 PhysicObject::getForce() const
 {
 	Vector2 force = Vector2();
-	force.x = _mass * _acceleration.x;
-	force.y = _mass * _acceleration.y;
+	force.x = _mass * _acc.x;
+	force.y = _mass * _acc.y;
 	return force;
 }
 
@@ -91,15 +89,15 @@ Vector2 PhysicObject::getRelPosition( const PhysicObject &obj ) const
 Vector2 PhysicObject::getRelVelocity( const PhysicObject &obj ) const
 {
 	Vector2 relVel = Vector2();
-	relVel.x = _velocity.x - obj.getVelocity().x;
-	relVel.y = _velocity.y - obj.getVelocity().y;
+	relVel.x = _vel.x - obj.getVelocity().x;
+	relVel.y = _vel.y - obj.getVelocity().y;
 	return relVel;
 }
 Vector2 PhysicObject::getRelAcceleration( const PhysicObject &obj ) const
 {
 	Vector2 relAcc = Vector2();
-	relAcc.x = _acceleration.x - obj.getAcceleration().x;
-	relAcc.y = _acceleration.y - obj.getAcceleration().y;
+	relAcc.x = _acc.x - obj.getAcceleration().x;
+	relAcc.y = _acc.y - obj.getAcceleration().y;
 	return relAcc;
 }
 Vector2 PhysicObject::getRelForce( const PhysicObject &obj ) const
@@ -110,14 +108,12 @@ Vector2 PhysicObject::getRelForce( const PhysicObject &obj ) const
 	return relForce;
 }
 
-float PhysicObject::getMass() const { return _mass; }
-float PhysicObject::getRadius() const { return _radius; }
-float PhysicObject::getFriction() const { return _friction; }
-float PhysicObject::getElasticity() const { return _elasticity; }
+float PhysicObject::getMass()       const { return _mass; }
+float PhysicObject::getFriction()   const { return _fric; }
+float PhysicObject::getElasticity() const { return _elas; }
 
-float PhysicObject::getArea() const { return M_PI * _radius * _radius; }
 float PhysicObject::getDensity() const { return _mass / getArea(); }
-float PhysicObject::getInertia() const { return _mass * _radius * _radius; }
+float PhysicObject::getInertia() const { return ( _mass * getArea() ) / 2.0f; }
 
 // ================================ ACCESSORS ( setters )
 
@@ -125,8 +121,8 @@ bool PhysicObject::setIsDynamic( bool isDynamic ) { _isDynamic = isDynamic; retu
 bool PhysicObject::setIsCollide( bool isCollide ) { _isCollide = isCollide; return _isCollide; }
 
 Vector2 PhysicObject::setPosition( const Vector2 &pos ) { return BaseObject::setPosition( pos ); }
-Vector2 PhysicObject::setVelocity( const Vector2 &vel ) { _velocity = vel; return _velocity; }
-Vector2 PhysicObject::setAcceleration( const Vector2 &acc ) { _acceleration = acc; return _acceleration; }
+Vector2 PhysicObject::setVelocity( const Vector2 &vel ) { _vel = vel; return _vel; }
+Vector2 PhysicObject::setAcceleration( const Vector2 &acc ) { _acc = acc; return _acc; }
 
 float PhysicObject::setMass( float mass )
 {
@@ -134,35 +130,28 @@ float PhysicObject::setMass( float mass )
 	else { mass = EPS; }
 	return mass;
 }
-float PhysicObject::setRadius( float radius )
-{
-	if ( radius > 0 ){ _radius = radius; }
-	else { _radius = EPS; }
-	return _radius;
-}
 float PhysicObject::setFriction( float friction )
 {
-	if ( friction >= 0 ){ _friction = friction; }
-	else { _friction = 0; }
-	return _friction;
+	if ( friction >= 0 ){ _fric = friction; }
+	else { _fric = 0; }
+	return _fric;
 }
 float PhysicObject::setElasticity( float elasticity )
 {
-	if ( elasticity >= 0 ){ _elasticity = elasticity; }
-	else { _elasticity = 0; }
-	return _elasticity;
+	if ( elasticity >= 0 ){ _elas = elasticity; }
+	else { _elas = 0; }
+	return _elas;
 }
 
 // ================================ ACCESSORS ( changers )
 
 Vector2 PhysicObject::changePosition( const Vector2 &delta ) { return BaseObject::changePosition( delta ); }
-Vector2 PhysicObject::changeVelocity( const Vector2 &delta ) { _velocity.x += delta.x; _velocity.y += delta.y; return _velocity; }
-Vector2 PhysicObject::changeAcceleration( const Vector2 &delta ) { _acceleration.x += delta.x; _acceleration.y += delta.y; return _acceleration; }
+Vector2 PhysicObject::changeVelocity( const Vector2 &delta ) { _vel.x += delta.x; _vel.y += delta.y; return _vel; }
+Vector2 PhysicObject::changeAcceleration( const Vector2 &delta ) { _acc.x += delta.x; _acc.y += delta.y; return _acc; }
 
 float PhysicObject::changeMass( float delta ) { return setMass( _mass + delta ); }
-float PhysicObject::changeRadius( float delta ) { return setRadius( _radius + delta ); }
-float PhysicObject::changeFriction( float delta ) { return setFriction( _friction + delta ); }
-float PhysicObject::changeElasticity( float delta ) { return setElasticity( _elasticity + delta ); }
+float PhysicObject::changeFriction( float delta ) { return setFriction( _fric + delta ); }
+float PhysicObject::changeElasticity( float delta ) { return setElasticity( _elas + delta ); }
 
 Vector2 PhysicObject::applyForce( const Vector2 &force )
 {
@@ -207,23 +196,23 @@ void PhysicObject::onPhysicTick() // calculates the object's physics
 	OnPhysicCall( this ); // DEBUG ?
 
 	// apply & reset acceleration
-	if ( _acceleration.x != 0 || _acceleration.y != 0 )
+	if ( _acc.x != 0 || _acc.y != 0 )
 	{
 		Vector2 acc = Vector2();
-		acc.x = _acceleration.x / _mass;
-		acc.y = _acceleration.y / _mass;
+		acc.x = _acc.x / _mass;
+		acc.y = _acc.y / _mass;
 
 		changeVelocity( acc );
 		setAcceleration( Vector2() );
 	}
 
 	// apply movement
-	if ( _velocity.x != 0 || _velocity.y != 0 ){ changePosition( _velocity ); }
+	if ( _vel.x != 0 || _vel.y != 0 ){ changePosition( _vel ); }
 
 
 	// apply friction
 	Vector2 friction = Vector2();
-	friction.x = -sign( _velocity.x ) * _friction;
-	friction.y = -sign( _velocity.y ) * _friction;
-	if ( _velocity.x != 0 || _velocity.y != 0 ){ applyForce( friction ); }
+	friction.x = -sign( _vel.x ) * _fric;
+	friction.y = -sign( _vel.y ) * _fric;
+	if ( _vel.x != 0 || _vel.y != 0 ){ applyForce( friction ); }
 }

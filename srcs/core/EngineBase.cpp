@@ -43,11 +43,11 @@ Controller *Engine::getController()
 	return _controller;
 }
 
-Camera2D   &Engine::getCamera() { return _viewport->getCamera(); }
+Camera2D   &Engine::getCamera() { return _viewport2D->getCamera(); }
 Viewport2D *Engine::getViewport()
 {
 	log( "Engine::getViewport()" );
-	return _viewport;
+	return _viewport2D;
 }
 
 BaseObject *Engine::getObjectByID( objID_t id )
@@ -97,3 +97,11 @@ void Engine::setState( engineState_e newState )
 
 
 // ================================ OTHER METHODS
+
+
+// ==================== ENGINE SHORTCUTS
+// Shortcuts to the engine and its components
+
+Engine     *GNG = Engine::getEngine();
+Controller *GCN = GNG->getController();
+Viewport2D *GVP = GNG->getViewport();

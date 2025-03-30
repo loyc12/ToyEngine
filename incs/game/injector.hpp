@@ -1,5 +1,5 @@
-#ifndef INJECTORS_HPP
-# define INJECTORS_HPP
+#ifndef INJECTOR_HPP
+# define INJECTOR_HPP
 
 # include "../core.hpp"
 
@@ -8,7 +8,7 @@ these functions are called by the engine at the end of there respective function
 they are used to inject game specific code into the engine without modifying the engine itself
 */
 
-// ==================== ENGINE CORE INJECTION FUNCTIONS
+// ==================== ENGINE STATE INJECTION FUNCTIONS
 // for when the engine changes state
 	void OnGameInit();
 		void OnGameStart();
@@ -34,4 +34,4 @@ they are used to inject game specific code into the engine without modifying the
 	void OnScriptCall( ScriptObject *obj );
 	void OnRenderCall( RenderObject *obj );
 
-#endif // INJECTORS_HPP
+#endif // INJECTOR_HPP

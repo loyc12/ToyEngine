@@ -1,17 +1,29 @@
 #ifndef RENDEROBJECT_HPP
 # define RENDEROBJECT_HPP
 
+# include <raylib.h>
 # include "./BaseObject.hpp"
+
+typedef enum shape_e
+{
+	SHAPE_CIRCLE,
+	SHAPE_RECT,
+	SHAPE_LINE,
+	SHAPE_BOX,
+} shape_e;
+
 
 class RenderObject : virtual public BaseObject
 {
 	protected:
 	// ================================ ATTRIBUTES
 		bool isVisible; // whether this object should be rendered
+		shape_e _shape;
+		Color   _color;
 
 	// ================================ CORE METHODS
 		void onAdd() override;
-		void onCpy( const RenderObject &obj );
+		void onCpy(  const RenderObject &obj );
 		void onDel() override;
 
 	public:
@@ -22,7 +34,9 @@ class RenderObject : virtual public BaseObject
 		~RenderObject();
 
 	// ================================ ACCESSORS
-		bool getIsVisible() const;			void setIsVisible( bool visible );
+		bool getIsVisible() const;		void setIsVisible( bool visible );
+		shape_e getShape() const;			void setShape( shape_e shape );
+		Color getColor() const;				void setColor( Color color );
 
 	// ================================ OPERATORS
 

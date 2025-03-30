@@ -32,7 +32,7 @@ class Engine
 {
 	// ================================ ATTRIBUTES
 	private:
-		Viewport2D *_viewport;
+		Viewport2D *_viewport2D;
 		Controller *_controller;
 
 		vector< BaseObject* > ObjectContainer;
@@ -120,5 +120,12 @@ class Engine
 	// ================================ OTHER METHODS
 
 };
+
+// ==================== ENGINE SHORTCUTS
+// Shortcuts to the engine and its components
+
+extern Engine     *GNG;
+extern Viewport2D *GVP;
+extern Controller *GCN;
 
 #endif // ENGINE_HPP

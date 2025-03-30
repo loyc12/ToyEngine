@@ -1,8 +1,8 @@
 #ifndef PHYSICOBJECT_HPP
 # define PHYSICOBJECT_HPP
 
+# include <raylib.h>
 # include "./BaseObject.hpp"
-#include <raylib.h>
 
 class PhysicObject : virtual public BaseObject
 {
@@ -11,13 +11,12 @@ class PhysicObject : virtual public BaseObject
 		bool _isDynamic; // whether this object should calculate physics
 		bool _isCollide; // whether other objects can collide with this object // add a collision mask ???
 
-		Vector2 _velocity;
-		Vector2 _acceleration;
+		Vector2 _vel;
+		Vector2 _acc;
 
 		float _mass;
-		float _radius;
-		float _friction;
-		float _elasticity; // TODO : implement me
+		float _fric;
+		float _elas; // TODO : implement me
 
 	// ================================ CORE METHODS
 		void collideWith( BaseObject *other );
@@ -48,11 +47,9 @@ class PhysicObject : virtual public BaseObject
 		Vector2 getRelForce( const PhysicObject &Obj ) const;
 
 		float getMass() const;				float setMass( float mass );							float changeMass( float mass );
-		float getRadius() const;			float setRadius( float radius );					float changeRadius( float radius );
 		float getFriction() const;		float setFriction( float friction );			float changeFriction( float friction );
 		float getElasticity() const;	float setElasticity( float elasticity );	float changeElasticity( float elasticity );
 
-		float getArea() const;
 		float getDensity() const;
 		float getInertia() const;
 
