@@ -1,5 +1,5 @@
-#include "../../incs/core.hpp"
 #include <raylib.h>
+#include "../../incs/core.hpp"
 
 // ================================ CORE METHODS
 
@@ -7,16 +7,18 @@ void Viewport2D::init()
 {
 	log( "Viewport2D::init()" );
 
-	_windowSize = {SCREEN_DEFAULT_WIDTH, SCREEN_DEFAULT_HEIGHT};
-	_mousePos   = {0, 0};
-	_targetFPS  = WINDOW_DEFAULT_FPS;
+	_targetFPS = WINDOW_DEFAULT_FPS;
+
+	_windowSize     = {SCREEN_DEFAULT_WIDTH, SCREEN_DEFAULT_HEIGHT};
+	_mousePos       = {0, 0};
+	_mouseWorldPos  = {0, 0};
 
 	_camera.target   = { 0.0f, 0.0f };
 	_camera.zoom     = DEFAULT_ZOOM;
 	_camera.rotation = 0.0f;
 	_camera.offset   = { _windowSize.x / 2, _windowSize.y / 2 };
 
-	_trackingObject = false;
+	_trackingObject  = false;
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
@@ -104,13 +106,31 @@ void Viewport2D::moveOffset( Vector2 &delta )
 void Viewport2D::open()
 {
 	log( "Viewport2D::open()" );
+
+	if ( IsWindowReady() )
+	{
+		log( "Viewport2D::open() : Window already opened", INFO );
+		return;
+	}
+
 	InitWindow( _windowSize.x, _windowSize.y, WINDOW_DEFAULT_TITLE );
+
+	// TODO : handle failure case
+
 	SetTargetFPS( _targetFPS );
 }
 
 void Viewport2D::close()
 {
 	log( "Viewport2D::close()" );
+
+	if ( !IsWindowReady() )
+	{
+		log( "Viewport2D::close() : Window already closed", INFO );
+		return;
+	}
+
+	// TODO : handle failure case
 
 	CloseWindow();
 }

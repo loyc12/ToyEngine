@@ -28,9 +28,10 @@ class Viewport2D
 		Vector2	_mousePos;      // latest position of the mouse in pixels
 		Vector2	_mouseWorldPos; // latest position of the mouse in world units
 
-		Camera2D	  _camera;      // contains target, zoom, rotation, offset
-		BaseObject	*_trackedObject;
-		bool				_trackingObject;
+		Camera2D	 _camera;      // contains target, zoom, rotation, offset
+		BaseObject *_trackedObject;
+
+		bool _trackingObject;
 
 		// ================================ CORE METHODS
 		void init();
@@ -41,19 +42,19 @@ class Viewport2D
 		~Viewport2D();
 
 	// ================================ ACCESSORS
-		float getWidth()     const;
-		float getHeight()    const;
-		float getZmdWidth()  const;
-		float getZmdHeight() const;
+		float getWidth()      const;
+		float getHeight()     const;
+		float getZmdWidth()   const;
+		float getZmdHeight()  const;
 
-		Vector2 getSize()   const;
-		Vector2 getOrigin() const;
-		Vector2 getCenter() const;
+		Vector2 getSize()     const;
+		Vector2 getOrigin()   const;
+		Vector2 getCenter()   const;
 
-		Vector2 getTop()   const;
-		Vector2 getBot()   const;
-		Vector2 getLeft()  const;
-		Vector2 getRight() const;
+		Vector2 getTop()      const;
+		Vector2 getBot()      const;
+		Vector2 getLeft()     const;
+		Vector2 getRight()    const;
 
 		Vector2 getTopLeft()  const;
 		Vector2 getTopRight() const;

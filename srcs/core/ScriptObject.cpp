@@ -56,10 +56,10 @@ void ScriptObject::setIsActive( bool active ) { isActive = active; }
 
 // ================================ METHODS
 
-void ScriptObject::onUpdate()	// runs the object's scripts
+void ScriptObject::onScriptTick()	// runs the object's scripts
 {
 	if ( !isActive ) return;
 	log( "ScriptObject::onUpdate()", DEBUG, _id );
 
-	OnEach( this ); // DEBUG ?
+	OnScriptCall( this ); // DEBUG ?
 }

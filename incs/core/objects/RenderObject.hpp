@@ -27,7 +27,7 @@ class RenderObject : virtual public BaseObject
 	// ================================ OPERATORS
 
 	// ================================ METHODS
-		void onRefresh() override; // ENTRYPOINT : (re)renders the object
+		void onRenderTick() override; // ENTRYPOINT : (re)renders the object
 };
 
 #endif // RENDEROBJECT_HPP

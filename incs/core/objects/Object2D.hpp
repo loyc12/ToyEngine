@@ -36,10 +36,9 @@ class Object2D :
 	// ================================ OPERATORS
 
 	// ================================ METHODS
-		//virtual void onInput();		// checks conditions based on the global engine inputs
-		//virtual void onUpdate();	// runs the object's scripts
-		//virtual void onTick();		// calculates the object's physics
-		//virtual void onRefresh();	// (re)renders the object
+		//virtual void onScriptTick() override; // ENTRYPOINT : runs the object's scripts
+		//virtual void onPhysicTick() override; // ENTRYPOINT : calculates the object's physics
+		//virtual void onRenderTick() override; // ENTRYPOINT : (re)renders the object
 };
 
 #endif // OBJECT2D_HPP

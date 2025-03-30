@@ -61,10 +61,9 @@ class BaseObject
 	// ================================ OPERATORS
 
 	// ================================ METHODS
-	virtual void onInput();		// checks conditions based on the global engine inputs
-	virtual void onUpdate();		// runs the object's scripts
-	virtual void onTick();			// calculates the object's physics
-	virtual void onRefresh();	// (re)renders the object
+	virtual void onScriptTick(); // runs the object's scripts
+	virtual void onPhysicTick(); // calculates the object's physics
+	virtual void onRenderTick(); // (re)renders the object
 
 	Vector2 getPosition() const;									Vector2 changePosition( const Vector2 &delta );
 	Vector2 setPosition( const Vector2 &pos );		Vector2 getRelPosition( const BaseObject &Obj ) const;

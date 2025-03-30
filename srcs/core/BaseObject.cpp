@@ -84,10 +84,9 @@ uint BaseObject::getID() const { return _id; }
 
 // ================================ METHODS
 
-void BaseObject::onInput()   { return; }
-void BaseObject::onUpdate()  { return; }
-void BaseObject::onTick()    { return; }
-void BaseObject::onRefresh() { return; }
+void BaseObject::onScriptTick() { return; }
+void BaseObject::onPhysicTick() { return; }
+void BaseObject::onRenderTick() { return; }
 
 Vector2 BaseObject::getPosition() const { return _position; }
 Vector2 BaseObject::setPosition( const Vector2 &pos ) { _position = pos; return _position; }

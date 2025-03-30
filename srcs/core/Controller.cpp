@@ -30,7 +30,7 @@ inputs_s &Controller::getPreviousInputs() { return _previousInputs; }
 
 // ================================ METHODS
 
-void Controller::refreshInputs()
+void Controller::refreshInputs() // NOTE : archaic way of doing things, but it works for now
 {
 	log( "Controller::refresh()" );
 
@@ -55,6 +55,8 @@ void Controller::refreshInputs()
 	_latestInputs.CLICK_RIGHT = IsMouseButtonDown( MOUSE_RIGHT_BUTTON );
 	_latestInputs.SCROLL_UP   = ( GetMouseWheelMove() > 0 );
 	_latestInputs.SCROLL_DOWN = ( GetMouseWheelMove() < 0 );
+
+	// TODO : move raw screen mouse pos here
 
 	// LETTERS
 	_latestInputs.A = IsKeyDown( KEY_A );      _latestInputs.B = IsKeyDown( KEY_B );

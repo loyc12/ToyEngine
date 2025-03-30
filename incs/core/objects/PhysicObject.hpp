@@ -62,7 +62,7 @@ class PhysicObject : virtual public BaseObject
 	// ================================ OPERATORS
 
 	// ================================ METHODS
-		void onTick() override; // ENTRYPOINT : calculates the object's physics
+		void onPhysicTick() override; // ENTRYPOINT : calculates the object's physics
 
 };
 

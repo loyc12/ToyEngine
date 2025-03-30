@@ -199,12 +199,12 @@ Vector2 PhysicObject::applyBreak( const Vector2 &breakForce )
 
 // ================================ METHODS
 
-void PhysicObject::onTick() // calculates the object's physics
+void PhysicObject::onPhysicTick() // calculates the object's physics
 {
 	if ( !_isDynamic ) return;
 	log( "PhysicObject::onTick()", DEBUG, _id );
 
-	OnEach( this ); // DEBUG ?
+	OnPhysicCall( this ); // DEBUG ?
 
 	// apply & reset acceleration
 	changeVelocity( _acceleration );

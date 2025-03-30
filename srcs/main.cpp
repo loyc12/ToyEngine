@@ -5,22 +5,16 @@
 int main()
 {
 	log( "Initializing the Engine", INFO );
-	start_clock();
 
 	Engine *engine = Engine::getEngine();
 
-	log( "Starting Engine", INFO );
 
-	engine->start();
+	engine->switchState(  ES_RUNNING );
 
-	log( "Launching Engine", INFO );
+	engine->launchLoop();
 
-	engine->launch();
-	//engine->runStep();
+	engine->switchState(  ES_CLOSED );
 
-	log( "Closing Engine", INFO );
-
-	engine->close();
 	delete engine;
 
 	log( "Exiting main()", INFO );

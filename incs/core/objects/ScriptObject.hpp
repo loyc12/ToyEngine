@@ -27,7 +27,7 @@ class ScriptObject : virtual public BaseObject
 	// ================================ OPERATORS
 
 	// ================================ METHODS
-		void onUpdate() override; // ENTRYPOINT : runs the object's scripts
+		void onScriptTick() override; // ENTRYPOINT : runs the object's scripts
 };
 
 #endif // SCRIPTOBJECT_HPP

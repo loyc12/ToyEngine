@@ -56,10 +56,10 @@ void RenderObject::setIsVisible( bool visible ) { isVisible = visible; }
 
 // ================================ METHODS
 
-void RenderObject::onRefresh() // (re)renders the object
+void RenderObject::onRenderTick() // (re)renders the object
 {
 	if ( !isVisible ) return;
 	log( "RenderObject::onRefresh()", DEBUG, _id );
 
-	OnEach( this ); // DEBUG ?
+	OnRenderCall( this ); // DEBUG ?
 }
