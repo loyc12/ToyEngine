@@ -6,19 +6,19 @@
 void Object2D::onAdd()
 {
 	log( "Object2D::onAdd()", DEBUG, _id );
-	// isActive = true;
-	// isDynamic = true;
-	// isCollide = true;
-	// isVisible = true;
+	// _isActive = true;
+	// _isDynamic = true;
+	// _isCollide = true;
+	// _isVisible = true;
 }
 
 void Object2D::onCpy( const Object2D &obj )
 {
 	log( "Object2D::onCpy()", DEBUG, _id );
-	// isActive = obj.getIsActive();
-	// isDynamic = obj.getIsDynamic();
-	// isCollide = obj.getIsCollide();
-	// isVisible = obj.getIsVisible();
+	// _isActive = obj.getIsActive();
+	// _isDynamic = obj.getIsDynamic();
+	// _isCollide = obj.getIsCollide();
+	// _isVisible = obj.getIsVisible();
 
 	( void )obj;
 }
@@ -79,3 +79,23 @@ Object2D::~Object2D() // inverted call order
 // ================================ OPERATORS
 
 // ================================ METHODS
+
+// ================================ OBJECTS FACTORY
+
+void GenerateObject2D( shape_e shape, Color color, Vector2 size, Vector2 pos, bool isActive, bool isDynamic, bool isCollide, bool isVisible )
+{
+	log( "GenerateObject2D()", DEBUG );
+
+	Object2D *obj = new Object2D;
+
+	obj->setShape( shape );
+	obj->setColor( color );
+	obj->setSize( size );
+	obj->setPosition( pos );
+
+	obj->setIsActive( isActive );
+	obj->setIsDynamic( isDynamic );
+	obj->setIsCollide( isCollide );
+	obj->setIsVisible( isVisible );
+
+}

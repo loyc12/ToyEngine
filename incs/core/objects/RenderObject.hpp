@@ -17,7 +17,7 @@ class RenderObject : virtual public BaseObject
 {
 	protected:
 	// ================================ ATTRIBUTES
-		bool isVisible; // whether this object should be rendered
+		bool _isVisible; // whether this object should be rendered
 		shape_e _shape;
 		Color   _color;
 
@@ -34,7 +34,7 @@ class RenderObject : virtual public BaseObject
 		~RenderObject();
 
 	// ================================ ACCESSORS
-		bool getIsVisible() const;		void setIsVisible( bool visible );
+		bool getIsVisible() const;		void setIsVisible( bool _isVisible );
 		shape_e getShape() const;			void setShape( shape_e shape );
 		Color getColor() const;				void setColor( Color color );
 

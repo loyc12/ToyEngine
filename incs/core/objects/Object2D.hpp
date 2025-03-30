@@ -14,10 +14,10 @@ class Object2D :
 {
 	protected:
 	// ================================ ATTRIBUTES
-		// bool isControlled;	// whether this object should check for input
-		// bool isActive;			// whether this object should run its scripts
-		// bool isDynamic;		// whether this object should calculate physics
-		// bool isVisible;		// whether this object should be rendered
+		// bool _isActive;			// whether this object should run its scripts
+		// bool _isDynamic;		// whether this object should calculate physics
+		// bool _isCollide;		// whether other objects can collide with this object
+		// bool _isVisible;		// whether this object should be rendered
 
 	// ================================ CORE METHODS
 		void onAdd() override;
@@ -36,9 +36,10 @@ class Object2D :
 	// ================================ OPERATORS
 
 	// ================================ METHODS
-		//virtual void onScriptTick() override; // ENTRYPOINT : runs the object's scripts
-		//virtual void onPhysicTick() override; // ENTRYPOINT : calculates the object's physics
-		//virtual void onRenderTick() override; // ENTRYPOINT : (re)renders the object
 };
+
+// ================================== OBJECTS FACTORY
+
+void GenerateObject2D( shape_e shape, Color color, Vector2 size, Vector2 pos = { 0, 0 }, bool isActive = true, bool isDynamic = true, bool isCollide = true, bool isVisible = true );
 
 #endif // OBJECT2D_HPP

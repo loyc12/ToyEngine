@@ -7,7 +7,7 @@ class ScriptObject : virtual public BaseObject
 {
 	protected:
 	// ================================ ATTRIBUTES
-		bool isActive; // whether this object should run its scripts
+		bool _isActive; // whether this object should run its scripts
 
 	// ================================ CORE METHODS
 		void onAdd() override;
@@ -22,7 +22,7 @@ class ScriptObject : virtual public BaseObject
 		~ScriptObject();
 
 	// ================================ ACCESSORS
-		bool getIsActive() const;			void setIsActive( bool active );
+		bool getIsActive() const;			void setIsActive( bool _isActive );
 
 	// ================================ OPERATORS
 

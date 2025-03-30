@@ -24,19 +24,24 @@ void OnGameStart()
 	Enemy  = new Object2D;
 
 	Floor->setShape(  SHAPE_RECT );
+	Floor->setColor(  BLUE );
+
 	Wall1->setShape(  SHAPE_RECT );
+	Wall1->setColor(  PINK );
+
 	Wall2->setShape(  SHAPE_RECT );
+	Wall2->setColor(  ORANGE );
+
 	Player->setShape( SHAPE_CIRCLE );
+	Player->setColor( GREEN );
+
 	Enemy->setShape(  SHAPE_CIRCLE );
 	Enemy->setColor(  RED );
-	Ball->setShape(   SHAPE_CIRCLE );
-	Box->setShape(    SHAPE_RECT );
 
-	Floor->setColor(  BLUE );
-	Wall1->setColor(  PINK );
-	Wall2->setColor(  ORANGE );
-	Player->setColor( GREEN );
+	Ball->setShape(   SHAPE_CIRCLE );
 	Ball->setColor(   YELLOW );
+
+	Box->setShape(    SHAPE_RECT );
 	Box->setColor(    DARKGRAY );
 
 	Floor->setPosition( { 0, -64 });

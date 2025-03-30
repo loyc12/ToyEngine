@@ -6,13 +6,13 @@
 void ScriptObject::onAdd()
 {
 	log( "ScriptObject::onAdd()", DEBUG, _id );
-	isActive = true;
+	_isActive = true;
 }
 
 void ScriptObject::onCpy( const ScriptObject &obj )
 {
 	log( "ScriptObject::onCpy()", DEBUG, _id );
-	isActive = obj.getIsActive();
+	_isActive = obj.getIsActive();
 }
 
 void ScriptObject::onDel()
@@ -49,8 +49,8 @@ ScriptObject::~ScriptObject() // inverted call order
 
 // ================================ ACCESSORS
 
-bool ScriptObject::getIsActive() const { return isActive; }
-void ScriptObject::setIsActive( bool active ) { isActive = active; }
+bool ScriptObject::getIsActive() const { return _isActive; }
+void ScriptObject::setIsActive( bool isActive ) { _isActive = isActive; }
 
 // ================================ OPERATORS
 
@@ -58,7 +58,7 @@ void ScriptObject::setIsActive( bool active ) { isActive = active; }
 
 void ScriptObject::onScriptTick()	// runs the object's scripts
 {
-	if ( !isActive ) return;
+	if ( !_isActive ) return;
 	log( "ScriptObject::onUpdate()", DEBUG, _id );
 
 	OnScriptCall( this ); // DEBUG ?

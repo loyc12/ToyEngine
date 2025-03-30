@@ -6,7 +6,7 @@
 void RenderObject::onAdd()
 {
 	log( "RenderObject::onAdd()", DEBUG, _id );
-	isVisible = true;
+	_isVisible = true;
 
 	// set default color and shape
 	_color = WHITE;
@@ -16,7 +16,7 @@ void RenderObject::onAdd()
 void RenderObject::onCpy( const RenderObject &obj )
 {
 	log( "RenderObject::onCpy()", DEBUG, _id );
-	isVisible = obj.getIsVisible();
+	_isVisible = obj.getIsVisible();
 }
 
 void RenderObject::onDel()
@@ -53,8 +53,8 @@ RenderObject::~RenderObject() // inverted call order
 
 // ================================ ACCESSORS
 
-bool RenderObject::getIsVisible() const { return isVisible; }
-void RenderObject::setIsVisible( bool visible ) { isVisible = visible; }
+bool RenderObject::getIsVisible() const { return _isVisible; }
+void RenderObject::setIsVisible( bool isVisible ) { _isVisible = isVisible; }
 
 shape_e RenderObject::getShape() const { return _shape; }
 void    RenderObject::setShape( shape_e shape ) { _shape = shape; }
@@ -68,7 +68,7 @@ void  RenderObject::setColor( Color color ) { _color = color; }
 
 void RenderObject::onRenderTick() // (re)renders the object
 {
-	if ( !isVisible ) return;
+	if ( !_isVisible ) return;
 	log( "RenderObject::onRenderTick()", DEBUG, _id );
 
 	if ( _shape == SHAPE_CIRCLE )
