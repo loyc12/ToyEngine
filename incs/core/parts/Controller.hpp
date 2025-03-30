@@ -9,12 +9,12 @@
 struct inputs_s
 {
 	// BASE
-	bool LEFT,  RIGHT, FORE,  BACK;
+	bool LEFT,  RIGHT, FORE, BACK;
 	bool SPACE, ENTER, SHIFT;
 	bool CTRL,  ALT,   TAB;
 
 	// MOUSE
-	bool CLICK_LEFT, CLICK_MID,   CLICK_RIGHT;
+	bool CLICK_LEFT, CLICK_MID, CLICK_RIGHT;
 	bool SCROLL_UP,  SCROLL_DOWN;
 
 	// LETTERS

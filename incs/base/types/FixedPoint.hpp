@@ -24,25 +24,25 @@ class FixedPoint
 
 	FixedPoint( byte_t value );
 	FixedPoint( word_t value );
-	FixedPoint( int value );
-	FixedPoint( long value );
-	FixedPoint( float value );
+	FixedPoint( int    value );
+	FixedPoint( long   value );
+	FixedPoint( float  value );
 	FixedPoint( double value );
 
 
 	// ================================ ACCESSORS
 
-	int    toInt() const;
-	long   toLong() const;
-	float  toFloat() const;
+	int    toInt()    const;
+	long   toLong()   const;
+	float  toFloat()  const;
 	double toDouble() const;
 
 	byte_t getShift() const;
-	bit_t  getSign() const;
-	uint   getRawValue() const;
+	bit_t  getSign()  const;
 
-	void   setSign(     const bit_t &sign );
-	void   setRawValue( const uint &rawValue );
+	uint   getRawValue() const;
+	void   setSign(      const bit_t &sign );
+	void   setRawValue(  const uint &rawValue );
 
 	// ================================ OPERATORS
 

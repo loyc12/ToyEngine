@@ -191,7 +191,7 @@ Vector2 PhysicObject::applyBreak( const Vector2 &breakForce )
 void PhysicObject::onPhysicTick() // calculates the object's physics
 {
 	if ( !_isDynamic ) return;
-	log( "PhysicObject::onTick()", DEBUG, _id );
+	log( "PhysicObject::onPhysicTick()", DEBUG, _id );
 
 	OnPhysicCall( this ); // DEBUG ?
 

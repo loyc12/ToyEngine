@@ -12,13 +12,13 @@ typedef enum : byte_t
 	E_PHYSIC,
 	E_RENDER,
 
-	E_CNTRLR, // INPUTS + SCRIPT ?
-	E_SPRITE, // PHYSIC + RENDER ?
+	//E_CNTRLR, // INPUTS + SCRIPT ?
+	//E_SPRITE, // PHYSIC + RENDER ?
 
 	E_OBJ2D,  // CNTRLR + SPRITE
 	//E_OBJ3D,
 
-	E_MENU,   // CNTRLR + RENDER ???
+	//E_MENU,   // CNTRLR + RENDER ???
 
 } objectType_e;
 
@@ -35,15 +35,15 @@ class BaseObject
 
 		protected:
 		// ================================ ATTRIBUTES
-		objID_t _id;
+		objID_t      _id;
 		objectType_e _type;
 
 		Vector2 _pos;
 		Vector2 _size; // half width and half height
-		bool _isSpherical;
+		bool    _isSpherical;
 
 		virtual void onAdd();
-		void onCpy( const BaseObject &obj );
+		void         onCpy( const BaseObject &obj );
 		virtual void onDel();
 
 	// ================================ CORE METHODS

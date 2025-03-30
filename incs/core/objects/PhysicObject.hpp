@@ -6,6 +6,7 @@
 
 class PhysicObject : virtual public BaseObject
 {
+	// this class is used to calculate the physics of an object
 	protected:
 	// ================================ ATTRIBUTES
 		bool _isDynamic; // whether this object should calculate physics
@@ -22,7 +23,7 @@ class PhysicObject : virtual public BaseObject
 		void collideWith( BaseObject *other );
 
 		void onAdd() override;
-		void onCpy( const PhysicObject &obj );
+		void onCpy(  const PhysicObject &obj );
 		void onDel() override;
 
 	public:
@@ -33,8 +34,8 @@ class PhysicObject : virtual public BaseObject
 		~PhysicObject();
 
 	// ================================ ACCESSORS
-		bool getIsDynamic() const;				bool setIsDynamic( bool isDynamic );
-		bool getIsCollide() const;				bool setIsCollide( bool isCollide );
+		bool getIsDynamic() const;	bool setIsDynamic( bool isDynamic );
+		bool getIsCollide() const;	bool setIsCollide( bool isCollide );
 
 		Vector2 getPosition() const;			Vector2 setPosition( const Vector2 &pos );			Vector2 changePosition( const Vector2 &delta );
 		Vector2 getVelocity() const;			Vector2 setVelocity( const Vector2 &vel );			Vector2 changeVelocity( const Vector2 &delta );

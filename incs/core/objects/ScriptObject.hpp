@@ -5,13 +5,14 @@
 
 class ScriptObject : virtual public BaseObject
 {
+	// this class is used to run scripts from an object
 	protected:
 	// ================================ ATTRIBUTES
 		bool _isActive; // whether this object should run its scripts
 
 	// ================================ CORE METHODS
 		void onAdd() override;
-		void onCpy( const ScriptObject &obj );
+		void onCpy(  const ScriptObject &obj );
 		void onDel() override;
 
 	public:
@@ -28,6 +29,7 @@ class ScriptObject : virtual public BaseObject
 
 	// ================================ METHODS
 		void onScriptTick() override; // ENTRYPOINT : runs the object's scripts
+		// TODO : used a customizable function pointer array to add/remove scripts to an object
 };
 
 #endif // SCRIPTOBJECT_HPP

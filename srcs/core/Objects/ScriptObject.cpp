@@ -59,7 +59,7 @@ void ScriptObject::setIsActive( bool isActive ) { _isActive = isActive; }
 void ScriptObject::onScriptTick()	// runs the object's scripts
 {
 	if ( !_isActive ) return;
-	log( "ScriptObject::onUpdate()", DEBUG, _id );
+	log( "ScriptObject::onScriptTick()", DEBUG, _id );
 
 	OnScriptCall( this ); // DEBUG ?
 }

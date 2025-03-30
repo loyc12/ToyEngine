@@ -29,8 +29,8 @@ void BaseObject::onAdd()
 {
 	log( "BaseObject::onAdd()", DEBUG, _id );
 
-	_pos = { 0, 0 };
-	_size = { 1.0f, 1.0f };
+	_pos =  { 0, 0 };
+	_size = { 1, 1 };
 	_isSpherical = true;
 
 	addToRegister();

@@ -7,44 +7,44 @@
 // Goes trought the steps needed to go from one state to another
 bool Engine::switchState(  engineState_e targetState )
 {
-	log( "Engine::switchState( )" );
+	log( "Engine::switchState()" );
 
 	if ( getState() == targetState )
 	{
-		log( "Engine::switchState( ) : State matches current state : " + to_string( targetState ), WARN );
+		log( "Engine::switchState() : State matches current state : " + to_string( targetState ), WARN );
 		return false;
 	}
 
 	engineState_e previousState = getState();
 
-	log( "Engine::switchState( ) : Changing state from " + to_string( getState() ) + " to " + to_string( targetState ), INFO );
+	log( "Engine::switchState() : Changing state from " + to_string( getState() ) + " to " + to_string( targetState ), INFO );
 
 	// goes through the steps to raise the state
 	if ( targetState > getState() ){ switch ( getState() )
 	{
 		case ES_CLOSED:
-			log( "Engine::switchState( ) : Raising to ES_INITIALIZED", INFO );
+			log( "Engine::switchState() : Raising to ES_INITIALIZED", INFO );
 			setState( ES_INITIALIZING ); init();
 			if ( getState() == targetState ) break;
 
 			[[fallthrough]];
 
 		case ES_INITIALIZED:
-			log( "Engine::switchState( ) : Raising to ES_STARTED", INFO );
+			log( "Engine::switchState() : Raising to ES_STARTED", INFO );
 			setState( ES_STARTING ); start();
 			if ( getState() == targetState ) break;
 
 			[[fallthrough]];
 
 		case ES_STARTED:
-			log( "Engine::switchState( ) : Raising to ES_RUNNING", INFO );
+			log( "Engine::switchState() : Raising to ES_RUNNING", INFO );
 			setState( ES_RESUMING ); resume();
 			if ( getState() == targetState ) break;
 
 			[[fallthrough]];
 
 		default:
-			log( "Engine::switchState( ) : Invalid state : Raising from " + to_string( previousState ) + " to " + to_string( targetState ), ERROR );
+			log( "Engine::switchState() : Invalid state : Raising from " + to_string( previousState ) + " to " + to_string( targetState ), ERROR );
 			return false;
 	}}
 
@@ -52,29 +52,29 @@ bool Engine::switchState(  engineState_e targetState )
 	if ( targetState < getState() ){ switch ( getState() )
 	{
 		case ES_RUNNING:
-			log( "Engine::switchState( ) : Lowering to ES_STARTED", INFO );
+			log( "Engine::switchState() : Lowering to ES_STARTED", INFO );
 			setState( ES_PAUSING ); pause();
 			if ( getState() == targetState ) break;
 			[[fallthrough]];
 
 		case ES_STARTED:
-			log( "Engine::switchState( ) : Lowering to ES_INITIALIZED", INFO );
+			log( "Engine::switchState() : Lowering to ES_INITIALIZED", INFO );
 			setState( ES_STOPPING ); stop();
 			if ( getState() == targetState ) break;
 			[[fallthrough]];
 
 		case ES_INITIALIZED:
-			log( "Engine::switchState( ) : Lowering to ES_CLOSED", INFO );
+			log( "Engine::switchState() : Lowering to ES_CLOSED", INFO );
 			setState( ES_CLOSING ); close();
 			if ( getState() == targetState ) break;
 			[[fallthrough]];
 
 		default:
-			log( "Engine::switchState( ) : Invalid state : Lowering from " + to_string( previousState ) + " to " + to_string( targetState ), ERROR );
+			log( "Engine::switchState() : Invalid state : Lowering from " + to_string( previousState ) + " to " + to_string( targetState ), ERROR );
 			return false;
 	}}
 
-	log( "Engine::switchState( ) : DONE ! : State changed from " + to_string( previousState ) + " to " + to_string( targetState ), INFO );
+	log( "Engine::switchState() : DONE ! : State changed from " + to_string( previousState ) + " to " + to_string( targetState ), INFO );
 	return true;
 }
 

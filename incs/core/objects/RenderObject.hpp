@@ -15,6 +15,7 @@ typedef enum shape_e
 
 class RenderObject : virtual public BaseObject
 {
+	// this class is used to render an object
 	protected:
 	// ================================ ATTRIBUTES
 		bool _isVisible; // whether this object should be rendered

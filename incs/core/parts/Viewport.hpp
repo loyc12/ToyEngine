@@ -55,7 +55,6 @@ class Viewport2D
 		Vector2 getBot()      const;
 		Vector2 getLeft()     const;
 		Vector2 getRight()    const;
-
 		Vector2 getTopLeft()  const;
 		Vector2 getTopRight() const;
 		Vector2 getBotLeft()  const;

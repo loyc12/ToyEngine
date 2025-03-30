@@ -14,14 +14,14 @@ class Object2D :
 {
 	protected:
 	// ================================ ATTRIBUTES
-		// bool _isActive;			// whether this object should run its scripts
+		// bool _isActive;		// whether this object should run its scripts
 		// bool _isDynamic;		// whether this object should calculate physics
 		// bool _isCollide;		// whether other objects can collide with this object
 		// bool _isVisible;		// whether this object should be rendered
 
 	// ================================ CORE METHODS
 		void onAdd() override;
-		void onCpy( const Object2D &obj );
+		void onCpy(  const Object2D &obj );
 		void onDel() override;
 
 	public:
