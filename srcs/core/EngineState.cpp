@@ -113,6 +113,8 @@ void Engine::init()
 	_controller = new Controller();   GCN = _controller;
 	_viewport2D = new Viewport2D();   GVP = _viewport2D;
 
+	ObjectContainer.clear();
+
 	OnGameInit(); // from game.hpp
 
 	setState( ES_INITIALIZED );
@@ -176,10 +178,11 @@ void Engine::close()
 	if ( getState() > ES_INITIALIZED ){ log( "Engine::close() : Engine still started",   ERROR ); return; }
 
 	OnGameClose(); // from game.hpp
+	setState( ES_CLOSED );
 
 	delete _viewport2D;   GVP = nullptr;
 	delete _controller;   GVP = nullptr;
 
 	DelAllObjects();
-	setState( ES_CLOSED );
+
 }

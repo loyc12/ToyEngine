@@ -25,12 +25,14 @@ void Viewport2D::init()
 
 Viewport2D::Viewport2D()
 {
-	log( "Viewport2D::Viewport2D()" ); init();
+	log( "Viewport2D::Viewport2D()" );
+	init();
 }
 
 Viewport2D::~Viewport2D()
 {
-	log( "Viewport2D::~Viewport2D()" ); close();
+	log( "Viewport2D::~Viewport2D()" );
+	close();
 }
 
 // ================================ ACCESSORS

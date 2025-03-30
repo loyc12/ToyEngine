@@ -48,7 +48,7 @@ void BaseObject::onDel() // inverted call order
 	log( "BaseObject::onDel()", DEBUG, _id );
 
 	// NOTE : if the object is being tracked, stop tracking it
-	if ( GVP->isTracking() && GVP->getTrackedObject() == this ) GVP->untrackObject();
+	if ( GVP != nullptr && GVP->isTracking() && GVP->getTrackedObject() == this )
 
 	if ( _id != 0 ) delFromRegister();
 }

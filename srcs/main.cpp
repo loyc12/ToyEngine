@@ -6,7 +6,6 @@ int main()
 {
 	log( "Initializing the Engine", INFO );
 
-
 	GNG->switchState( ES_RUNNING );
 
 	GNG->launchLoop();

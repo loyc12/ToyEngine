@@ -78,6 +78,27 @@ bool Engine::delObjectByID( objID_t id )
 void Engine::DelAllObjects()
 {
 	log( "Engine::DelAllObjects()" );
-	while ( !ObjectContainer.empty() ) { delete ObjectContainer[ 0 ]; }
+	if ( ObjectContainer.empty() )
+	{
+		log( "Engine::DelAllObjects() : ObjectContainer already empty", WARN );
+		return;
+	}
+
+	while ( !ObjectContainer.empty() )
+	{
+		if ( ObjectContainer[ 0 ] == nullptr )
+		{
+			log( "Engine::DelAllObjects() : object nonexistant", WARN );
+			ObjectContainer.erase( ObjectContainer.begin() );
+		}
+		else
+		{
+			delete ObjectContainer[ 0 ];
+			ObjectContainer[ 0 ] = nullptr;
+		}
+		ObjectContainer.erase( ObjectContainer.begin() );
+	}
 	ObjectContainer.clear();
+	ObjectContainer.shrink_to_fit();
+	log( "Engine::DelAllObjects() : Deleted all objects" );
 }
