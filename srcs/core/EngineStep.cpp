@@ -29,6 +29,8 @@ void Engine::runStep()
 	log( "Engine::runStep()" );
 	if ( getState() < ES_STARTED ){ log( "Engine::runeStep() : Engine not started", ERROR ); return; }
 
+	_DT = GetFrameTime();
+
 	readInputs();
 	runScripts();
 	if ( getState() >= ES_RUNNING ) { runPhysics(); } // Only runs the physics call if the enguine is unpaused

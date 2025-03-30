@@ -32,17 +32,17 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 -include $(OBJS:.o=.d)
 
 # Redo and/or Run the project
-re: clean relc
+re: clean release
 rerun: re run
-run: relc
+run: release
 	@printf "Launching $(PROJECT_NAME)...\n"
 	@./$(PROJECT_NAME)$(EXT)
 	@printf "Project executed\n"
 
 # Redo and/or Debug the project
-dre: clean dbgc
+dre: clean debug
 drerun: dre drun
-drun: dbgc
+drun: debug
 	@printf "Launching $(PROJECT_NAME) in debug mode...\n"
 	@./$(PROJECT_NAME)$(EXT)
 	@printf "Project executed\n"

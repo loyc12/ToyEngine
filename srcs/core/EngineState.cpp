@@ -82,6 +82,8 @@ bool Engine::togglePause()
 {
 	log( "Engine::togglePause()" );
 
+	log( "Engine::togglePause() : Current state is " + to_string( getState() ), INFO );
+
 	switch ( getState() )
 	{
 		case ES_RUNNING:
@@ -89,7 +91,7 @@ bool Engine::togglePause()
 			pause();
 			break;
 
-		case ES_PAUSING:
+		case ES_STARTED:
 			log( "Engine::togglePause() : Resuming engine", INFO );
 			resume();
 			break;

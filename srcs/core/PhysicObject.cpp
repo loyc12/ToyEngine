@@ -207,15 +207,23 @@ void PhysicObject::onPhysicTick() // calculates the object's physics
 	OnPhysicCall( this ); // DEBUG ?
 
 	// apply & reset acceleration
-	changeVelocity( _acceleration );
-	setAcceleration( Vector2() );
+	if ( _acceleration.x != 0 || _acceleration.y != 0 )
+	{
+		Vector2 acc = Vector2();
+		acc.x = _acceleration.x / _mass;
+		acc.y = _acceleration.y / _mass;
 
-	// apply velocity
-	changePosition( _velocity );
+		changeVelocity( acc );
+		setAcceleration( Vector2() );
+	}
+
+	// apply movement
+	if ( _velocity.x != 0 || _velocity.y != 0 ){ changePosition( _velocity ); }
+
 
 	// apply friction
 	Vector2 friction = Vector2();
 	friction.x = -sign( _velocity.x ) * _friction;
 	friction.y = -sign( _velocity.y ) * _friction;
-	applyForce( friction );
+	if ( _velocity.x != 0 || _velocity.y != 0 ){ applyForce( friction ); }
 }

@@ -89,9 +89,12 @@ void BaseObject::onPhysicTick() { return; }
 void BaseObject::onRenderTick() { return; }
 
 Vector2 BaseObject::getPosition() const { return _position; }
-Vector2 BaseObject::setPosition( const Vector2 &pos ) { _position = pos; return _position; }
+Vector2 BaseObject::setPosition( const Vector2 &pos ){ _position = pos; return _position; }
 
-Vector2 BaseObject::changePosition( const Vector2 &delta ) { _position.x += delta.x; _position.y += delta.y; return _position; }
+Vector2 BaseObject::changePosition( const Vector2 &delta )
+{
+	_position.x += delta.x; _position.y += delta.y; return _position;
+}
 Vector2 BaseObject::getRelPosition( const BaseObject &obj ) const
 {
 	Vector2 relPos = Vector2();

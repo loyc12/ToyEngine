@@ -9,11 +9,11 @@ int main()
 	Engine *engine = Engine::getEngine();
 
 
-	engine->switchState(  ES_RUNNING );
+	engine->switchState( ES_RUNNING );
 
 	engine->launchLoop();
 
-	engine->switchState(  ES_CLOSED );
+	engine->switchState( ES_CLOSED );
 
 	delete engine;
 

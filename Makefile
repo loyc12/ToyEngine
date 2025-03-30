@@ -1,5 +1,5 @@
 default: dbgc
-.PHONY: default relb relc dbgb dbgc compt comp
+.PHONY: default release debug compt comp
 
 include _mk/Colours.mk
 include _mk/Settings.mk
@@ -7,11 +7,11 @@ include _mk/Env.mk
 include _mk/Commands.mk
 
 # Release build target
-relc:
+release:
 	@$(MAKE) -s BUILD_MODE=RELEASE comp
 
 # Debug build targets
-dbgc:
+debug:
 	@$(MAKE) -s BUILD_MODE=DEBUG comp
 
 # Compilation target

@@ -77,21 +77,20 @@ void OnReadInputs() // only called when the game is launched
 	log( "OnReadInputs()", INFO );
 
 	inputs_s np = ng->getLatestInputs(); // TODO make this shit global
-	float DT = ng->getDeltaTime();
 
-	float factor = 1.0f;
-	if ( np.SHIFT ){ factor *= 0.5; }
-	if ( np.CTRL  ){ factor *= 4.0; }
+	float moveFactor = ng->getDeltaTime() ;
+	if ( np.SHIFT ){ moveFactor *= 0.5; } // TODO make this shit global
+	if ( np.CTRL  ){ moveFactor *= 4.0; }
 
 
 	if ( cn->getLatestInputs().P )
 	{
-		log( "toggleing pause", INFO );
+		log( "Toggling pause", INFO );
 		ng->togglePause();
 	}
 
-	if ( np.SCROLL_DOWN ){ vp->scaleZoom( pow( 2.0f, factor * DT * ZOOM_SPEED )); }
-	if ( np.SCROLL_UP   ){ vp->scaleZoom( pow( 0.5f, factor * DT * ZOOM_SPEED )); }
+	if ( np.SCROLL_DOWN ){ vp->scaleZoom( pow( 2.0f, moveFactor * ZOOM_SPEED )); }
+	if ( np.SCROLL_UP   ){ vp->scaleZoom( pow( 0.5f, moveFactor * ZOOM_SPEED )); }
 
 }
 
@@ -99,23 +98,23 @@ void OnRunScripts() // only called when the game is launched
 {
 	log( "OnRunScripts()", INFO );
 }
+
 void OnRunPhysics() // only called when the game is launched and unpaused
 {
 	log( "OnRunPhysics()", INFO );;
 
 	inputs_s np = ng->getLatestInputs(); // TODO make this shit global
-	float DT = ng->getDeltaTime();
 
-	float factor = 1.0f;
-	if ( np.SHIFT ){ factor *= 0.5; }
-	if ( np.CTRL  ){ factor *= 4.0; }
+	float moveFactor = ng->getDeltaTime() ;
+	if ( np.SHIFT ){ moveFactor *= 0.5; } // TODO make this shit global
+	if ( np.CTRL  ){ moveFactor *= 4.0; }
 
 
 	int32_t moveHor = ( np.RIGHT - np.LEFT ) * MOVE_SPEED;
-	if ( moveHor ){ Player->changePosition( { moveHor * factor * DT, 0.0f } ); }
+	if ( moveHor ){ Player->changePosition( { moveHor * moveFactor, 0.0f } ); }
 
 	int32_t moveVer = ( np.BACK - np.FORE ) * MOVE_SPEED;
-	if ( moveVer ){ Player->changePosition( { 0.0f, moveVer * factor * DT } ); }
+	if ( moveVer ){ Player->changePosition( { 0.0f, moveVer * moveFactor } ); }
 
 	if ( np.X ){ vp->untrackObject(); }
 	if ( np.C ){ vp->trackObject( Player ); }
@@ -128,7 +127,6 @@ void OnRunPhysics() // only called when the game is launched and unpaused
 		Player->setVelocity( { 0.0f, 0.0f } );
 		//Player->setRotation( 0.0f );
 	}
-
 }
 
 void OnRenderWorld() // only called when the game is launched
