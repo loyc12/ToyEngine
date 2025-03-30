@@ -11,7 +11,7 @@ void OnGameLaunch()
 
 void OnGameStep()
 {
-	CloseWindow(); // DEBUG : to run the game loop only once
+	//CloseWindow(); // DEBUG : to run the game loop only once
 }
 
 void OnReadInputs() // only called when the game is launched
