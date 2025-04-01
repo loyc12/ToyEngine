@@ -9,4 +9,5 @@ Performance
 General
 	- Use ScriptObject as an Entity Component System Interface
 	- replace EXIT_SUCCESS with true & so on
-	- Implement a time scale
+	- Implement a timescale engine var
+	- Implement a ShapeInfo struct

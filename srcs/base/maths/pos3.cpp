@@ -2,6 +2,8 @@
 
 pos3_s getNullPos3() { return { 0, 0, 0 }; }
 
+pos2_s P3toP2( const pos3_s &pos ) { return { pos.x, pos.z }; } // NOTE : Y is to be used for height ( absent in 2D )
+pos3_s P2toP3( const pos2_s &pos ) { return { pos.x, pos.y, 0 }; }
 pos3_s  VtoP3( const Vector3 &vec ) { return { ( posint_t )vec.x, ( posint_t )vec.y, ( posint_t )vec.z }; }
 Vector3 PtoV3( const pos3_s  &pos ) { return { ( float )pos.x,    ( float )pos.y,    ( float )pos.z }; }
 
@@ -255,6 +257,32 @@ pos3_s operator-( const pos3_s &lhs, const pos3_s &rhs )
 	return pos;
 }
 
+pos3_s operator*( const pos3_s &lhs, const pos3_s &rhs )
+{
+	pos3_s pos = getPos3( lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z );
+	return pos;
+}
+
+pos3_s operator/( const pos3_s &lhs, const pos3_s &rhs )
+{
+	if ( divtest( rhs.x )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs.y )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs.z )) { throw std::invalid_argument( "Invalid division" ); }
+	pos3_s pos = getPos3( lhs.x / rhs.x, lhs.y / rhs.y, lhs.z / rhs.z );
+	return pos;
+}
+
+pos3_s operator%( const pos3_s &lhs, const pos3_s &rhs )
+{
+	if ( divtest( rhs.x )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs.y )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs.z )) { throw std::invalid_argument( "Invalid division" ); }
+	pos3_s pos = getPos3( lhs.x % rhs.x, lhs.y % rhs.y, lhs.z % rhs.z );
+	return pos;
+}
+
+// ================ INTEGER OPERATORS
+
 pos3_s operator*( int  lhs, const pos3_s &rhs ) { return rhs * lhs; }
 pos3_s operator*( const pos3_s &lhs, int rhs )
 {
@@ -292,6 +320,13 @@ pos3_s operator/( const pos3_s &lhs, float rhs )
 	return pos;
 }
 
+pos3_s operator%( const pos3_s &lhs, float rhs )
+{
+	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
+	pos3_s pos = getPos3( fmod( lhs.x, rhs ), fmod( lhs.y, rhs ), fmod( lhs.z, rhs ));
+	return pos;
+}
+
 // ================ DOUBLE OPERATORS
 
 pos3_s operator*( double lhs, const pos3_s &rhs ) { return rhs * lhs; }
@@ -305,6 +340,13 @@ pos3_s operator/( const pos3_s &lhs, double rhs )
 {
 	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
 	pos3_s pos = getPos3( lhs.x / rhs, lhs.y / rhs, lhs.z / rhs );
+	return pos;
+}
+
+pos3_s operator%( const pos3_s &lhs, double rhs )
+{
+	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
+	pos3_s pos = getPos3( fmod( lhs.x, rhs ), fmod( lhs.y, rhs ), fmod( lhs.z, rhs ));
 	return pos;
 }
 
@@ -325,6 +367,38 @@ pos3_s &operator-=( pos3_s &lhs, const pos3_s &rhs )
 	lhs.z -= rhs.z;
 	return lhs;
 }
+
+pos3_s &operator*=( pos3_s &lhs, const pos3_s &rhs )
+{
+	lhs.x *= rhs.x;
+	lhs.y *= rhs.y;
+	lhs.z *= rhs.z;
+	return lhs;
+}
+
+pos3_s &operator/=( pos3_s &lhs, const pos3_s &rhs )
+{
+	if ( divtest( rhs.x )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs.y )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs.z )) { throw std::invalid_argument( "Invalid division" ); }
+	lhs.x /= rhs.x;
+	lhs.y /= rhs.y;
+	lhs.z /= rhs.z;
+	return lhs;
+}
+
+pos3_s &operator%=( pos3_s &lhs, const pos3_s &rhs )
+{
+	if ( divtest( rhs.x )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs.y )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs.z )) { throw std::invalid_argument( "Invalid division" ); }
+	lhs.x %= rhs.x;
+	lhs.y %= rhs.y;
+	lhs.z %= rhs.z;
+	return lhs;
+}
+
+// ================ INTEGER OPERATORS
 
 pos3_s &operator*=( pos3_s &lhs, int rhs )
 {
@@ -352,7 +426,7 @@ pos3_s &operator%=( pos3_s &lhs, int rhs )
 	return lhs;
 }
 
-// ================ FLOAT
+// ================ FLOAT OPERATORS
 
 pos3_s &operator*=( pos3_s &lhs, float rhs )
 {
@@ -380,7 +454,7 @@ pos3_s &operator%=( pos3_s &lhs, float rhs )
 	return lhs;
 }
 
-// ================ DOUBLE
+// ================ DOUBLE OPERATORS
 
 pos3_s &operator*=( pos3_s &lhs, double rhs )
 {

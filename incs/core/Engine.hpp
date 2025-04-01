@@ -35,7 +35,7 @@ class Engine
 		Viewport2D *_viewport2D;
 		Controller *_controller;
 
-		vector< BaseObject* > ObjectContainer;
+		objVect_t ObjectContainer;
 
 		std::mutex mtx_state;
 		engineState_e _state;

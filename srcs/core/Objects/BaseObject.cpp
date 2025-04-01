@@ -3,9 +3,9 @@
 
 // ================================ MEMORY METHODS
 
-bool BaseObject::addToRegister()
+bool BaseObject::addToEngine()
 {
-	log( "BaseObject::addToRegister()", DEBUG, _id );
+	log( "BaseObject::addToEngine()", DEBUG, _id );
 
 	// getting a new ID here instead of in Engine::addObject() to prevent making setID() public
 	_id = GNG->getNewID();
@@ -15,9 +15,9 @@ bool BaseObject::addToRegister()
 	return EXIT_SUCCESS;
 }
 
-bool BaseObject::delFromRegister()
+bool BaseObject::delFromEngine()
 {
-	log( "BaseObject::delFromRegister()", DEBUG, _id );
+	log( "BaseObject::delFromEngine()", DEBUG, _id );
 
 	GNG->delObjectByID( _id );		_id = 0;
 
@@ -33,7 +33,7 @@ void BaseObject::onAdd()
 	_size = { 1, 1 };
 	_isSpherical = true;
 
-	addToRegister();
+	addToEngine();
 }
 
 void BaseObject::onCpy( const BaseObject &obj )
@@ -50,7 +50,7 @@ void BaseObject::onDel() // inverted call order
 	// NOTE : if the object is being tracked, stop tracking it
 	if ( GVP != nullptr && GVP->isTracking() && GVP->getTrackedObject() == this )
 
-	if ( _id != 0 ) delFromRegister();
+	if ( _id != 0 ) delFromEngine();
 }
 
 
@@ -145,7 +145,25 @@ Vector2 BaseObject::getRelSize( const BaseObject &obj ) const
 	return relSize;
 }
 
-	// ================================ DIMENSIONS GETTERS
+// ================================ DIMENSIONS GETTERS
+
+
+float BaseObject::getPerim() const
+{
+	if ( _isSpherical ) // calculate the perimiter of an elliptic shape
+	{
+		if ( _size.x == _size.y ) { return PI * _size.x * 2; } // circle
+
+		// if not a perfect circle, we use Ramanujan's approximation
+		return PI * ( 3 * ( _size.x + _size.y ) - sqrt( ( 3 * _size.x + _size.y ) * ( _size.x + 3 * _size.y )));
+	}
+	return ( _size.x + _size.y ) * 4;
+}
+float BaseObject::getArea() const
+{
+	if ( _isSpherical ) { return PI * _size.x * _size.y; }
+	return _size.x * _size.y * 4;
+}
 
 float BaseObject::getMinRadius() const { return getMinSide(); }
 float BaseObject::getMaxRadius() const
@@ -165,19 +183,3 @@ float BaseObject::getAvgRadius() const
 
 float BaseObject::getHalfDiago() const { return ( sqrt( sqr( _size.x ) + sqr( _size.y ))); }
 float BaseObject::getFullDiago() const { return getHalfDiago() * 2; }
-float BaseObject::getPerimeter() const
-{
-	if ( _isSpherical ) // calculate the perimiter of an elliptic shape
-	{
-		if ( _size.x == _size.y ) { return PI * _size.x * 2; } // circle
-
-		// if not a perfect circle, we use Ramanujan's approximation
-		return PI * ( 3 * ( _size.x + _size.y ) - sqrt( ( 3 * _size.x + _size.y ) * ( _size.x + 3 * _size.y )));
-	}
-	return ( _size.x + _size.y ) * 4;
-}
-float BaseObject::getArea() const
-{
-	if ( _isSpherical ) { return PI * _size.x * _size.y; }
-	return _size.x * _size.y * 4;
-}
