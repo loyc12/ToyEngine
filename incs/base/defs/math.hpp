@@ -9,6 +9,9 @@
 #define PI	3.14159265358979323846f
 #define EPS 0.0000000001f
 
+#define RtoD ( 180.0f / PI )
+#define DtoR ( PI / 180.0f )
+
 // fabs( ), pow( ) and sqrt( ) are already defined in cmath
 // floor( ), ceil( ) and round( )( ? ) are already defined in cmath
 
