@@ -32,17 +32,17 @@ class Engine
 {
 	// ================================ ATTRIBUTES
 	private:
+		objID_t _maxID;
+		float   _DT; // delta time
+		float   _TS; // time scale
+
 		Viewport2D *_viewport2D;
 		Controller *_controller;
 
 		objVect_t ObjectContainer;
 
-		std::mutex mtx_state;
 		engineState_e _state;
-
-		objID_t maxID;
-		float _DT;
-
+		std::mutex mtx_state;
 
 	// ================================ STATE METHODS
 	public:
@@ -94,9 +94,8 @@ class Engine
 	private:
 		void DelAllObjects(); // deletes all objects in the container
 
-	// ================================ ACCESSORS
+	// ================================ ACCESSORS / MUTATORS
 	public:
-	  float getDeltaTime() const;
 
 		inputs_s   &getLatestInputs();
 		inputs_s   &getPreviousInputs();
@@ -112,12 +111,12 @@ class Engine
 
 		engineState_e  getState();
 
+		float getDeltaTime() const; // multiplied by the time scale
+		void setTimeScale( float timeScale );
 
 	// ================================ MUTEXED ACCESSORS
 	private:
 		void setState( engineState_e newState );
-
-	// ================================ OTHER METHODS
 
 };
 
@@ -127,5 +126,7 @@ class Engine
 extern Engine     *GNG;
 extern Viewport2D *GVP;
 extern Controller *GCN;
+
+extern float     GDTS();
 
 #endif // ENGINE_HPP

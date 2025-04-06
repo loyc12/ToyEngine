@@ -4,7 +4,7 @@
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
-Engine::Engine() : _state( ES_CLOSED ), maxID( 0 )
+Engine::Engine() : _maxID( 0 ), _DT( 0 ), _TS( 1 ), _state( ES_CLOSED )
 {
 	log( "Engine::Engine()" );
 
@@ -29,13 +29,9 @@ Engine *Engine::getEngine()
 	return instance;
 }
 
+// ================================ ACCESSORS / MUTATORS
 
-
-// ================================ ACCESSORS
-
-float Engine::getDeltaTime() const { return _DT; }
-
-inputs_s   &Engine::getLatestInputs(){  return _controller->getLatestInputs(); }
+inputs_s   &Engine::getLatestInputs(){   return _controller->getLatestInputs(); }
 inputs_s   &Engine::getPreviousInputs(){ return _controller->getPreviousInputs(); }
 Controller *Engine::getController()
 {
@@ -70,16 +66,29 @@ BaseObject *Engine::getObjectByID( objID_t id )
 objID_t Engine::getNewID()
 {
 	log( "Engine::getNewID()" );
-	return ++maxID;
+	return ++_maxID;
 }
 
-uint32_t Engine::getObjectCount() const
+uint32_t Engine::getObjectCount() const // NOTE : add a resetIDs() method ?
 {
 	log( "Engine::getObjectCount()" );
 	return ObjectContainer.size();
 }
 
-// ================================ MUTEXED ACCESSORS
+float Engine::getDeltaTime() const { return _DT * _TS; }
+void  Engine::setTimeScale( float timeScale )
+{
+	log( "Engine::setTimeScale()" );
+	if ( timeScale < 0 )
+	{
+		log( "Engine::setTimeScale() : Time scale cannot be negative", WARN );
+		_TS = 0;
+		return;
+	}
+	_TS = timeScale;
+}
+
+// ================ MUTEXES
 
 engineState_e Engine::getState()
 {
@@ -95,13 +104,11 @@ void Engine::setState( engineState_e newState )
 	_state = newState;
 }
 
-
-// ================================ OTHER METHODS
-
-
 // ==================== ENGINE SHORTCUTS
 // Shortcuts to the engine and its components
 
 Engine     *GNG = Engine::getEngine();
 Controller *GCN = GNG->getController();
 Viewport2D *GVP = GNG->getViewport();
+
+float GDTS() { return GNG->getDeltaTime(); }

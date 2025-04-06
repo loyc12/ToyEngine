@@ -1,13 +1,24 @@
 Style
 
-Performance
-	- Improve the performance of log() / get_time_str()
+Refactor
+	- use Shape2 for Objects instead of current settup
+	- Chain Objects inheritance : Base > Physic > Render > Script > Obj2
+	- Use Precise ints : (u)intx_t, posint_t, etc
 	- Use fixed_t instead of floats
-	- Use angle_t
-	- Use scalar_t instead of floats
+	- Use angle_t instead of float
+	- Use chain_t instead of List
+	- Use bank_t< 2 > instead of Vect2
+
+Performance
+
 
 General
 	- Use ScriptObject as an Entity Component System Interface
 	- replace EXIT_SUCCESS with true & so on
 	- Implement a timescale engine var
-	- Implement a ShapeInfo struct
+
+Nomenclature
+	- set( val )         : v0 = v
+	- move( delta )      : v0 += d
+	- change( factor )   : v0 *= f
+	- nudge( target, % ) : v0 += ( % * ( v - v0 )) : aka move a % towards a target

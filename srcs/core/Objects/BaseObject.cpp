@@ -97,16 +97,15 @@ Vector2 BaseObject::getTop()    const { return { _pos.x, (_pos.y - _size.y) }; }
 Vector2 BaseObject::getBot()    const { return { _pos.x, (_pos.y + _size.y) }; }
 Vector2 BaseObject::getLeft()   const { return { (_pos.x - _size.x), _pos.y }; }
 Vector2 BaseObject::getRight()  const { return { (_pos.x + _size.x), _pos.y }; }
-Vector2 BaseObject::getCenter() const { return _pos; }
 
 Vector2 BaseObject::getTopLeft()  const { return { (_pos.x - _size.x), (_pos.y - _size.y) }; }
 Vector2 BaseObject::getTopRight() const { return { (_pos.x + _size.x), (_pos.y - _size.y) }; }
 Vector2 BaseObject::getBotLeft()  const { return { (_pos.x - _size.x), (_pos.y + _size.y) }; }
 Vector2 BaseObject::getBotRight() const { return { (_pos.x + _size.x), (_pos.y + _size.y) }; }
 
-Vector2 BaseObject::getPosition()   const { return _pos; }
-Vector2 BaseObject::setPosition(    const Vector2 &pos ){ _pos = pos; return _pos; }
-Vector2 BaseObject::changePosition( const Vector2 &delta ) { _pos.x += delta.x; _pos.y += delta.y; return _pos; }
+Vector2 BaseObject::getPosition() const { return _pos; }
+Vector2 BaseObject::setPosition(  const Vector2 &pos ){ _pos = pos; return _pos; }
+Vector2 BaseObject::movePosition( const Vector2 &delta ) { _pos.x += delta.x; _pos.y += delta.y; return _pos; }
 
 // returns the position difference between this object and the given object
 Vector2 BaseObject::getRelPosition( const BaseObject &obj ) const
@@ -128,7 +127,7 @@ Vector2 BaseObject::setSize(  const Vector2 &size )
 	return _size;
 }
 
-Vector2 BaseObject::changeSize( const Vector2 &delta )
+Vector2 BaseObject::moveSize( const Vector2 &delta )
 {
 	_size.x += delta.x; _size.y += delta.y;
 	if ( _size.x <= 0 ) { _size.x = EPS; }

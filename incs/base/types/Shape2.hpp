@@ -144,9 +144,9 @@ class Shape2 // NOTE : test the shit out of this class before using
 		bool delScaledVertex( const Vector2 &p );   // Delete by index instead
 		bool delWorldVertex(  const Vector2 &p );   bool delVertex( int index );
 
-		void setAngle( float angle );           void moveAngle( float delta );
-		void setCenter( const Vector2 &ctr );   void moveCenter( const Vector2 &delta );
-		void setScales( const Vector2 &scl );   void changeScales( const Vector2 &factor );
+		void setAngle( float angle );               void moveAngle( float delta );
+		void setCenter( const Vector2 &ctr );       void moveCenter( const Vector2 &delta );
+		void setScales( const Vector2 &scl );       void changeScales( const Vector2 &factor );
 
 		void updateCenter(); // updates the center to the mean of all vertices
 		void updateType(); //   updates the type to the one that best fits the shape

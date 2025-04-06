@@ -20,7 +20,7 @@ void OnReadInputs() // only called when the game is launched
 
 	inputs_s np = GNG->getLatestInputs(); // TODO make this shit global
 
-	float moveFactor = GNG->getDeltaTime() ;
+	float moveFactor = GDTS();
 	if ( np.SHIFT ){ moveFactor *= 0.5; } // TODO make this shit global
 	if ( np.CTRL  ){ moveFactor *= 4.0; }
 
@@ -47,16 +47,16 @@ void OnRunPhysics() // only called when the game is launched and unpaused
 
 	inputs_s np = GNG->getLatestInputs(); // TODO make this shit global
 
-	float moveFactor = GNG->getDeltaTime() ;
+	float moveFactor = GDTS() ;
 	if ( np.SHIFT ){ moveFactor *= 0.5; } // TODO make this shit global
 	if ( np.CTRL  ){ moveFactor *= 4.0; }
 
 
 	int32_t moveHor = ( np.RIGHT - np.LEFT ) * MOVE_SPEED;
-	if ( moveHor ){ Player->changePosition( { moveHor * moveFactor, 0.0f } ); }
+	if ( moveHor ){ Player->movePosition( { moveHor * moveFactor, 0.0f } ); }
 
 	int32_t moveVer = ( np.BACK - np.FORE ) * MOVE_SPEED;
-	if ( moveVer ){ Player->changePosition( { 0.0f, moveVer * moveFactor } ); }
+	if ( moveVer ){ Player->movePosition( { 0.0f, moveVer * moveFactor } ); }
 
 	if ( np.X ){ GVP->untrackObject(); }
 	if ( np.C ){ GVP->trackObject( Player ); }

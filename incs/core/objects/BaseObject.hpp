@@ -74,16 +74,17 @@ class BaseObject
 
 	  Vector2 getTop() const;				Vector2 getBot() const;
 		Vector2 getLeft() const;			Vector2 getRight() const;
-		Vector2 getCenter() const;		// same as getPosition()
+
+		inline Vector2 getCenter() const { return BaseObject::getPosition(); }
 
 		Vector2 getTopLeft() const;		Vector2 getTopRight() const;
 		Vector2 getBotLeft() const;		Vector2 getBotRight() const;
 
-		Vector2 getPosition() const;									Vector2 changePosition( const Vector2 &delta );
-		Vector2 setPosition( const Vector2 &pos );		Vector2 getRelPosition( const BaseObject &Obj ) const;
+		Vector2 getPosition() const;									Vector2 movePosition(   const Vector2 &delta );
+		Vector2 setPosition(  const Vector2 &pos );		Vector2 getRelPosition( const BaseObject &Obj ) const;
 
-		Vector2 getSize() const;											Vector2 changeSize( const Vector2 &delta );
-		Vector2 setSize( const Vector2 &size );				Vector2 getRelSize( const BaseObject &Obj ) const;
+		Vector2 getSize() const;											Vector2 moveSize(   const Vector2 &delta );
+		Vector2 setSize(  const Vector2 &size );			Vector2 getRelSize( const BaseObject &Obj ) const;
 
 	// ================================ DIMENSIONS GETTERS
 
