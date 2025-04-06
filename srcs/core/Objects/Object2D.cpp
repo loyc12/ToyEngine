@@ -32,25 +32,22 @@ void Object2D::onDel()
 
 Object2D::Object2D() :
 	BaseObject( E_OBJ2D ),
-	ScriptObject(),
 	PhysicObject(),
-	RenderObject()
-{ Object2D::onAdd(); }
+	RenderObject(),
+	ScriptObject()
+{
+	Object2D::onAdd();
+}
 
 Object2D::Object2D( const Object2D &obj ) :
 	BaseObject( E_OBJ2D ),
-	ScriptObject( obj ),
 	PhysicObject( obj ),
-	RenderObject( obj )
+	RenderObject( obj ),
+	ScriptObject( obj )
 {
 	if ( this == &obj ) return;
 
-	BaseObject::onCpy( obj );
-
-	ScriptObject::onCpy( obj );
-	PhysicObject::onCpy( obj );
-	RenderObject::onCpy( obj );
-
+	Object2D::onAdd();
 	Object2D::onCpy( obj );
 }
 
@@ -60,18 +57,21 @@ Object2D &Object2D::operator=( const Object2D &obj )
 
 	BaseObject::onCpy( obj );
 
-	ScriptObject::onCpy( obj );
 	PhysicObject::onCpy( obj );
 	RenderObject::onCpy( obj );
-
+	ScriptObject::onCpy( obj );
 	Object2D::onCpy( obj );
 
 	return *this;
 }
 
-Object2D::~Object2D() // inverted call order
+Object2D::~Object2D() // automatic inverted call order
 {
 	Object2D::onDel();
+	// ScriptObject::onDel();
+	// RenderObject::onDel();
+	// PhysicObject::onDel();
+	// BaseObject::onDel();
 }
 
 // ================================ ACCESSORS

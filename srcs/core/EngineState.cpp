@@ -184,5 +184,4 @@ void Engine::close()
 	delete _controller;   GVP = nullptr;
 
 	DelAllObjects();
-
 }

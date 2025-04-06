@@ -1,33 +1,33 @@
 #include "../../../incs/base.hpp"
 
-pos2_s getNullPos2() { return { 0, 0 }; }
+pos2_s getNullPos2(){ return { 0, 0 }; }
 
-pos2_s  VtoP2( const Vector2 &vec ) { return { ( posint_t )vec.x, ( posint_t )vec.y }; }
-Vector2 PtoV2( const pos2_s  &pos ) { return { ( float )pos.x,    ( float )pos.y }; }
+pos2_s  VtoP2( const Vector2 &vec ){ return { ( posint_t )vec.x, ( posint_t )vec.y }; }
+Vector2 PtoV2( const pos2_s  &pos ){ return { ( float )pos.x,    ( float )pos.y }; }
 
-pos2_s getPos2( byte_t x, byte_t y ) { return { ( posint_t )x, ( posint_t )y }; }
-pos2_s getPos2( word_t x, word_t y ) { return { ( posint_t )x, ( posint_t )y }; }
+pos2_s getPos2( byte_t x, byte_t y ){ return { ( posint_t )x, ( posint_t )y }; }
+pos2_s getPos2( word_t x, word_t y ){ return { ( posint_t )x, ( posint_t )y }; }
 pos2_s getPos2( int x, int y )       { return { ( posint_t )x, ( posint_t )y }; }
 pos2_s getPos2( long x, long y )     { return { ( posint_t )x, ( posint_t )y }; }
 pos2_s getPos2( float x, float y )   { return { ( posint_t )x, ( posint_t )y }; }
-pos2_s getPos2( double x, double y ) { return { ( posint_t )x, ( posint_t )y }; }
+pos2_s getPos2( double x, double y ){ return { ( posint_t )x, ( posint_t )y }; }
 
-pos2_s getPos2( byte_t v ) { return { ( posint_t )v, ( posint_t )v }; }
-pos2_s getPos2( word_t v ) { return { ( posint_t )v, ( posint_t )v }; }
+pos2_s getPos2( byte_t v ){ return { ( posint_t )v, ( posint_t )v }; }
+pos2_s getPos2( word_t v ){ return { ( posint_t )v, ( posint_t )v }; }
 pos2_s getPos2( int v )    { return { ( posint_t )v, ( posint_t )v }; }
 pos2_s getPos2( long v )   { return { ( posint_t )v, ( posint_t )v }; }
 pos2_s getPos2( float v )  { return { ( posint_t )v, ( posint_t )v }; }
-pos2_s getPos2( double v ) { return { ( posint_t )v, ( posint_t )v }; }
+pos2_s getPos2( double v ){ return { ( posint_t )v, ( posint_t )v }; }
 
 // ================================ DISTANCE METHODS
 
-float getXDist( const pos2_s &p1, const pos2_s &p2 ) { return abs( p1.x - p2.x ); }
-float getYDist( const pos2_s &p1, const pos2_s &p2 ) { return abs( p1.y - p2.y ); }
+float getXDist( const pos2_s &p1, const pos2_s &p2 ){ return abs( p1.x - p2.x ); }
+float getYDist( const pos2_s &p1, const pos2_s &p2 ){ return abs( p1.y - p2.y ); }
 
-float getShortLinearDist( const pos2_s &p1, const pos2_s &p2 ) { return min( abs( p1.x - p2.x ), abs( p1.y - p2.y )); }
-float getLongLinearDist( const pos2_s &p1, const pos2_s &p2 ) { return max( abs( p1.x - p2.x ), abs( p1.y - p2.y )); }
+float getShortLinearDist( const pos2_s &p1, const pos2_s &p2 ){ return min( abs( p1.x - p2.x ), abs( p1.y - p2.y )); }
+float getLongLinearDist( const pos2_s &p1, const pos2_s &p2 ){ return max( abs( p1.x - p2.x ), abs( p1.y - p2.y )); }
 
-float getCartesianDist( const pos2_s &p1, const pos2_s &p2 ) { return abs( p1.x - p2.x ) + abs( p1.y - p2.y ); }
+float getCartesianDist( const pos2_s &p1, const pos2_s &p2 ){ return abs( p1.x - p2.x ) + abs( p1.y - p2.y ); }
 float getCircularDist( const pos2_s &p1, const pos2_s &p2 )
 {
 	posint_t x = abs( p2.x - p1.x );
@@ -89,9 +89,9 @@ posList2_t listPosInCircle( pos2_s const &center, float radius )
 
 // ================================ BOOLEAN METHODS
 
-bool hasSameX( const pos2_s &p1, const pos2_s &p2 ) { return p1.x == p2.x; }
-bool hasSameY( const pos2_s &p1, const pos2_s &p2 ) { return p1.y == p2.y; }
-bool hasSameXY( const pos2_s &p1, const pos2_s &p2 ) { return p1.x == p2.x && p1.y == p2.y; }
+bool hasSameX( const pos2_s &p1, const pos2_s &p2 ){ return p1.x == p2.x; }
+bool hasSameY( const pos2_s &p1, const pos2_s &p2 ){ return p1.y == p2.y; }
+bool hasSameXY( const pos2_s &p1, const pos2_s &p2 ){ return p1.x == p2.x && p1.y == p2.y; }
 
 // ================ RECTANGULAR VOLUMES
 
@@ -155,8 +155,8 @@ bool isInTriangle( pos2_s const &point, pos2_s const &p1, pos2_s const &p2, pos2
 
 // ================================ COMPARISON OPERATORS
 
-bool operator==( const pos2_s &lhs, const pos2_s &rhs ) { return lhs.x == rhs.x && lhs.y == rhs.y; }
-bool operator!=( const pos2_s &lhs, const pos2_s &rhs ) { return lhs.x != rhs.x || lhs.y != rhs.y; }
+bool operator==( const pos2_s &lhs, const pos2_s &rhs ){ return lhs.x == rhs.x && lhs.y == rhs.y; }
+bool operator!=( const pos2_s &lhs, const pos2_s &rhs ){ return lhs.x != rhs.x || lhs.y != rhs.y; }
 bool operator>( const pos2_s &lhs, const pos2_s &rhs )  { return lhs.x + lhs.y> rhs.x + rhs.y; }
 bool operator<( const pos2_s &lhs, const pos2_s &rhs )  { return lhs.x + lhs.y < rhs.x + rhs.y ; }
 
@@ -182,21 +182,21 @@ pos2_s operator*( const pos2_s &lhs, const pos2_s &rhs )
 
 pos2_s operator/( const pos2_s &lhs, const pos2_s &rhs )
 {
-	if ( divtest( rhs.x ) || divtest( rhs.y )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs.x ) || divtest( rhs.y )){ throw std::invalid_argument( "Invalid division" ); }
 	pos2_s pos = getPos2( lhs.x / rhs.x, lhs.y / rhs.y );
 	return pos;
 }
 
 pos2_s operator%( const pos2_s &lhs, const pos2_s &rhs )
 {
-	if ( divtest( rhs.x ) || divtest( rhs.y )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs.x ) || divtest( rhs.y )){ throw std::invalid_argument( "Invalid division" ); }
 	pos2_s pos = getPos2( lhs.x % rhs.x, lhs.y % rhs.y );
 	return pos;
 }
 
 // ================ INTEGER OPERATORS
 
-pos2_s operator*( int  lhs, const pos2_s &rhs ) { return rhs * lhs; }
+pos2_s operator*( int  lhs, const pos2_s &rhs ){ return rhs * lhs; }
 pos2_s operator*( const pos2_s &lhs, int rhs )
 {
 	pos2_s pos = getPos2( lhs.x * rhs, lhs.y * rhs );
@@ -205,21 +205,21 @@ pos2_s operator*( const pos2_s &lhs, int rhs )
 
 pos2_s operator/( const pos2_s &lhs, int rhs )
 {
-	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs )){ throw std::invalid_argument( "Invalid division" ); }
 	pos2_s pos = getPos2( lhs.x / rhs, lhs.y / rhs );
 	return pos;
 }
 
 pos2_s operator%( const pos2_s &lhs, int rhs )
 {
-	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs )){ throw std::invalid_argument( "Invalid division" ); }
 	pos2_s pos = getPos2( lhs.x % rhs, lhs.y % rhs );
 	return pos;
 }
 
 // ================ FLOAT OPERATORS
 
-pos2_s operator*( float lhs, const pos2_s &rhs) { return rhs * lhs; }
+pos2_s operator*( float lhs, const pos2_s &rhs){ return rhs * lhs; }
 pos2_s operator*( const pos2_s &lhs, float rhs )
 {
 	pos2_s pos = { int( lhs.x * rhs ), int( lhs.y * rhs )};
@@ -228,21 +228,21 @@ pos2_s operator*( const pos2_s &lhs, float rhs )
 
 pos2_s operator/( const pos2_s &lhs, float rhs )
 {
-	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs )){ throw std::invalid_argument( "Invalid division" ); }
 	pos2_s pos = getPos2( lhs.x / rhs, lhs.y / rhs );
 	return pos;
 }
 
 pos2_s operator%( const pos2_s &lhs, float rhs )
 {
-	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs )){ throw std::invalid_argument( "Invalid division" ); }
 	pos2_s pos = getPos2( fmod( lhs.x, rhs ), fmod( lhs.y, rhs ));
 	return pos;
 }
 
 // ================ DOUBLE OPERATORS
 
-pos2_s operator*( double lhs, const pos2_s &rhs ) { return rhs * lhs; }
+pos2_s operator*( double lhs, const pos2_s &rhs ){ return rhs * lhs; }
 pos2_s operator*( const pos2_s &lhs, double rhs )
 {
 	pos2_s pos = { int( lhs.x * rhs ), int( lhs.y * rhs )};
@@ -251,14 +251,14 @@ pos2_s operator*( const pos2_s &lhs, double rhs )
 
 pos2_s operator/( const pos2_s &lhs, double rhs )
 {
-	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs )){ throw std::invalid_argument( "Invalid division" ); }
 	pos2_s pos = getPos2( lhs.x / rhs, lhs.y / rhs );
 	return pos;
 }
 
 pos2_s operator%( const pos2_s &lhs, double rhs )
 {
-	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs )){ throw std::invalid_argument( "Invalid division" ); }
 	pos2_s pos = getPos2( fmod( lhs.x, rhs ), fmod( lhs.y, rhs ));
 	return pos;
 }
@@ -288,7 +288,7 @@ pos2_s &operator*=( pos2_s &lhs, const pos2_s &rhs )
 
 pos2_s &operator/=( pos2_s &lhs, const pos2_s &rhs )
 {
-	if ( divtest( rhs.x ) || divtest( rhs.y )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs.x ) || divtest( rhs.y )){ throw std::invalid_argument( "Invalid division" ); }
 	lhs.x /= rhs.x;
 	lhs.y /= rhs.y;
 	return lhs;
@@ -296,7 +296,7 @@ pos2_s &operator/=( pos2_s &lhs, const pos2_s &rhs )
 
 pos2_s &operator%=( pos2_s &lhs, const pos2_s &rhs )
 {
-	if ( divtest( rhs.x ) || divtest( rhs.y )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs.x ) || divtest( rhs.y )){ throw std::invalid_argument( "Invalid division" ); }
 	lhs.x %= rhs.x;
 	lhs.y %= rhs.y;
 	return lhs;
@@ -313,7 +313,7 @@ pos2_s &operator*=( pos2_s &lhs, int rhs )
 
 pos2_s &operator/=( pos2_s &lhs, int rhs )
 {
-	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs )){ throw std::invalid_argument( "Invalid division" ); }
 	lhs.x /= rhs;
 	lhs.y /= rhs;
 	return lhs;
@@ -321,7 +321,7 @@ pos2_s &operator/=( pos2_s &lhs, int rhs )
 
 pos2_s &operator%=( pos2_s &lhs, int rhs )
 {
-	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs )){ throw std::invalid_argument( "Invalid division" ); }
 	lhs.x %= rhs;
 	lhs.y %= rhs;
 	return lhs;
@@ -338,7 +338,7 @@ pos2_s &operator*=( pos2_s &lhs, float rhs )
 
 pos2_s &operator/=( pos2_s &lhs, float rhs )
 {
-	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs )){ throw std::invalid_argument( "Invalid division" ); }
 	lhs.x = ( posint_t )fmod( lhs.x, rhs );
 	lhs.y = ( posint_t )fmod( lhs.y, rhs );
 	return lhs;
@@ -346,7 +346,7 @@ pos2_s &operator/=( pos2_s &lhs, float rhs )
 
 pos2_s &operator%=( pos2_s &lhs, float rhs )
 {
-	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs )){ throw std::invalid_argument( "Invalid division" ); }
 	lhs.x = ( posint_t )fmod( lhs.x, rhs );
 	lhs.y = ( posint_t )fmod( lhs.y, rhs );
 	return lhs;
@@ -363,7 +363,7 @@ pos2_s &operator*=( pos2_s &lhs, double rhs )
 
 pos2_s &operator/=( pos2_s &lhs, double rhs )
 {
-	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs )){ throw std::invalid_argument( "Invalid division" ); }
 	lhs.x = ( posint_t )fmod( lhs.x, rhs );
 	lhs.y = ( posint_t )fmod( lhs.y, rhs );
 	return lhs;
@@ -371,7 +371,7 @@ pos2_s &operator/=( pos2_s &lhs, double rhs )
 
 pos2_s &operator%=( pos2_s &lhs, double rhs )
 {
-	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid division" ); }
+	if ( divtest( rhs )){ throw std::invalid_argument( "Invalid division" ); }
 	lhs.x = ( posint_t )fmod( lhs.x, rhs );
 	lhs.y = ( posint_t )fmod( lhs.y, rhs );
 	return lhs;

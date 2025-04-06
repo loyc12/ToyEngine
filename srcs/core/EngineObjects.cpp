@@ -86,19 +86,14 @@ void Engine::DelAllObjects()
 
 	while ( !ObjectContainer.empty() )
 	{
-		if ( ObjectContainer[ 0 ] == nullptr )
-		{
-			log( "Engine::DelAllObjects() : object nonexistant", WARN );
-			ObjectContainer.erase( ObjectContainer.begin() );
-		}
-		else
-		{
-			delete ObjectContainer[ 0 ];
-			ObjectContainer[ 0 ] = nullptr;
-		}
+		if ( ObjectContainer[ 0 ] == nullptr ){ log( "Engine::DelAllObjects() : object nonexistant", WARN ); }
+		else { delete ObjectContainer[ 0 ]; }
+
 		ObjectContainer.erase( ObjectContainer.begin() );
+		ObjectContainer[ 0 ] = nullptr;
+		ObjectContainer.shrink_to_fit();
 	}
 	ObjectContainer.clear();
-	ObjectContainer.shrink_to_fit();
+
 	log( "Engine::DelAllObjects() : Deleted all objects" );
 }

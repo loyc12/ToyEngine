@@ -1,16 +1,14 @@
 #ifndef OBJECT2D_HPP
 # define OBJECT2D_HPP
 
-# include "./BaseObject.hpp"
+# include <raylib.h>
 # include "./ScriptObject.hpp"
-# include "./PhysicObject.hpp"
-# include "./RenderObject.hpp"
 
 class Object2D :
 	virtual public BaseObject,
-	virtual public ScriptObject,
 	virtual public PhysicObject,
-	virtual public RenderObject
+	virtual public RenderObject,
+	virtual public ScriptObject
 {
 	protected:
 	// ================================ ATTRIBUTES

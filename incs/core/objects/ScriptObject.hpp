@@ -1,9 +1,13 @@
 #ifndef SCRIPTOBJECT_HPP
 # define SCRIPTOBJECT_HPP
 
-# include "./BaseObject.hpp"
+# include <raylib.h>
+# include "./RenderObject.hpp"
 
-class ScriptObject : virtual public BaseObject
+class ScriptObject :
+	virtual public BaseObject,
+	virtual public PhysicObject,
+	virtual public RenderObject
 {
 	// this class is used to run scripts from an object
 	protected:
@@ -20,7 +24,7 @@ class ScriptObject : virtual public BaseObject
 		ScriptObject();
 		ScriptObject( const ScriptObject &obj );
 		ScriptObject &operator=( const ScriptObject &obj );
-		~ScriptObject();
+		virtual ~ScriptObject();
 
 	// ================================ ACCESSORS
 		bool getIsActive() const;			void setIsActive( bool _isActive );

@@ -14,7 +14,7 @@ bool clock_started = false;
 
 struct timeval &start_clock()
 {
-	if ( clock_started ) { log( "Clock already started", WARN ); return clock_start_time; }
+	if ( clock_started ){ log( "Clock already started", WARN ); return clock_start_time; }
 
 	gettimeofday( &clock_start_time, NULL );
 
@@ -25,13 +25,13 @@ struct timeval &start_clock()
 
 struct timeval &get_start_time()
 {
-	if ( !clock_started ) { start_clock(); }
+	if ( !clock_started ){ start_clock(); }
 	return clock_start_time;
 }
 
 string get_time_str()
 {
-	if ( !clock_started ) { start_clock(); }
+	if ( !clock_started ){ start_clock(); }
 
 	ostrs out; out << std::setfill( '0' );
 
@@ -68,7 +68,7 @@ string get_time_str()
 }
 string get_time_str_raw()
 {
-	if ( !clock_started ) { log( "Clock not started", WARN ); start_clock(); }
+	if ( !clock_started ){ log( "Clock not started", WARN ); start_clock(); }
 
 	ostrs out;
 	ulong time = get_runtime();
@@ -84,7 +84,7 @@ string get_time_str_raw()
 }
 string get_start_time_str()
 {
-	if ( !clock_started ) { log( "Clock not started", WARN ); start_clock(); }
+	if ( !clock_started ){ log( "Clock not started", WARN ); start_clock(); }
 
 	ostrs out; out << std::setfill( '0' );
 

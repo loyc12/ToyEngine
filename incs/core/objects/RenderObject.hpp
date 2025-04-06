@@ -2,7 +2,7 @@
 # define RENDEROBJECT_HPP
 
 # include <raylib.h>
-# include "./BaseObject.hpp"
+# include "PhysicObject.hpp"
 
 typedef enum shape_e
 {
@@ -13,7 +13,9 @@ typedef enum shape_e
 } shape_e;
 
 
-class RenderObject : virtual public BaseObject
+class RenderObject :
+	virtual public BaseObject,
+	virtual public PhysicObject
 {
 	// this class is used to render an object
 	protected:
@@ -32,7 +34,7 @@ class RenderObject : virtual public BaseObject
 		RenderObject();
 		RenderObject( const RenderObject &obj );
 		RenderObject &operator=( const RenderObject &obj );
-		~RenderObject();
+		virtual ~RenderObject();
 
 	// ================================ ACCESSORS
 		bool getIsVisible() const;		void setIsVisible( bool _isVisible );

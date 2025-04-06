@@ -8,8 +8,8 @@ ostream &operator<<( ostream &out, const FixedPoint &fp )
 
 // ================================ CONSTRUCTORS
 
-FixedPoint::FixedPoint() :  _isNeg( 0 ), _rawValue( 0 ) {}
-FixedPoint::FixedPoint( const FixedPoint &fp ) : _isNeg( fp.getSign() ), _rawValue( fp.getRawValue() ) {}
+FixedPoint::FixedPoint() :  _isNeg( 0 ), _rawValue( 0 ){}
+FixedPoint::FixedPoint( const FixedPoint &fp ) : _isNeg( fp.getSign() ), _rawValue( fp.getRawValue() ){}
 FixedPoint &FixedPoint::operator=( const FixedPoint &fp )
 {
 	_isNeg = fp._isNeg;
@@ -112,7 +112,7 @@ bit_t  FixedPoint::getSign()     const { return _isNeg; }
 uint   FixedPoint::getRawValue() const { return _rawValue; }
 
 void FixedPoint::setSign(     const bit_t &sign )   { _isNeg = sign; }
-void FixedPoint::setRawValue( const uint &rawValue ) { _rawValue = rawValue; }
+void FixedPoint::setRawValue( const uint &rawValue ){ _rawValue = rawValue; }
 
 // ================================ OPERATORS
 

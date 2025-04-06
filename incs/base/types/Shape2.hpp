@@ -43,7 +43,7 @@ class Shape2 // NOTE : test the shit out of this class before using
 
 	public:
 	// ================================== CONSTRUCTORS / DESTRUCTORS
-		inline Shape2() : _type( SH2_NULL ), _angle( 0 ), _center( Vector2() ), _scales({ 1, 1 }) { _verts = V2Vect_t(); };
+		inline Shape2() : _type( SH2_NULL ), _angle( 0 ), _center( Vector2() ), _scales({ 1, 1 }){ _verts = V2Vect_t(); };
 
 		Shape2( sh2_type_e type, const Vector2 &ctr, const Vector2 &scl = { 1, 1 }, float angle = 0 );
 
@@ -54,8 +54,8 @@ class Shape2 // NOTE : test the shit out of this class before using
 
 	// ================================== FACTORY METHODS
 
-		inline static Shape2 Null() { return Shape2(); };
-		inline static Shape2 Point( const Vector2 &ctr ) { return Shape2( SH2_POIN, ctr ); };
+		inline static Shape2 Null(){return Shape2(); };
+		inline static Shape2 Point( const Vector2 &ctr ){ return Shape2( SH2_POIN, ctr ); };
 
 		// returns a line with a given center and scale
 		static Shape2 Line( const Vector2 &ctr, const Vector2 &scl );

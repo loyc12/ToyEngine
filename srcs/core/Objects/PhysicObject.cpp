@@ -40,13 +40,17 @@ void PhysicObject::onDel()
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
-PhysicObject::PhysicObject() : BaseObject( E_PHYSIC ){ PhysicObject::onAdd();}
+PhysicObject::PhysicObject() :
+	BaseObject( E_PHYSIC )
+{
+	PhysicObject::onAdd();
+}
 
 PhysicObject::PhysicObject( const PhysicObject &obj ) : BaseObject( obj )
 {
 	if ( this == &obj ) return;
 
-	BaseObject::onCpy( obj );
+	PhysicObject::onAdd();
 	PhysicObject::onCpy( obj );
 }
 
@@ -60,9 +64,10 @@ PhysicObject &PhysicObject::operator=( const PhysicObject &obj )
 	return *this;
 }
 
-PhysicObject::~PhysicObject() // inverted call order
+PhysicObject::~PhysicObject() // automatic inverted call order
 {
 	PhysicObject::onDel();
+	// BaseObject::onDel();
 }
 
 
@@ -112,46 +117,54 @@ float PhysicObject::getMass()       const { return _mass; }
 float PhysicObject::getFriction()   const { return _fric; }
 float PhysicObject::getElasticity() const { return _elas; }
 
-float PhysicObject::getDensity() const { return _mass / getArea(); }
-float PhysicObject::getInertia() const { return ( _mass * getArea() ) / 2.0f; }
+float PhysicObject::getDensity() const
+{
+	float area = max( getArea(), EPS );
+	return _mass / area;
+}
+float PhysicObject::getInertia() const
+{
+	float area = max( getArea(), EPS );
+	return ( _mass * area ) / 2.0f;
+}
 
 // ================================ ACCESSORS
 
-bool PhysicObject::setIsDynamic( bool isDynamic ) { _isDynamic = isDynamic; return _isDynamic; }
-bool PhysicObject::setIsCollide( bool isCollide ) { _isCollide = isCollide; return _isCollide; }
+bool PhysicObject::setIsDynamic( bool isDynamic ){ _isDynamic = isDynamic; return _isDynamic; }
+bool PhysicObject::setIsCollide( bool isCollide ){ _isCollide = isCollide; return _isCollide; }
 
-Vector2 PhysicObject::setPosition( const Vector2 &pos ) { return BaseObject::setPosition( pos ); }
-Vector2 PhysicObject::setVelocity( const Vector2 &vel ) { _vel = vel; return _vel; }
-Vector2 PhysicObject::setAcceleration( const Vector2 &acc ) { _acc = acc; return _acc; }
+Vector2 PhysicObject::setPosition( const Vector2 &pos ){ return BaseObject::setPosition( pos ); }
+Vector2 PhysicObject::setVelocity( const Vector2 &vel ){ _vel = vel; return _vel; }
+Vector2 PhysicObject::setAcceleration( const Vector2 &acc ){ _acc = acc; return _acc; }
 
 float PhysicObject::setMass( float mass )
 {
 	if ( mass > 0 ){ _mass = mass; }
-	else { mass = EPS; }
+	else { mass = EPS; log( "PhysicObject::setMass() : mass cannot be negative : clamping to EPS", WARN ); }
 	return mass;
 }
 float PhysicObject::setFriction( float friction )
 {
 	if ( friction >= 0 ){ _fric = friction; }
-	else { _fric = 0; }
+	else { _fric = 0; log( "PhysicObject::setFriction() : friction cannot be negative : clamping to 0", WARN ); }
 	return _fric;
 }
 float PhysicObject::setElasticity( float elasticity )
 {
 	if ( elasticity >= 0 ){ _elas = elasticity; }
-	else { _elas = 0; }
+	else { _elas = 0; log( "PhysicObject::setElasticity() : elasticity cannot be negative : clamping to 0", WARN ); }
 	return _elas;
 }
 
 // ================================ MUTATORS
 
-Vector2 PhysicObject::movePosition( const Vector2 &delta ) { return BaseObject::movePosition( delta ); }
-Vector2 PhysicObject::moveVelocity( const Vector2 &delta ) { _vel.x += delta.x; _vel.y += delta.y; return _vel; }
-Vector2 PhysicObject::moveAcceleration( const Vector2 &delta ) { _acc.x += delta.x; _acc.y += delta.y; return _acc; }
+Vector2 PhysicObject::movePosition( const Vector2 &delta ){ return BaseObject::movePosition( delta ); }
+Vector2 PhysicObject::moveVelocity( const Vector2 &delta ){ _vel.x += delta.x; _vel.y += delta.y; return _vel; }
+Vector2 PhysicObject::moveAcceleration( const Vector2 &delta ){ _acc.x += delta.x; _acc.y += delta.y; return _acc; }
 
-float PhysicObject::moveMass( float delta ) { return setMass( _mass + delta ); }
-float PhysicObject::moveFriction( float delta ) { return setFriction( _fric + delta ); }
-float PhysicObject::moveElasticity( float delta ) { return setElasticity( _elas + delta ); }
+float PhysicObject::moveMass( float delta ){ return setMass( _mass + delta ); }
+float PhysicObject::moveFriction( float delta ){ return setFriction( _fric + delta ); }
+float PhysicObject::moveElasticity( float delta ){ return setElasticity( _elas + delta ); }
 
 Vector2 PhysicObject::applyForce( const Vector2 &force )
 {

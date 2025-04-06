@@ -1,8 +1,8 @@
 #include "../../../incs/base.hpp"
 
-//double getNoiseValue( double x, double y ) { return getNoise()->eval( x, y ); }
-//double getNoiseValue( double x, double y, double z ) { return getNoise()->eval( x, y, z ); }
-//double getNoiseValue( double x, double y, double z, double w ) { return getNoise()->eval( x, y, z, w ); }
+//double getNoiseValue( double x, double y ){ return getNoise()->eval( x, y ); }
+//double getNoiseValue( double x, double y, double z ){ return getNoise()->eval( x, y, z ); }
+//double getNoiseValue( double x, double y, double z, double w ){ return getNoise()->eval( x, y, z, w ); }
 
 using namespace std;
 
@@ -64,7 +64,7 @@ Noise::Noise( int64_t seed )
 		seed = seed * 6364136223846793005l + 1442695040888963407l;
 		int r = static_cast< int >(( seed + 31 ) % ( i + 1 ));
 
-		if ( r < 0 ) { r += ( i + 1 ); }
+		if ( r < 0 ){ r += ( i + 1 ); }
 
 		m_perm[ i ] = source[ r ];
 		m_permGradIndex3d[ i ] = static_cast< short >(( m_perm[ i ] % ( m_gradients3d.size() / 3 )) * 3 );

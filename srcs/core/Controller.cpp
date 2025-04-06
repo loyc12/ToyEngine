@@ -26,7 +26,7 @@ Controller::~Controller()
 // ================================ ACCESSORS
 
 inputs_s &Controller::getLatestInputs()   { return _latestInputs; }
-inputs_s &Controller::getPreviousInputs() { return _previousInputs; }
+inputs_s &Controller::getPreviousInputs(){ return _previousInputs; }
 
 // ================================ METHODS
 

@@ -1,7 +1,7 @@
 #include "../../incs/base.hpp"
 
 
-void log_time() { log( "< clock time", INFO ); }
+void log_time(){ log( "< clock time", INFO ); }
 
 bool open_log_file( ofstream &log_file ) // orivate function
 {

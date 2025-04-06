@@ -133,7 +133,7 @@ Shape2 Shape2::operator=( const Shape2 &s )
 // ================================== FACTORY METHODS
 
 // returns a line with a given center and scale
-Shape2 Shape2::Line( const Vector2 &ctr, const Vector2 &scl ) { return Shape2( SH2_LINE, ctr, scl ); }
+Shape2 Shape2::Line( const Vector2 &ctr, const Vector2 &scl ){ return Shape2( SH2_LINE, ctr, scl ); }
 // returns a line from p at angle dir, with length dist
 Shape2 Shape2::Line( const Vector2 &p1, float angle, float dist )
 {
@@ -226,7 +226,7 @@ Shape2 Shape2::Elipse( const Vector2 &ctr, const Vector2 &scl, float angle )
 	return Shape2( SH2_ELLI, ctr, scl, angle );
 }
 
-Shape2 Shape2::Pentagon( const Vector2 &ctr, float scl, float angle ) { return Pentagon( ctr, { scl, scl }, angle ); }
+Shape2 Shape2::Pentagon( const Vector2 &ctr, float scl, float angle ){ return Pentagon( ctr, { scl, scl }, angle ); }
 Shape2 Shape2::Pentagon( const Vector2 &ctr, const Vector2 &scl, float angle )
 {
 	Shape2 s( SH2_PENT, ctr, scl, angle );
@@ -866,7 +866,7 @@ Shape2 operator*( const Shape2 &lhs, float rhs )
 }
 Shape2 operator/( const Shape2 &lhs, float rhs )
 {
-	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid shape division" ); }
+	if ( divtest( rhs )){ throw std::invalid_argument( "Invalid shape division" ); }
 
 	Shape2 s = lhs;
 	s.changeScales( { 1 / rhs, 1 / rhs });
@@ -887,7 +887,7 @@ Shape2 &operator*=( Shape2 &lhs, float rhs )
 }
 Shape2 &operator/=( Shape2 &lhs, float rhs )
 {
-	if ( divtest( rhs )) { throw std::invalid_argument( "Invalid shape division" ); }
+	if ( divtest( rhs )){ throw std::invalid_argument( "Invalid shape division" ); }
 
 	lhs.changeScales( { 1 / rhs, 1 / rhs });
 	return lhs;

@@ -1,13 +1,20 @@
+Debug
+	- Test and fix Shape2
+	- Fix object copying subcalls
+	- Make sure objects are properly added and deleted form the engine
+	- test the new Object Inheritance chain
+
 Style
 
 Refactor
-	- use Shape2 for Objects instead of current settup
-	- Chain Objects inheritance : Base > Physic > Render > Script > Obj2
+	- Move physical properties from base to physic obj
+	- Use Shape2 for Objects instead of current setup
 	- Use Precise ints : (u)intx_t, posint_t, etc
 	- Use fixed_t instead of floats
 	- Use angle_t instead of float
 	- Use chain_t instead of List
 	- Use bank_t< 2 > instead of Vect2
+	- Rework the input system ( why not just use raylib inputs directly )
 
 Performance
 

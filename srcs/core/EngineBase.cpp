@@ -39,7 +39,7 @@ Controller *Engine::getController()
 	return _controller;
 }
 
-Camera2D   &Engine::getCamera() { return _viewport2D->getCamera(); }
+Camera2D   &Engine::getCamera(){ return _viewport2D->getCamera(); }
 Viewport2D *Engine::getViewport()
 {
 	log( "Engine::getViewport()" );
@@ -111,4 +111,5 @@ Engine     *GNG = Engine::getEngine();
 Controller *GCN = GNG->getController();
 Viewport2D *GVP = GNG->getViewport();
 
-float GDTS() { return GNG->getDeltaTime(); }
+float    GDTS(){ return GNG->getDeltaTime(); }
+inputs_s &GIN(){ return GNG->getLatestInputs(); }

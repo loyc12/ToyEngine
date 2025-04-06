@@ -33,7 +33,7 @@ void Engine::runStep()
 
 	readInputs();
 	runScripts();
-	if ( getState() >= ES_RUNNING ) { runPhysics(); } // Only runs the physics call if the enguine is unpaused
+	if ( getState() >= ES_RUNNING ){ runPhysics(); } // Only runs the physics call if the enguine is unpaused
 	runRenders();
 
 	OnGameStep(); // from game.hpp
@@ -52,7 +52,7 @@ void Engine::runPhysics()
 {
 	log( "Engine::runPhysics()" );
 
-	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onPhysicTick(); }
+	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ){ (*it)->onPhysicTick(); }
 
 	OnRunPhysics(); // from game.hpp
 }
@@ -61,7 +61,7 @@ void Engine::runScripts()
 {
 	log( "Engine::runScripts()" );
 
-	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onScriptTick(); }
+	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ){ (*it)->onScriptTick(); }
 
 	OnRunScripts(); // from game.hpp
 }
@@ -85,7 +85,7 @@ void Engine::renderWorld()
 
 	BeginMode2D( _viewport2D->getCamera() );
 
-	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ) { (*it)->onRenderTick(); }
+	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ){ (*it)->onRenderTick(); }
 
 	OnRenderWorld(); // from game.hpp
 

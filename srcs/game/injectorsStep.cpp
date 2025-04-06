@@ -18,7 +18,7 @@ void OnReadInputs() // only called when the game is launched
 {
 	log( "OnReadInputs()", INFO );
 
-	inputs_s np = GNG->getLatestInputs(); // TODO make this shit global
+	inputs_s np = GIN(); // TODO make this shit global
 
 	float moveFactor = GDTS();
 	if ( np.SHIFT ){ moveFactor *= 0.5; } // TODO make this shit global
@@ -45,7 +45,7 @@ void OnRunPhysics() // only called when the game is launched and unpaused
 {
 	log( "OnRunPhysics()", INFO );;
 
-	inputs_s np = GNG->getLatestInputs(); // TODO make this shit global
+	inputs_s np = GIN(); // TODO make this shit global
 
 	float moveFactor = GDTS() ;
 	if ( np.SHIFT ){ moveFactor *= 0.5; } // TODO make this shit global

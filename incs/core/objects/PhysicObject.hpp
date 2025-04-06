@@ -4,7 +4,8 @@
 # include <raylib.h>
 # include "./BaseObject.hpp"
 
-class PhysicObject : virtual public BaseObject
+class PhysicObject :
+	virtual public BaseObject
 {
 	// this class is used to calculate the physics of an object
 	protected:
@@ -31,7 +32,7 @@ class PhysicObject : virtual public BaseObject
 		PhysicObject();
 		PhysicObject( const PhysicObject &obj );
 		PhysicObject &operator=( const PhysicObject &obj );
-		~PhysicObject();
+		virtual ~PhysicObject();
 
 	// ================================ MUTATORS
 		bool getIsDynamic() const;	bool setIsDynamic( bool isDynamic );

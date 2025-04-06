@@ -26,13 +26,20 @@ void RenderObject::onDel()
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
-RenderObject::RenderObject() : BaseObject( E_RENDER ) { RenderObject::onAdd(); }
+RenderObject::RenderObject() :
+	BaseObject( E_RENDER ),
+	PhysicObject()
+{
+	RenderObject::onAdd();
+}
 
-RenderObject::RenderObject( const RenderObject &obj ) : BaseObject( obj )
+RenderObject::RenderObject( const RenderObject &obj ) :
+	BaseObject( obj ),
+	PhysicObject( obj )
 {
 	if ( this == &obj ) return;
 
-	BaseObject::onCpy( obj );
+	RenderObject::onAdd();
 	RenderObject::onCpy( obj );
 }
 
@@ -41,26 +48,29 @@ RenderObject &RenderObject::operator=( const RenderObject &obj )
 	if ( this == &obj ) return *this;
 
 	BaseObject::onCpy( obj );
+	PhysicObject::onCpy( obj );
 	RenderObject::onCpy( obj );
 
 	return *this;
 }
 
-RenderObject::~RenderObject() // inverted call order
+RenderObject::~RenderObject() // automatic inverted call order
 {
 	RenderObject::onDel();
+	// PhysicObject::onDel();
+	// BaseObject::onDel();
 }
 
 // ================================ ACCESSORS
 
 bool RenderObject::getIsVisible() const { return _isVisible; }
-void RenderObject::setIsVisible( bool isVisible ) { _isVisible = isVisible; }
+void RenderObject::setIsVisible( bool isVisible ){ _isVisible = isVisible; }
 
 shape_e RenderObject::getShape() const { return _shape; }
-void    RenderObject::setShape( shape_e shape ) { _shape = shape; }
+void    RenderObject::setShape( shape_e shape ){ _shape = shape; }
 
 Color RenderObject::getColor() const { return _color; }
-void  RenderObject::setColor( Color color ) { _color = color; }
+void  RenderObject::setColor( Color color ){ _color = color; }
 
 // ================================ OPERATORS
 
@@ -85,10 +95,10 @@ void RenderObject::onRenderTick() // (re)renders the object
 	}
 	else if ( _shape == SHAPE_BOX )
 	{
-		DrawLine( int( getTopLeft().x ), int( getTopLeft().y ), int( getTopRight().x ), int( getTopRight().y ), _color );
+		DrawLine( int( getTopLeft().x  ), int( getTopLeft().y  ), int( getTopRight().x ), int( getTopRight().y ), _color );
 		DrawLine( int( getTopRight().x ), int( getTopRight().y ), int( getBotRight().x ), int( getBotRight().y ), _color );
-		DrawLine( int( getBotRight().x ), int( getBotRight().y ), int( getBotLeft().x ), int( getBotLeft().y ), _color );
-		DrawLine( int( getBotLeft().x ), int( getBotLeft().y ), int( getTopLeft().x ), int( getTopLeft().y ), _color );
+		DrawLine( int( getBotRight().x ), int( getBotRight().y ), int( getBotLeft().x  ), int( getBotLeft().y  ), _color );
+		DrawLine( int( getBotLeft().x  ), int( getBotLeft().y  ), int( getTopLeft().x  ), int( getTopLeft().y  ), _color );
 	}
 	else
 	{

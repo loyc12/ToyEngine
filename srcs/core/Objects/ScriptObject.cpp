@@ -22,13 +22,22 @@ void ScriptObject::onDel()
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
-ScriptObject::ScriptObject() : BaseObject( E_SCRIPT ){ ScriptObject::onAdd();}
+ScriptObject::ScriptObject() :
+	BaseObject( E_SCRIPT ),
+	PhysicObject(),
+	RenderObject()
+{
+	ScriptObject::onAdd();
+}
 
-ScriptObject::ScriptObject( const ScriptObject &obj ) : BaseObject( obj )
+ScriptObject::ScriptObject( const ScriptObject &obj ) :
+	BaseObject( obj ),
+	PhysicObject( obj ),
+	RenderObject( obj )
 {
 	if ( this == &obj ) return;
 
-	BaseObject::onCpy( obj );
+	ScriptObject::onAdd();
 	ScriptObject::onCpy( obj );
 }
 
@@ -37,20 +46,25 @@ ScriptObject &ScriptObject::operator=( const ScriptObject &obj )
 	if ( this == &obj ) return *this;
 
 	BaseObject::onCpy( obj );
+	PhysicObject::onCpy( obj );
+	RenderObject::onCpy( obj );
 	ScriptObject::onCpy( obj );
 
 	return *this;
 }
 
-ScriptObject::~ScriptObject() // inverted call order
+ScriptObject::~ScriptObject() // automatic inverted call order
 {
 	ScriptObject::onDel();
+	// RenderObject::onDel();
+	// PhysicObject::onDel();
+	// BaseObject::onDel();
 }
 
 // ================================ ACCESSORS
 
 bool ScriptObject::getIsActive() const { return _isActive; }
-void ScriptObject::setIsActive( bool isActive ) { _isActive = isActive; }
+void ScriptObject::setIsActive( bool isActive ){ _isActive = isActive; }
 
 // ================================ OPERATORS
 

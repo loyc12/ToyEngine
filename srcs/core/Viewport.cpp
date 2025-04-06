@@ -61,7 +61,7 @@ Vector2 Viewport2D::getMouseWorldPos() const { return _mouseWorldPos; }
 
 // ================================ CAMERA ACCESSORS
 
-Camera2D &Viewport2D::getCamera() { return _camera; }
+Camera2D &Viewport2D::getCamera(){ return _camera; }
 
 Vector2 Viewport2D::getTarget() const { return _camera.target; }
 void Viewport2D::moveTarget( Vector2 offset )
@@ -85,11 +85,11 @@ void Viewport2D::setTarget( Vector2 target, bool overrideTracking )
 	_camera.target = target;
 }
 
-float Viewport2D::getZoom() { return _camera.zoom; }
+float Viewport2D::getZoom(){ return _camera.zoom; }
 void Viewport2D::setZoom(   float zoom ){ _camera.zoom = zoom; }
 void Viewport2D::scaleZoom( float factor ){ _camera.zoom *= factor; }
 
-float Viewport2D::getRotation() { return _camera.rotation; }
+float Viewport2D::getRotation(){ return _camera.rotation; }
 //void Viewport2D::setRotation( float rotation ){ _camera.rotation = rotation; }
 //void Viewport2D::changeRotation( float delta ){ _camera.rotation += delta; }
 
