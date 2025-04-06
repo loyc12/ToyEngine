@@ -8,6 +8,7 @@ typedef vector< Vector2 > V2Vect_t; // TODO : move me
 
 V2Vect_t CalcPolyVerts(   byte_t facets );
 Vector2  RotateVertex(    const Vector2 &v, float angle );
+float    findAngle(        const Vector2 &p1, const Vector2 &p2 );
 float    getTriangleArea( const Vector2 &p1, const Vector2 &p2, const Vector2 &p3 );
 float    getDistance(     const Vector2 &p1, const Vector2 &p2 );
 float    getDistanceTo00( const Vector2 &p );
@@ -30,7 +31,7 @@ typedef enum : byte_t
 
 } sh2_type_e;
 
-class Shape2
+class Shape2 // NOTE : test the shit out of this class before using
 {
 	protected:
 	// ================================== MEMBERS
@@ -103,14 +104,52 @@ class Shape2
 		inline float   getAngle()       const { return _angle; };
 		inline Vector2 getAngleVector() const { return { cosf( _angle ), sinf( _angle )}; };
 
-		inline const V2Vect_t &getRawVerts()  const;
+		inline const V2Vect_t &getRawVerts()  const { return _verts; };
 		V2Vect_t getScaledVerts() const;
 		V2Vect_t getWorldVerts() const;
 
-		// NOTE : Wraps around the index
-		Vector2  getRawVertex(    int index ) const;
-		Vector2  getScaledVertex( int index ) const;
-		Vector2  getWorldVertex(  int index ) const;
+		// NOTE : The index wraps around if out of bounds
+		Vector2  getRawVertex(    int index ) const; // uses unscaled vertex values ( 00 == center )
+		Vector2  getScaledVertex( int index ) const; // uses scaled vertex values   ( 00 == center )
+		Vector2  getWorldVertex(  int index ) const; // uses world vertex values    ( 00 != center )
+
+		// To know where to insert a new vertex base on its angle :
+		// Compares the angle of each vertex and finds the ID of the one directly to the right of the given angle
+		int getInsertRawID(    float angle ) const;
+		int getInsertScaledID( float angle ) const;
+		int getInsertWorldID(  float angle ) const;
+
+		inline int getInsertRawID(    const Vector2 &p ) const { return getInsertRawID(    findAngle( _center, p )); }
+		inline int getInsertScaledID( const Vector2 &p ) const { return getInsertScaledID( findAngle( _center, p )); }
+		inline int getInsertWorldID(  const Vector2 &p ) const { return getInsertWorldID(  findAngle( _center, p )); }
+
+		// NOTE : Finds the ID of the vertex closest to the given point
+		int getNearestRawVertexID(    const Vector2 &p ) const;
+		int getNearestScaledVertexID( const Vector2 &p ) const;
+		int getNearestWorldVertexID(  const Vector2 &p ) const;
+
+		Vector2  getRawVertexID(    const Vector2 &p ) const { return getRawVertex(    getNearestRawVertexID(    p )); }
+		Vector2  getScaledVertexID( const Vector2 &p ) const { return getScaledVertex( getNearestScaledVertexID( p )); }
+		Vector2  getWorldVertexID(  const Vector2 &p ) const { return getWorldVertex(  getNearestWorldVertexID(  p )); }
+
+	// ================================== MUTATORS
+
+		// NOTE : Adds a vertex to the shape               // manually specify the index instead
+		bool addRawVertex(    const Vector2 &p );   bool	addRawVertex(    const Vector2 &p, int index ) ;
+		bool addScaledVertex( const Vector2 &p );   bool	addScaledVertex( const Vector2 &p, int index ) ;
+		bool addWorldVertex(  const Vector2 &p );   bool	addWorldVertex(  const Vector2 &p, int index ) ;
+
+		// NOTE : Deletes the vertex closest to the given point
+		bool delRawVertex(    const Vector2 &p );
+		bool delScaledVertex( const Vector2 &p );   // Delete by index instead
+		bool delWorldVertex(  const Vector2 &p );   bool delVertex( int index );
+
+		void setAngle( float angle );           void moveAngle( float delta );
+		void setCenter( const Vector2 &ctr );   void moveCenter( const Vector2 &delta );
+		void setScales( const Vector2 &scl );   void changeScales( const Vector2 &factor );
+
+		void updateCenter(); // updates the center to the mean of all vertices
+		void updateType(); //   updates the type to the one that best fits the shape
 
 	// ================================== SHAPE PROPERTIES
 		Vector2 getTop()   const;
@@ -140,8 +179,8 @@ class Shape2
 		inline float getWidth()    const { return getMaxX() - getMinX(); }
 		inline float getHeight()   const { return getMaxY() - getMinY(); }
 
-		inline float getMaxPerim() const { return 2 * ( getWidth() + getHeight() ); }
-		inline float getMaxArea()  const { return getWidth() * getHeight(); }
+		inline float getMaxPerim() const { return ( getWidth() + getHeight() ) * 2; }
+		inline float getMaxArea()  const { return ( getWidth() * getHeight() ); }
 
 		// NOTE : the radius is the distance from the center to the furthest vertex
 		float getMinRadius() const;
@@ -151,15 +190,11 @@ class Shape2
 		float getPerim()     const;
 		float getArea()      const;
 
-	// ================================== MUTATORS
-		void setAngle( float angle );           void changeAngle( float delta );
-		void setCenter( const Vector2 &ctr );   void changeCenter( const Vector2 &delta );
-		void setScales( const Vector2 &scl );   void changeScales( const Vector2 &factor );
-
 	// ================================== PROPERTIES COMPARISON METHODS
 		inline bool hasSameX(     const Shape2 &s ) const { return ( _center.x == s._center.x ); };
 		inline bool hasSameY(     const Shape2 &s ) const { return ( _center.y == s._center.y ); };
 		inline bool hasSameCtr(   const Shape2 &s ) const { return ( _center.x == s._center.x && _center.y == s._center.y ); };
+
 		inline bool hasSameSclX(  const Shape2 &s ) const { return ( _scales.x == s._scales.x ); };
 		inline bool hasSameSclY(  const Shape2 &s ) const { return ( _scales.y == s._scales.y ); };
 		inline bool hasSameScl(   const Shape2 &s ) const { return ( _scales.x == s._scales.x && _scales.y == s._scales.y ); };
@@ -185,13 +220,10 @@ class Shape2
 
 		bool hasSameVerts( const Shape2 &s )  const;
 
-		// ================================== SHAPE COMPARISON METHODS
-		bool overlaps( const Shape2 &s ) const; // checks if s1 overlaps s2
-		bool isOnEdge( const Shape2 &s ) const; // checks if s1 overlaps the edge of s2
-		bool isWithin( const Shape2 &s ) const; // checks if s1 is entirely within s2
-		bool englobes( const Shape2 &s ) const; // checks if s2 is entirely within s1
-
 		// ================================== POINT DISTANCE COMPARISON METHODS
+		inline float getAngleWith(    const Vector2 &p                     ) const { return findAngle( _center, p ); }
+		inline float getAngleBetween( const Vector2 &p1, const Vector2 &p2 ) const { return ( findAngle( _center, p1 ) - findAngle( _center, p2 ) ); }
+
 		inline float getXDist( const Vector2 &p ) const { return abs( p.x - _center.x ); }
 		inline float getYDist( const Vector2 &p ) const { return abs( p.y - _center.y ); }
 		inline float getDist(  const Vector2 &p ) const { return getDistance( p, _center ); }
@@ -200,8 +232,11 @@ class Shape2
 		float getLongCartDist(  const Vector2 &p ) const;
 		float getSumCartDist(   const Vector2 &p ) const;
 
-		float getAngleWith(    const Vector2 &p ) const;
-		float getAngleBetween( const Vector2 &p1, const Vector2 &p2 ) const;
+		// ================================== SHAPE COLLISION METHODS
+		bool overlaps( const Shape2 &s ) const; // checks if s1 overlaps s2
+		bool isOnEdge( const Shape2 &s ) const; // checks if s1 overlaps the edge of s2
+		bool isWithin( const Shape2 &s ) const; // checks if s1 is entirely within s2
+		bool englobes( const Shape2 &s ) const; // checks if s2 is entirely within s1
 
 	// ================================== COMPARISON OPERATORS
 		friend bool operator==( const Shape2 &lhs, const Shape2 &rhs );

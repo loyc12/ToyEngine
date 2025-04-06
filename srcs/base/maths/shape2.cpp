@@ -1,4 +1,3 @@
-#include <cmath>
 #include <raylib.h>
 #include "../../../incs/base.hpp"
 
@@ -17,12 +16,19 @@ V2Vect_t CalcPolyVerts( byte_t facets )
 	return verts;
 }
 
-Vector2 RotateVertex( const Vector2 &v, float angle ) // TODO : test me
+Vector2 RotateVertex( const Vector2 &v, float angle ) // TODO : check if this is correct
 {
 	float x = v.x * cosf( angle * DtoR ) - v.y * sinf( angle * DtoR );
 	float y = v.x * sinf( angle * DtoR ) + v.y * cosf( angle * DtoR );
 
 	return { x, y };
+}
+float findAngle( const Vector2 &p1, const Vector2 &p2 ) // TODO : check if this is correct
+{
+	float angle = atan2( p2.y - p1.y, p2.x - p1.x ) * RtoD;
+	if ( angle < 0 ){ angle += 360.0f; }
+
+	return angle;
 }
 
 float getDistance(     const Vector2 &p1, const Vector2 &p2 ){ return sqrt( sqr( p1.x - p2.x ) + sqr( p1.y - p2.y )); }
@@ -50,7 +56,7 @@ Shape2::Shape2( sh2_type_e type, const Vector2 &ctr, const Vector2 &scl, float a
 			break;
 
 		case SH2_LINE: // makes a diagonal line going from 1,1 to -1,-1 - scale acordingly to change orientation
-			_verts.push_back( { 1,  1 });
+			_verts.push_back( { 1,  1  });
 			_verts.push_back( { -1, -1 });
 			break;
 
@@ -184,8 +190,11 @@ Shape2 Shape2::Square( const Vector2 &ctr, float scl, float angle )
 Shape2 Shape2::Square( const Vector2 &ctr, const Vector2 &edge, float angle ) // TODO : check if this is correct
 {
 	Vector2 re = { edge.x - ctr.x, edge.y - ctr.y }; //     gets the relative position of the edge from the center
+
 	re = RotateVertex( re, -angle ); //                  cancels out the rotation of the final shape
+
 	float scl = max( abs( edge.x ), abs( edge.x ) ); // finds the scale needed for both axes to touch the edge
+
 	return Shape2( SH2_SQUR, ctr, { scl, scl }, angle );
 }
 Shape2 Shape2::Rectangle( const Vector2 &ctr, const Vector2 &scl, float angle )
@@ -195,8 +204,11 @@ Shape2 Shape2::Rectangle( const Vector2 &ctr, const Vector2 &scl, float angle )
 Shape2 Shape2::RectCorners( const Vector2 &p1, const Vector2 &p2, float angle ) // TODO : check if this is correct
 {
 	Vector2 ctr = { ( p1.x + p2.x ) / 2, ( p1.y + p2.y ) / 2 }; // finds the center of the rectangle
+
 	Vector2 rp = { p1.x - ctr.x, p1.y - ctr.y }; //                gets the relative position of a corner from the center
+
 	rp = RotateVertex( rp, -angle ); //                         cancels out the rotation of the final shape
+
 	return Shape2( SH2_RECT, ctr, rp, angle ); //              rp == scl here
 }
 
@@ -283,6 +295,125 @@ V2Vect_t Shape2::getWorldVerts() const
 	return verts;
 }
 
+// ================= VERTEX ACCESSORS
+
+// compares the angle of each vertex and finds the ID of
+// the one directly to the right of the given angle
+int Shape2::getInsertRawID(    float angle ) const
+{
+	int id = 0;
+	float min = INFINITY;
+
+	for ( byte_t i = 0; i < ( byte_t )_verts.size(); i++ )
+	{
+		float a = atan2( _verts[ i ].y, _verts[ i ].x ) * RtoD;
+		if ( a < 0 ){ a += 360.0f; }
+
+		float d = abs( angle - a ); // TODO : check if this is correct
+		if ( d < min )
+		{
+			min = d;
+			id  = i;
+		}
+	}
+	return id;
+}
+
+int Shape2::getInsertScaledID( float angle ) const
+{
+	int id = 0;
+	float min = INFINITY;
+
+	for ( byte_t i = 0; i < ( byte_t )_verts.size(); i++ )
+	{
+		Vector2 v = { _verts[ i ].x * _scales.x, _verts[ i ].y * _scales.y };
+
+		float a = atan2( v.y, v.x ) * RtoD; // TODO : check if this is correct
+		if ( a < 0 ){ a += 360.0f; }
+
+		float d = abs( angle - a );
+		if ( d < min )
+		{
+			min = d;
+			id  = i;
+		}
+	}
+	return id;
+}
+int Shape2::getInsertWorldID( float angle ) const
+{
+	int id = 0;
+	float min = INFINITY;
+
+	for ( byte_t i = 0; i < ( byte_t )_verts.size(); i++ )
+	{
+		Vector2 v = RotateVertex( { _verts[ i ].x * _scales.x, _verts[ i ].y * _scales.y }, _angle );
+
+		float a = atan2( v.y, v.x ) * RtoD; // TODO : check if this is correct
+		if ( a < 0 ){ a += 360.0f; }
+
+		float d = abs( angle - a );
+		if ( d < min )
+		{
+			min = d;
+			id  = i;
+		}
+	}
+	return id;
+}
+
+int Shape2::getNearestRawVertexID( const Vector2 &p ) const
+{
+	int id = 0;
+	float min = INFINITY;
+
+	for ( byte_t i = 0; i < ( byte_t )_verts.size(); i++ )
+	{
+		float d = getDistance( p, getRawVertex( i ));
+		if ( d < min )
+		{
+			min = d;
+			id  = i;
+		}
+	}
+
+	return id;
+}
+int Shape2::getNearestScaledVertexID( const Vector2 &p ) const
+{
+	int id = 0;
+	float min = INFINITY;
+
+	for ( byte_t i = 0; i < ( byte_t )_verts.size(); i++ )
+	{
+		float d = getDistance( p, getScaledVertex( i ));
+		if ( d < min )
+		{
+			min = d;
+			id  = i;
+		}
+	}
+
+	return id;
+}
+int Shape2::getNearestWorldVertexID( const Vector2 &p ) const
+{
+	int id = 0;
+	float min = INFINITY;
+
+	for ( byte_t i = 0; i < ( byte_t )_verts.size(); i++ )
+	{
+		float d = getDistance( p, getWorldVertex( i )); // TODO : check if this is correct
+		if ( d < min )
+		{
+			min = d;
+			id  = i;
+		}
+	}
+
+	return id;
+}
+
 Vector2 Shape2::getRawVertex( int index ) const
 {
 	index %= _verts.size(); // wrap around
@@ -303,7 +434,98 @@ Vector2 Shape2::getWorldVertex( int index ) const
 {
 	index %= _verts.size(); // wrap around
 
-	return RotateVertex( _verts[ index ], _angle );
+	Vector2 v = { _verts[ index ].x * _scales.x, _verts[ index ].y * _scales.y }; // TODO : check if this is correct
+
+	return RotateVertex( v, _angle );
+}
+
+// ================================== MUTATORS
+
+
+bool Shape2::addRawVertex( const Vector2 &p ){    return addRawVertex( p,    getInsertRawID(    findAngle( _center, p ))); }
+bool Shape2::addRawVertex( const Vector2 &p, int index )
+{
+	index %= _verts.size(); // wrap around
+
+	_verts.insert( _verts.begin() + index, p ); // TODO : check if this is correct
+	return true;
+}
+
+bool Shape2::addScaledVertex( const Vector2 &p ){ return addScaledVertex( p, getInsertScaledID( findAngle( _center, p ))); }
+bool Shape2::addScaledVertex( const Vector2 &p, int index )
+{
+	index %= _verts.size(); // wrap around
+
+	Vector2 v = Vector2();
+	if ( _scales.x != 0 ){ v.x = p.x / _scales.x; }
+	if ( _scales.y != 0 ){ v.y = p.y / _scales.y; }
+
+	_verts.insert( _verts.begin() + index, v ); // TODO : check if this is correct
+	return true;
+}
+
+bool Shape2::addWorldVertex( const Vector2 &p ){  return addWorldVertex( p,  getInsertWorldID(  findAngle( _center, p ))); }
+bool Shape2::addWorldVertex( const Vector2 &p, int index )
+{
+	index %= _verts.size(); // wrap around
+
+	Vector2 v = Vector2();
+	if ( _scales.x != 0 ){ v.x = p.x / _scales.x; }
+	if ( _scales.y != 0 ){ v.y = p.y / _scales.y; }
+
+	_verts.insert( _verts.begin() + index, RotateVertex( v, -_angle ) ); // TODO : check if this is correct
+	return true;
+}
+
+void Shape2::setAngle(  float angle ){ _angle = fmod( angle, 360.0f ); }
+void Shape2::moveAngle( float delta ){ setAngle( _angle + delta ); }
+
+void Shape2::setCenter(  const Vector2 &ctr ){   _center = ctr; }
+void Shape2::moveCenter( const Vector2 &delta ){ _center.x += delta.x; _center.y += delta.y; }
+
+void Shape2::setScales(    const Vector2 &scl ){    _scales.x = abs( scl.x ); _scales.y = abs( scl.y ); }
+void Shape2::changeScales( const Vector2 &factor ){ _scales.x *= factor.x; _scales.y *= factor.y; }
+
+void Shape2::updateCenter()
+{
+	// TODO : check if this is correct
+	Vector2 ctr = Vector2();
+	for ( auto &v : _verts )
+	{
+		ctr.x += v.x;
+		ctr.y += v.y;
+	}
+	ctr.x /= _verts.size();
+	ctr.y /= _verts.size();
+
+	setCenter( ctr );
+
+	Vector2 ctrDiff = { _center.x - ctr.x, _center.y - ctr.y }; // TODO : check if this is correct
+	for ( auto &v : _verts )
+	{
+		v.x += ctrDiff.x;
+		v.y += ctrDiff.y;
+	}
+}
+
+void Shape2::updateType()
+{
+	// NOTE : skips circular shapes for now
+	if ( _type == SH2_CIRC || _type == SH2_ELLI ) return;
+
+	switch( _verts.size() )
+	{ // NOTE : ignores squares as they are just rectangles with equal scales anyways
+		case 0:  _type = SH2_NULL; break;
+		case 1:  _type = SH2_POIN; break;
+		case 2:  _type = SH2_LINE; break;
+		case 3:  _type = SH2_TRIA; break;
+		case 4:  _type = SH2_RECT; break;
+		case 5:  _type = SH2_PENT; break;
+		case 6:  _type = SH2_HEXA; break;
+		case 7:  _type = SH2_OCTA; break;
+		case 8:  _type = SH2_DODE; break;
+		default: _type = SH2_POLY; break;
+	}
 }
 
 // ================================== SHAPE PROPERTIES
@@ -512,32 +734,6 @@ float Shape2::getArea() const // TODO : check if this is correct
 	return abs( area / 2 );
 }
 
-// ================================== MUTATORS
-void Shape2::setAngle( float angle ) { _angle = fmod( angle, 360.0f ); }
-void Shape2::changeAngle( float delta )
-{
-	_angle += delta;
-	_angle = fmod( _angle, 360.0f );
-}
-
-void Shape2::setCenter( const Vector2 &ctr ) { _center = ctr; }
-void Shape2::changeCenter( const Vector2 &delta )
-{
-	_center.x += delta.x;
-	_center.y += delta.y;
-}
-
-void Shape2::setScales( const Vector2 &scl )
-{
-	_scales.x = abs( scl.x );
-	_scales.y = abs( scl.y );
-}
-void Shape2::changeScales( const Vector2 &factor )
-{
-	_scales.x *= factor.x;
-	_scales.y *= factor.y;
-}
-
 // ================================== PROPERTIES COMPARISON METHODS
 
 bool Shape2::hasSameVerts( const Shape2 &s ) const
@@ -550,8 +746,6 @@ bool Shape2::hasSameVerts( const Shape2 &s ) const
 	}
 	return true;
 }
-
-// ================================== SHAPE COMPARISON METHODS
 
 // ================================== POINT DISTANCE METHODS
 
@@ -574,18 +768,48 @@ float Shape2::getSumCartDist( const Vector2 &p ) const
 	return x + y;
 }
 
-float Shape2::getAngleWith( const Vector2 &p ) const
+// ================================== SHAPE COLLISION METHODS
+
+// TODO : IMPLEMENT US
+
+bool Shape2::overlaps( const Shape2 &s ) const
 {
-	float x = p.x - _center.x;
-	float y = p.y - _center.y;
-	return atan2( y, x ) * RtoD;
+	if ( _type == SH2_NULL || s._type == SH2_NULL ){ return false; }
+
+	( void )s; // TODO : remove this
+
+	return false;
 }
-float Shape2::getAngleBetween( const Vector2 &p1, const Vector2 &p2 ) const
+
+bool Shape2::isOnEdge( const Shape2 &s ) const
 {
-	return ( getAngleWith( p1 ) - getAngleWith( p2 ));
+	if ( _type == SH2_NULL || s._type == SH2_NULL ){ return false; }
+
+	( void )s; // TODO : remove this
+
+	return false;
+}
+
+bool Shape2::isWithin( const Shape2 &s ) const
+{
+	if ( _type == SH2_NULL || s._type == SH2_NULL ){ return false; }
+
+	( void )s; // TODO : remove this
+
+	return false;
+}
+
+bool Shape2::englobes( const Shape2 &s ) const
+{
+	if ( _type == SH2_NULL || s._type == SH2_NULL ){ return false; }
+
+	( void )s; // TODO : remove this
+
+	return false;
 }
 
 // ================================== COMPARISON OPERATORS
+
 bool operator==( const Shape2 &lhs, const Shape2 &rhs )
 {
 	if ( !lhs.hasSameType(  rhs )){ return false; }
