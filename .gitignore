@@ -1,6 +1,9 @@
 ### C++ ###
 ToyEngine
+
+# Logs #
 *logs/.log
+*out.txt
 
 # Prerequisites
 *.d
