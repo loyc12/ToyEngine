@@ -180,8 +180,8 @@ void Engine::close()
 	OnGameClose(); // from game.hpp
 	setState( ES_CLOSED );
 
-	delete _viewport2D;   GVP = nullptr;
-	delete _controller;   GVP = nullptr;
+	delete _viewport2D;   _viewport2D = nullptr;   GVP = nullptr;
+	delete _controller;   _controller = nullptr;   GCN = nullptr;
 
 	DelAllObjects();
 }

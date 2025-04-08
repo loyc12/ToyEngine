@@ -16,7 +16,7 @@ Engine::~Engine()
 {
 	log( "Engine::~Engine()" );
 
-	if ( getState() > ES_CLOSING )
+	if ( getState() > ES_CLOSED )
 		switchState(  ES_CLOSED );
 }
 
