@@ -14,19 +14,19 @@ bool open_log_file( ofstream &log_file ) // orivate function
 
 		log_file.open( file_name, std::ios::out | std::ios::app );
 
-		if ( !log_file.is_open() ){ return EXIT_FAILURE; }
+		if ( !log_file.is_open() ){ return false; }
 
 		printf( "Log file Generated successfully\n" );
 	}
-	return EXIT_SUCCESS;
+	return true;
 }
 
 bool log( ostrs msg,       log_level_e lvl, objID_t id ){ return log( msg.str().c_str(), lvl, id ); }
 bool log( string msg,      log_level_e lvl, objID_t id ){ return log( msg.c_str(), lvl, id ); }
 bool log( const char *msg, log_level_e lvl, objID_t id )
 {
-	if ( lvl > LOG_LVL )           return EXIT_SUCCESS;
-	if ( !SHOW_OBJ_MSG && id > 0 ) return EXIT_SUCCESS;
+	if ( lvl > LOG_LVL )           return true;
+	if ( !SHOW_OBJ_MSG && id > 0 ) return true;
 
 	ostream *log_out = &cout;
 
@@ -60,5 +60,5 @@ bool log( const char *msg, log_level_e lvl, objID_t id )
 
 	*log_out << endl;
 
-	return EXIT_SUCCESS;
+	return true;
 }

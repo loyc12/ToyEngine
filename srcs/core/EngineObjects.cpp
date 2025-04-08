@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <raylib.h>
 #include "../../incs/core.hpp"
 #include "../../incs/game.hpp"
@@ -39,7 +40,7 @@ bool Engine::delObject( BaseObject *obj )
 	if ( obj == nullptr )
 	{
 		log( "Engine::delObject() : obj cannot be a nullptr", WARN );
-		return EXIT_FAILURE;
+		return false;
 	}
 
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ )
@@ -48,12 +49,12 @@ bool Engine::delObject( BaseObject *obj )
 		{
 			log( "Engine::delObject() : Deleting object" );
 			ObjectContainer.erase( it );
-			return EXIT_SUCCESS;
+			return true;
 		}
 	}
 
 	log( "Engine::delObject() : Failed to find requested object", WARN );
-	return EXIT_FAILURE;
+	return false;
 }
 
 bool Engine::delObjectByID( objID_t id )
@@ -66,13 +67,13 @@ bool Engine::delObjectByID( objID_t id )
 		{
 			log( "Engine::delObjectByID() : Deleting object" );
 			ObjectContainer.erase( it );
-			return EXIT_SUCCESS;
+			return true;
 		}
 	}
 
 	log( "Engine::delObjectByID() : Failed to find requested object", WARN );
 
-	return EXIT_FAILURE;
+	return false;
 }
 
 void Engine::DelAllObjects()
@@ -86,12 +87,12 @@ void Engine::DelAllObjects()
 
 	while ( !ObjectContainer.empty() )
 	{
-		if ( ObjectContainer[ 0 ] == nullptr ){ log( "Engine::DelAllObjects() : object nonexistant", WARN ); }
-		else { delete ObjectContainer[ 0 ]; }
-
-		ObjectContainer.erase( ObjectContainer.begin() );
-		ObjectContainer[ 0 ] = nullptr;
-		ObjectContainer.shrink_to_fit();
+		if ( ObjectContainer[ 0 ] == nullptr )
+		{
+			log( "Engine::DelAllObjects() : removing nullptr object", WARN );
+			ObjectContainer.erase( ObjectContainer.begin() ); // NOTE : this should not happen with proper runtime memory managment
+		}
+		else { delete ObjectContainer[ 0 ]; } // NOTE : the object destructor will call delFromEngine() which will remove the object from the container
 	}
 	ObjectContainer.clear();
 

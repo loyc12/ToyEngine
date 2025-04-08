@@ -12,7 +12,7 @@ bool BaseObject::addToEngine()
 
 	GNG->addObject( this );
 
-	return EXIT_SUCCESS;
+	return true;
 }
 
 bool BaseObject::delFromEngine()
@@ -21,7 +21,7 @@ bool BaseObject::delFromEngine()
 
 	GNG->delObjectByID( _id );		_id = 0;
 
-	return EXIT_SUCCESS;
+	return true;
 }
 // ================================ CORE METHODS
 
@@ -52,7 +52,7 @@ void BaseObject::onDel() // inverted call order
 	}
 	if ( _id != 0 )
 	{
-		if ( delFromEngine() == EXIT_FAILURE )
+		if ( !delFromEngine() )
 		{
 			log( "BaseObject::onDel() : failed to delete object from engine", ERROR, _id );
 			return;
