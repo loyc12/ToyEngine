@@ -84,4 +84,14 @@ void Controller::refreshInputs() // NOTE : archaic way of doing things, but it w
 	_latestInputs.D7 = IsKeyDown( KEY_SEVEN);  _latestInputs.K7 = IsKeyDown( KEY_KP_7 );
 	_latestInputs.D8 = IsKeyDown( KEY_EIGHT);  _latestInputs.K8 = IsKeyDown( KEY_KP_8 );
 	_latestInputs.D9 = IsKeyDown( KEY_NINE);   _latestInputs.K9 = IsKeyDown( KEY_KP_9 );
+
+	// SYMBOLS
+	_latestInputs.ADD = IsKeyDown( KEY_KP_ADD );
+	_latestInputs.SUB = IsKeyDown( KEY_KP_SUBTRACT );
+	_latestInputs.MUL = IsKeyDown( KEY_KP_MULTIPLY );
+	_latestInputs.DIV = IsKeyDown( KEY_KP_DIVIDE );
+	_latestInputs.DOT = IsKeyDown( KEY_KP_DECIMAL );
+	_latestInputs.EQU = IsKeyDown( KEY_EQUAL );
+	_latestInputs.MIN = IsKeyDown( KEY_MINUS );
+	_latestInputs.SLA = IsKeyDown( KEY_SLASH );
 }

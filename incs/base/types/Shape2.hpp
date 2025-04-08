@@ -18,11 +18,12 @@ typedef enum : byte_t
 	SH2_NULL,
 	SH2_POIN,
 	SH2_LINE,
+	SH2_TRIA,
+	SH2_DIAM,
 	SH2_SQUR,
 	SH2_RECT,
 	SH2_CIRC,
 	SH2_ELLI,
-	SH2_TRIA,
 	SH2_PENT,
 	SH2_HEXA,
 	SH2_OCTA,
@@ -76,9 +77,11 @@ class Shape2 // NOTE : test the shit out of this class before using
 		static Shape2 Rectangle(  const Vector2 &ctr, const Vector2 &scl, float angle = 0 );
 		static Shape2 Rectangle2( const Vector2 &p1,  const Vector2 &p2,  float angle = 0 );
 
+		static Shape2 Diamond( const Vector2 &ctr, const Vector2 &scl, float angle = 0 );
+
 		static Shape2 Circle( const Vector2 &ctr, float scl );
 		static Shape2 Circle( const Vector2 &ctr, const Vector2 &edge );
-		static Shape2 Elipse( const Vector2 &ctr, const Vector2 &scl, float angle = 0 );
+		static Shape2 Ellipse( const Vector2 &ctr, const Vector2 &scl, float angle = 0 );
 
 		static Shape2 Pentagon( const Vector2 &ctr, float scl,          float angle = 0 );
 		static Shape2 Pentagon( const Vector2 &ctr, const Vector2 &scl, float angle = 0 );
@@ -169,6 +172,7 @@ class Shape2 // NOTE : test the shit out of this class before using
 		inline bool isLine()     const { return ( _type == SH2_LINE ); };
 
 		inline bool isTriangle() const { return ( _type == SH2_TRIA ); };
+		inline bool isDiamond()  const { return ( _type == SH2_DIAM ); };
 
 		inline bool isRectangular() const { return ( _type == SH2_RECT || _type == SH2_SQUR ); };
 		inline bool isSquare()      const { return ( _type == SH2_SQUR ); };
@@ -183,7 +187,7 @@ class Shape2 // NOTE : test the shit out of this class before using
 
 		inline bool isEliptical() const { return ( _type == SH2_ELLI || _type == SH2_CIRC ); };
 		inline bool isCircle()    const { return ( _type == SH2_CIRC ); };
-		inline bool isElipse()    const { return ( _type == SH2_ELLI ); };
+		inline bool isEllipse()    const { return ( _type == SH2_ELLI ); };
 
 		byte_t getFacetC() const;
 

@@ -89,12 +89,17 @@ bool RenderObject::RenderSelf()
 		DrawLine( p1.x, p1.y, p2.x, p2.y, _color );
 	}
 	if ( s.isEliptical() ) // NOTE Ellipses are not supported in raylib : Using DrawCircle instead
-	{
+	{                      // TODO : implement ellipses
 		DrawCircle( s.getCenter().x, s.getCenter().y, s.getAvgScale(), _color );
 	}
 	elif ( s.isTriangle() )
 	{
 		DrawTriangle( s.getWorldVertex( 1 ), s.getWorldVertex( 0 ), s.getWorldVertex( 2 ), _color);
+	}
+	elif ( s.isDiamond() )
+	{
+		DrawTriangle( s.getWorldVertex( 0 ), s.getWorldVertex( 2 ), s.getWorldVertex( 1 ), _color);
+		DrawTriangle( s.getWorldVertex( 2 ), s.getWorldVertex( 0 ), s.getWorldVertex( 3 ), _color);
 	}
 	elif ( s.isRectangular() )
 	{

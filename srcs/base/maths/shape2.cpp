@@ -8,11 +8,12 @@ V2Vect_t CalcPolyVerts( byte_t facets )
 		log( "CalcPolyVerts() : facets must be >= 2", WARN );
 		return V2Vect_t();
 	}
-
 	V2Vect_t verts;   float angle = 360.0f / facets;
 
-	for ( int i = 0; i < facets; i++ ){ verts.push_back( { cosf( angle * i * DtoR ), sinf( angle * i * DtoR  )}); }
-
+	for ( int i = 0; i < facets; i++ )
+	{
+		verts.push_back( { cosf( angle * i * DtoR ), sinf( angle * i * DtoR  )});
+	}
 	return verts;
 }
 
@@ -31,9 +32,8 @@ float findAngle( const Vector2 &p1, const Vector2 &p2 ) // TODO : check if this 
 	return angle;
 }
 
-float getDistance(     const Vector2 &p1, const Vector2 &p2 ){ return sqrt( sqr( p1.x - p2.x ) + sqr( p1.y - p2.y )); }
 float getDistanceTo00( const Vector2 &p ){ return sqrt( sqr( p.x ) + sqr( p.y )); }
-
+float getDistance(     const Vector2 &p1, const Vector2 &p2 ){ return sqrt( sqr( p1.x - p2.x ) + sqr( p1.y - p2.y )); }
 float getTriangleArea( const Vector2 &p1, const Vector2 &p2, const Vector2 &p3 )
 {
 	return abs( ( p1.x * ( p2.y - p3.y ) + p2.x * ( p3.y - p1.y ) + p3.x * ( p1.y - p2.y )) / 2 );
@@ -58,6 +58,13 @@ Shape2::Shape2( sh2_type_e type, const Vector2 &ctr, const Vector2 &scl, float a
 		case SH2_LINE: // makes a diagonal line going from 1,1 to -1,-1 - scale acordingly to change orientation
 			_verts.push_back( { 1,  1  });
 			_verts.push_back( { -1, -1 });
+			break;
+
+		case SH2_DIAM: // makes a diamond ( verts are corners )
+			_verts.push_back( { 1,  0  });
+			_verts.push_back( { 0,  1  });
+			_verts.push_back( { -1, 0  });
+			_verts.push_back( { 0, -1  });
 			break;
 
 		case SH2_SQUR: // use the smallest scale as the scale - rotate by 45 degrees for a diamond
@@ -182,6 +189,10 @@ Shape2 Shape2::Triangle( const Vector2 &p1, const Vector2 &p2, const Vector2 &p3
 
 	return Shape2( SH2_TRIA, ctr, { scl, scl }); // TODO : check if this is correct : forces it to be equilateral
 }
+Shape2 Shape2::Diamond( const Vector2 &ctr, const Vector2 &scl, float angle )
+{
+	return Shape2( SH2_DIAM, ctr, scl, angle );
+}
 
 Shape2 Shape2::Square( const Vector2 &ctr, float scl, float angle )
 {
@@ -191,7 +202,7 @@ Shape2 Shape2::Square( const Vector2 &ctr, const Vector2 &edge, float angle ) //
 {
 	Vector2 v = { edge.x - ctr.x, edge.y - ctr.y }; // gets the relative position of the edge from the center
 
-	v = RotateVertex( v, -angle ); //                   cancels out the rotation of the final shape
+	v = RotateVertex( v, -angle ); //               cancels out the rotation of the final shape
 
 	float scl = max( abs( v.x ), abs( v.y )); // finds the scale needed for both axes to touch the edge
 
@@ -205,11 +216,11 @@ Shape2 Shape2::Rectangle2( const Vector2 &p1, const Vector2 &p2, float angle ) /
 {
 	Vector2 ctr = { ( p1.x + p2.x ) / 2, ( p1.y + p2.y ) / 2 }; // finds the center of the rectangle
 
-	Vector2 rp = { p1.x - ctr.x, p1.y - ctr.y }; //                gets the relative position of a corner from the center
+	Vector2 rp = { p1.x - ctr.x, p1.y - ctr.y }; // gets the relative position of a corner from the center
 
-	rp = RotateVertex( rp, -angle ); //                         cancels out the rotation of the final shape
+	rp = RotateVertex( rp, -angle ); //            cancels out the rotation of the final shape
 
-	return Shape2( SH2_RECT, ctr, rp, angle ); //              rp == scl here
+	return Shape2( SH2_RECT, ctr, rp, angle ); // rp == scl here
 }
 
 Shape2 Shape2::Circle( const Vector2 &ctr, float scl )
@@ -221,7 +232,7 @@ Shape2 Shape2::Circle( const Vector2 &ctr, const Vector2 &edge )
 	float scl = getDistance( ctr, edge );
 	return Shape2( SH2_CIRC, ctr, { scl, scl } );
 }
-Shape2 Shape2::Elipse( const Vector2 &ctr, const Vector2 &scl, float angle )
+Shape2 Shape2::Ellipse( const Vector2 &ctr, const Vector2 &scl, float angle )
 {
 	return Shape2( SH2_ELLI, ctr, scl, angle );
 }

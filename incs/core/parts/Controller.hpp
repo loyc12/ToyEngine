@@ -24,6 +24,9 @@ struct inputs_s
 	// DIGITS
 	bool D0, D1, D2, D3, D4, D5, D6, D7, D8, D9;
 	bool K0, K1, K2, K3, K4, K5, K6, K7, K8, K9;
+
+	// SYMBOLS
+	bool ADD, SUB, MUL, DIV, DOT, EQU, MIN, SLA; // MIN is not on the keypad, SUB is
 };
 
 class Controller
