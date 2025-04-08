@@ -10,10 +10,10 @@ typedef enum : byte_t
 {
 	E_BASEOBJ = 0,
 
-	E_INPUTS,
-	E_SCRIPT,
+	E_SHAPE,
 	E_PHYSIC,
 	E_RENDER,
+	E_SCRIPT,
 
 	//E_CNTRLR, // INPUTS + SCRIPT ?
 	//E_SPRITE, // PHYSIC + RENDER ?
@@ -30,21 +30,17 @@ typedef vector< BaseObject * > objVect_t; //  TODO : move me
 class BaseObject
 {
 	private:
-	// ================================ MEMORY METHODS
-		bool setID( objID_t id );
+	// ================================ ATTRIBUTES
+		objID_t      _id;
+		objectType_e _type;
+
+	// ================================ CORE METHODS
 		bool delID();
 
 		bool addToEngine();
 		bool delFromEngine();
 
-		protected:
-		// ================================ ATTRIBUTES
-		objID_t      _id;
-		objectType_e _type;
-
-		Vector2 _pos;
-		Vector2 _size; // half width and half height
-		bool    _isSpherical;
+	protected:
 
 		virtual void onAdd();
 		void         onCpy( const BaseObject &obj );
@@ -60,54 +56,19 @@ class BaseObject
 		virtual ~BaseObject();
 
 	// ================================ TICK METHODS
-		virtual void onScriptTick(); // runs the object's scripts
-		virtual void onPhysicTick(); // calculates the object's physics
+		virtual void onShapeTick();  // (re)calculates the object's shape
+		virtual void onPhysicTick(); // (re)calculates the object's physics
 		virtual void onRenderTick(); // (re)renders the object
-
-	// ================================ OPERATORS
+		virtual void onScriptTick(); // (re)runs the object's scripts
 
 	// ================================ ACCESSORS
-		objectType_e getType() const;
 		uint getID() const;
+		objectType_e getType() const;
 
-		// TODO : MOVE THESE BELLOW TO EITHER PHYSICOBJECT OR SHAPE2
-
-		bool isSpherical() const;			bool setSpherical( bool isSpherical );
-
-	  Vector2 getTop() const;				Vector2 getBot() const;
-		Vector2 getLeft() const;			Vector2 getRight() const;
-
-		inline Vector2 getCenter() const { return BaseObject::getPosition(); }
-
-		Vector2 getTopLeft() const;		Vector2 getTopRight() const;
-		Vector2 getBotLeft() const;		Vector2 getBotRight() const;
-
-		Vector2 getPosition() const;									Vector2 movePosition(   const Vector2 &delta );
-		Vector2 setPosition(  const Vector2 &pos );		Vector2 getRelPosition( const BaseObject &Obj ) const;
-
-		Vector2 getSize() const;											Vector2 moveSize(   const Vector2 &delta );
-		Vector2 setSize(  const Vector2 &size );			Vector2 getRelSize( const BaseObject &Obj ) const;
-
-		// ================================ DIMENSIONS GETTERS
-
-		float getWidth()  const { return _size.x * 2; }
-		float getHeight() const { return _size.y * 2 ; }
-
-		float getPerim()  const;
-		float getArea()   const;
-
-		float getMinSide() const { return ( _size.x < _size.y ? _size.x : _size.y ) * 2; }
-		float getMaxSide() const { return ( _size.x > _size.y ? _size.x : _size.y ) * 2; }
-		float getAvgSide() const { return ( _size.x + _size.y ); }
-
-		float getMinRadius() const;
-		float getMaxRadius() const;
-		float getAvgRadius() const;
-
-		float getHalfDiago() const; // returns the distance between the center and the +x,+y corner
-		float getFullDiago() const; // returns the distance between the -x,-y corner and the +x,+y corner
-
-
+	private:
+	// ================================ MUTATORS
+		void setID( objID_t id );
+		void setType( objectType_e type );
 };
 
 #endif // BASEOBJECT_HPP

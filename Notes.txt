@@ -7,7 +7,7 @@ Debug
 Style
 
 Refactor
-	- Move physical properties from base to physic obj
+	- Move physical properties from base to shapeObject
 	- Use Shape2 for Objects instead of current setup
 	- Use Precise ints : (u)intx_t, posint_t, etc
 	- Use fixed_t instead of floats
@@ -28,4 +28,5 @@ Nomenclature
 	- set( val )         : v0 = v
 	- move( delta )      : v0 += d
 	- change( factor )   : v0 *= f
-	- nudge( target, % ) : v0 += ( % * ( v - v0 )) : aka move a % towards a target
+	- nudge( target, % ) : v0 += ( % * ( v - v0 ))   : aka move a % towards t  ( % can be negative )
+	- push( target, d )  : v0 += max( |d|, |t - v| ) : aka move by d towards t ( d can be negative )

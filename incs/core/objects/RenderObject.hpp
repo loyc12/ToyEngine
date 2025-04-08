@@ -2,27 +2,17 @@
 # define RENDEROBJECT_HPP
 
 # include <raylib.h>
-# include "PhysicObject.hpp"
-
-typedef enum shape_e
-{
-	SHAPE_CIRCLE,
-	SHAPE_RECT,
-	SHAPE_LINE,
-	SHAPE_BOX,
-} shape_e;
-
+# include "./ShapeObject.hpp"
 
 class RenderObject :
 	virtual public BaseObject,
-	virtual public PhysicObject
+	virtual public ShapeObject
 {
 	// this class is used to render an object
 	protected:
 	// ================================ ATTRIBUTES
-		bool _isVisible; // whether this object should be rendered
-		shape_e _shape;
-		Color   _color;
+		bool  _isVisible; // whether this object should be rendered
+		Color _color;
 
 	// ================================ CORE METHODS
 		void onAdd() override;
@@ -36,14 +26,12 @@ class RenderObject :
 		RenderObject &operator=( const RenderObject &obj );
 		virtual ~RenderObject();
 
-	// ================================ ACCESSORS
-		bool getIsVisible() const;		void setIsVisible( bool _isVisible );
-		shape_e getShape() const;			void setShape( shape_e shape );
-		Color getColor() const;				void setColor( Color color );
+	// ================================ ACCESSORS / MUTATORS
+		bool getIsVisible() const;   void setIsVisible( bool _isVisible );
+		Color getColor() const;      void setColor( Color color );
 
-	// ================================ OPERATORS
-
-	// ================================ METHODS
+	// ================================ TICK METHODS
+		bool RenderSelf();
 		void onRenderTick() override; // ENTRYPOINT : (re)renders the object
 };
 

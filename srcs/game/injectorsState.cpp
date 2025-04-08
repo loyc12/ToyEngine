@@ -15,55 +15,31 @@ void OnGameStart()
 
 	// NOTE : this is a temporary solution, the engine should be able to load the game from a file
 
-	Floor	 = new Object2D;
-	Wall1	 = new Object2D;
-	Wall2	 = new Object2D;
-	Ball   = new Object2D;
-	Box    = new Object2D;
-	Player = new Object2D;
-	Enemy  = new Object2D;
+	G_Point = new Object2D;
+	G_Point->setShape( Shape2::Point( { 64, -64 }));
 
-	Floor->setShape(  SHAPE_RECT );
-	Floor->setColor(  BLUE );
+	G_Line = new Object2D;
+	G_Line->setShape( Shape2::Line( { 256, 128 }, { 16, -8 }));
 
-	Wall1->setShape(  SHAPE_RECT );
-	Wall1->setColor(  PINK );
+	G_Square = new Object2D;
+	G_Square->setShape( Shape2::Square( { -64, 64 }, { -72, 80 }, 20));
+	G_Square->setColor( MAGENTA );
 
-	Wall2->setShape(  SHAPE_RECT );
-	Wall2->setColor(  ORANGE );
+	G_Hexagon = new Object2D;
+	G_Hexagon->setShape( Shape2::Hexagon( { -64, 0 }, { 16, 16 }));
+	G_Hexagon->setColor( YELLOW );
 
-	Player->setShape( SHAPE_CIRCLE );
-	Player->setColor( GREEN );
+	G_Polygon = new Object2D;
+	G_Polygon->setShape( Shape2::Polygon( { 64, 128 }, { 16, 16 }, 7, 75 ));
+	G_Polygon->setColor( GREEN );
 
-	Enemy->setShape(  SHAPE_CIRCLE );
-	Enemy->setColor(  RED );
+	G_Player = new Object2D;
+	G_Player->setShape( Shape2::Circle( { 0.0f, 0.0f }, 10.0f ));
+	G_Player->setColor( BLUE );
 
-	Ball->setShape(   SHAPE_CIRCLE );
-	Ball->setColor(   YELLOW );
-
-	Box->setShape(    SHAPE_RECT );
-	Box->setColor(    DARKGRAY );
-
-	Floor->setPosition( { 0, -64 });
-	Floor->setSize( { 512, 16 });
-
-	Wall1->setPosition( { 64, -32 });
-	Wall1->setSize( { 8, 32 });
-
-	Wall2->setPosition( { -128, -32 });
-	Wall2->setSize( { 8, 32 });
-
-	Ball->setPosition( { 0, 128 });
-	Ball->setSize( { 32, 32 });
-
-	Box->setPosition( { 0, 64 });
-	Box->setSize( { 32, 32 });
-
-	Player->setPosition( { 0, 0 });
-	Player->setSize( { 16, 16 });
-
-	Enemy->setPosition( { 0, 256 });
-	Enemy->setSize( { 16, 16 });
+	G_Enemy = new Object2D;
+	G_Enemy->setShape( Shape2::Triangle( { 64, 64 }, { 16, 16 }, 40));
+	G_Enemy->setColor( RED );
 
 	log( "Created " + std::to_string( GNG->getObjectCount() ) + " objects", INFO );
 }

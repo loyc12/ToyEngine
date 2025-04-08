@@ -3,7 +3,7 @@
 
 # include <raylib.h>
 # include "../../base.hpp"
-# include "../objects/BaseObject.hpp"
+# include "../objects/ShapeObject.hpp"
 
 
 # define WINDOW_DEFAULT_TITLE  "ToyEngine"
@@ -29,7 +29,7 @@ class Viewport2D
 		Vector2	_mouseWorldPos; // latest position of the mouse in world units
 
 		Camera2D	 _camera;      // contains target, zoom, rotation, offset
-		BaseObject *_trackedObject;
+		ShapeObject *_trackedObject;
 
 		bool _trackingObject;
 
@@ -95,10 +95,10 @@ class Viewport2D
 		void updateCamera();
 
 	// ================================ OBJECT TRACKING
-		BaseObject *getTrackedObject() const;
+		ShapeObject *getTrackedObject() const;
 
 		bool isTracking() const;
-		bool trackObject( BaseObject *obj, bool overrideTracking = false );
+		bool trackObject( ShapeObject *obj, bool overrideTracking = false );
 		bool untrackObject();
 };
 

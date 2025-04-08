@@ -53,21 +53,21 @@ void OnRunPhysics() // only called when the game is launched and unpaused
 
 
 	int32_t moveHor = ( np.RIGHT - np.LEFT ) * MOVE_SPEED;
-	if ( moveHor ){ Player->movePosition( { moveHor * moveFactor, 0.0f } ); }
+	if ( moveHor ){ G_Player->movePosition( { moveHor * moveFactor, 0.0f } ); }
 
 	int32_t moveVer = ( np.BACK - np.FORE ) * MOVE_SPEED;
-	if ( moveVer ){ Player->movePosition( { 0.0f, moveVer * moveFactor } ); }
+	if ( moveVer ){ G_Player->movePosition( { 0.0f, moveVer * moveFactor } ); }
 
 	if ( np.X ){ GVP->untrackObject(); }
-	if ( np.C ){ GVP->trackObject( Player ); }
+	if ( np.C ){ GVP->trackObject( G_Player ); }
 
 	if ( np.CLICK_LEFT && !GVP->isTracking() )
 	{
 		Vector2 mouseWorldPos = GVP->getMouseWorldPos();
 
-		Player->setPosition( { mouseWorldPos.x, mouseWorldPos.y } );
-		Player->setVelocity( { 0.0f, 0.0f } );
-		//Player->setRotation( 0.0f );
+		G_Player->setPosition( { mouseWorldPos.x, mouseWorldPos.y } );
+		G_Player->setVelocity( { 0.0f, 0.0f } );
+		//G_Player->setRotation( 0.0f );
 	}
 }
 
@@ -84,9 +84,9 @@ void OnRenderUI() // only called when the game is launched
 	string caInfo = "Camera : " + to_string( GVP->getZoom() ) + " | " + to_string( ( int )GVP->getRotation() ) + " | " + to_string( ( int )GVP->getTarget().x ) + ":" + to_string( ( int )GVP->getTarget().y );
 	log( caInfo, INFO );
 
-	Vector2 playerWorldPos = Player->getPosition();
+	Vector2 playerWorldPos = G_Player->getPosition();
 	Vector2 playerScreenPos = GetWorldToScreen2D( playerWorldPos, GVP->getCamera() );
-	string plInfo = "Player  : " + to_string( ( int )playerScreenPos.x ) + ":" + to_string( ( int )playerScreenPos.y ) + " | " + to_string( ( int )playerWorldPos.x ) + ":" + to_string( ( int )playerWorldPos.y );
+	string plInfo = "G_Player  : " + to_string( ( int )playerScreenPos.x ) + ":" + to_string( ( int )playerScreenPos.y ) + " | " + to_string( ( int )playerWorldPos.x ) + ":" + to_string( ( int )playerWorldPos.y );
 	log( plInfo, INFO );
 
 	int FontSizeUI = DEBUG_FONT_SIZE;

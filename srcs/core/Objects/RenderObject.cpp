@@ -5,37 +5,36 @@
 
 void RenderObject::onAdd()
 {
-	log( "RenderObject::onAdd()", DEBUG, _id );
+	log( "RenderObject::onAdd()", DEBUG, getID() );
 	_isVisible = true;
 
 	// set default color and shape
 	_color = WHITE;
-	_shape = SHAPE_CIRCLE;
 }
 
 void RenderObject::onCpy( const RenderObject &obj )
 {
-	log( "RenderObject::onCpy()", DEBUG, _id );
+	log( "RenderObject::onCpy()", DEBUG, getID() );
 	_isVisible = obj.getIsVisible();
 }
 
 void RenderObject::onDel()
 {
-	log( "RenderObject::onDel()", DEBUG, _id );
+	log( "RenderObject::onDel()", DEBUG, getID() );
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
 RenderObject::RenderObject() :
 	BaseObject( E_RENDER ),
-	PhysicObject()
+	ShapeObject()
 {
 	RenderObject::onAdd();
 }
 
 RenderObject::RenderObject( const RenderObject &obj ) :
 	BaseObject( obj ),
-	PhysicObject( obj )
+	ShapeObject( obj )
 {
 	if ( this == &obj ) return;
 
@@ -48,7 +47,8 @@ RenderObject &RenderObject::operator=( const RenderObject &obj )
 	if ( this == &obj ) return *this;
 
 	BaseObject::onCpy( obj );
-	PhysicObject::onCpy( obj );
+	ShapeObject::onCpy( obj );
+
 	RenderObject::onCpy( obj );
 
 	return *this;
@@ -57,53 +57,66 @@ RenderObject &RenderObject::operator=( const RenderObject &obj )
 RenderObject::~RenderObject() // automatic inverted call order
 {
 	RenderObject::onDel();
-	// PhysicObject::onDel();
+	// ShapeObject::onDel();
 	// BaseObject::onDel();
 }
 
-// ================================ ACCESSORS
+// ================================ ACCESSORS / MUTATORS
 
 bool RenderObject::getIsVisible() const { return _isVisible; }
 void RenderObject::setIsVisible( bool isVisible ){ _isVisible = isVisible; }
 
-shape_e RenderObject::getShape() const { return _shape; }
-void    RenderObject::setShape( shape_e shape ){ _shape = shape; }
-
 Color RenderObject::getColor() const { return _color; }
 void  RenderObject::setColor( Color color ){ _color = color; }
 
-// ================================ OPERATORS
+// ================================ TICK METHODS
 
-// ================================ METHODS
+bool RenderObject::RenderSelf()
+{
+	if ( getShapeType() == SH2_NULL ) return false;
+
+	log( "RenderObject::RenderSelf()", DEBUG, getID() );
+
+	Shape2 s = getShape();
+	if ( s.isPoint() )
+	{
+		DrawCircle( s.getCenter().x, s.getCenter().y, 4, _color );
+	}
+	elif ( s.isLine() )
+	{
+		Vector2 p1 = s.getWorldVertex( 0 );
+		Vector2 p2 = s.getWorldVertex( 1 );
+		DrawLine( p1.x, p1.y, p2.x, p2.y, _color );
+	}
+	if ( s.isEliptical() ) // NOTE Ellipses are not supported in raylib : Using DrawCircle instead
+	{
+		DrawCircle( s.getCenter().x, s.getCenter().y, s.getAvgScale(), _color );
+	}
+	elif ( s.isTriangle() )
+	{
+		DrawTriangle( s.getWorldVertex( 1 ), s.getWorldVertex( 0 ), s.getWorldVertex( 2 ), _color);
+	}
+	elif ( s.isRectangular() )
+	{
+		DrawTriangle( s.getWorldVertex( 0 ), s.getWorldVertex( 2 ), s.getWorldVertex( 1 ), _color);
+		DrawTriangle( s.getWorldVertex( 2 ), s.getWorldVertex( 0 ), s.getWorldVertex( 3 ), _color);
+	}
+	elif ( s.isPolygonal() )
+	{
+		for ( int i = 0; i < s.getFacetC(); i++ ) // NOTE : loops on all vertex pair and draw a triangle from the center to the vertices
+		{
+			DrawTriangle( s.getWorldVertex( i ), s.getCenter(), s.getWorldVertex( ( i + 1 )), _color );
+		}
+	}
+	return true;
+}
 
 void RenderObject::onRenderTick() // (re)renders the object
 {
 	if ( !_isVisible ) return;
-	log( "RenderObject::onRenderTick()", DEBUG, _id );
+	log( "RenderObject::onRenderTick()", DEBUG, getID() );
 
-	if ( _shape == SHAPE_CIRCLE )
-	{
-		DrawCircle( int( _pos.x ), int( _pos.y ), getAvgRadius(), _color );
-	}
-	else if ( _shape == SHAPE_RECT )
-	{
-		DrawRectangle( int( getLeft().x ), int( getTop().y ), int( getSize().x * 2 ), int( getSize().y * 2 ), _color );
-	}
-	else if ( _shape == SHAPE_LINE )
-	{
-		DrawLine( int( getBot().x ), int( getBot().y ), int( getTop().x ), int( getTop().y ), _color );
-	}
-	else if ( _shape == SHAPE_BOX )
-	{
-		DrawLine( int( getTopLeft().x  ), int( getTopLeft().y  ), int( getTopRight().x ), int( getTopRight().y ), _color );
-		DrawLine( int( getTopRight().x ), int( getTopRight().y ), int( getBotRight().x ), int( getBotRight().y ), _color );
-		DrawLine( int( getBotRight().x ), int( getBotRight().y ), int( getBotLeft().x  ), int( getBotLeft().y  ), _color );
-		DrawLine( int( getBotLeft().x  ), int( getBotLeft().y  ), int( getTopLeft().x  ), int( getTopLeft().y  ), _color );
-	}
-	else
-	{
-		log( "RenderObject::onRenderTick() : unknown shape", WARN, _id );
-	}
+	RenderSelf();
 
 	OnRenderCall( this );
 }

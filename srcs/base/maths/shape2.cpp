@@ -42,7 +42,7 @@ float getTriangleArea( const Vector2 &p1, const Vector2 &p2, const Vector2 &p3 )
 // ================================== CONSTRUCTORS
 
 Shape2::Shape2( sh2_type_e type, const Vector2 &ctr, const Vector2 &scl, float angle )
-	: _type( type ), _angle( fmod( angle, 360.0f )), _center( ctr ), _scales( { abs( scl.x ), abs( scl.y )})
+	: _type( type ), _angle( fmod( angle, 360.0f )), _center( ctr ), _scales( { scl.x, scl.y })
 {
 	_verts = V2Vect_t();
 	switch ( type )
@@ -65,10 +65,10 @@ Shape2::Shape2( sh2_type_e type, const Vector2 &ctr, const Vector2 &scl, float a
 			[[fallthrough]];
 
 		case SH2_RECT: // makes a rectangle ( verts are corners )
-			_verts.push_back( { 1,  1 });
-			_verts.push_back( { 1,  -1 });
+			_verts.push_back( { 1,  1  });
+			_verts.push_back( { -1, 1  });
 			_verts.push_back( { -1, -1 });
-			_verts.push_back( { -1, 1 });
+			_verts.push_back( { 1,  -1 });
 			break;
 
 		case SH2_CIRC: // use the smallest scale as the scale
@@ -76,9 +76,9 @@ Shape2::Shape2( sh2_type_e type, const Vector2 &ctr, const Vector2 &scl, float a
 			[[fallthrough]];
 
 		case SH2_ELLI: // makes an ellipse ( verts are +/- radii )
-			_verts.push_back( { 1,  0 });
-			_verts.push_back( { 0,  1 });
-			_verts.push_back( { -1, 0 });
+			_verts.push_back( { 1,  0  });
+			_verts.push_back( { 0,  1  });
+			_verts.push_back( { -1, 0  });
 			_verts.push_back( { 0,  -1 });
 			break;
 
@@ -132,26 +132,26 @@ Shape2 Shape2::operator=( const Shape2 &s )
 
 // ================================== FACTORY METHODS
 
-// returns a line with a given center and scale
-Shape2 Shape2::Line( const Vector2 &ctr, const Vector2 &scl ){ return Shape2( SH2_LINE, ctr, scl ); }
 // returns a line from p at angle dir, with length dist
 Shape2 Shape2::Line( const Vector2 &p1, float angle, float dist )
 {
 	Vector2 p2 = { p1.x + cosf( angle * DtoR ) * dist, p1.y + sinf( angle * DtoR ) * dist };
-	return Shape2::Line2( p1, p2 );
+	return Shape2::Line( p1, p2 );
 }
 // returns a line from p1 to p2, with the mean of the two points as center
-Shape2 Shape2::Line2( const Vector2 &p1, const Vector2 &p2 )
+Shape2 Shape2::Line( const Vector2 &p1, const Vector2 &p2 )
 {
 	Vector2 ctr = { ( p1.x + p2.x ) / 2, ( p1.y + p2.y ) / 2 };
 	Vector2 scl = { ( p2.x - p1.x ) / 2, ( p2.y - p1.y ) / 2 }; // TODO : check if this is correct
 	return Shape2( SH2_LINE, ctr, scl );
 }
+// returns a line with a given center and scale
+Shape2 Shape2::Line2( const Vector2 &ctr, const Vector2 &scl ){ return Shape2( SH2_LINE, ctr, scl ); }
 // returns a line going from p through the center to its opposite
 Shape2 Shape2::Line3( const Vector2 &ctr, const Vector2 &p )
 {
 	Vector2 scl = { p.x - ctr.x, p.y - ctr.y };
-	return Line( ctr, scl );
+	return Line2( ctr, scl );
 }
 
 // returns a equilateral triangle with the tip at p1
@@ -180,7 +180,7 @@ Shape2 Shape2::Triangle( const Vector2 &p1, const Vector2 &p2, const Vector2 &p3
 	float d3 = getDistanceTo00( np3 );
 	float scl = ( d1 + d2 + d3 ) / 3;
 
-	return Shape2( SH2_TRIA, ctr, { scl, scl }); // TODO : check if this is correct
+	return Shape2( SH2_TRIA, ctr, { scl, scl }); // TODO : check if this is correct : forces it to be equilateral
 }
 
 Shape2 Shape2::Square( const Vector2 &ctr, float scl, float angle )
@@ -189,11 +189,11 @@ Shape2 Shape2::Square( const Vector2 &ctr, float scl, float angle )
 }
 Shape2 Shape2::Square( const Vector2 &ctr, const Vector2 &edge, float angle ) // TODO : check if this is correct
 {
-	Vector2 re = { edge.x - ctr.x, edge.y - ctr.y }; //     gets the relative position of the edge from the center
+	Vector2 v = { edge.x - ctr.x, edge.y - ctr.y }; // gets the relative position of the edge from the center
 
-	re = RotateVertex( re, -angle ); //                  cancels out the rotation of the final shape
+	v = RotateVertex( v, -angle ); //                   cancels out the rotation of the final shape
 
-	float scl = max( abs( edge.x ), abs( edge.x ) ); // finds the scale needed for both axes to touch the edge
+	float scl = max( abs( v.x ), abs( v.y )); // finds the scale needed for both axes to touch the edge
 
 	return Shape2( SH2_SQUR, ctr, { scl, scl }, angle );
 }
@@ -201,7 +201,7 @@ Shape2 Shape2::Rectangle( const Vector2 &ctr, const Vector2 &scl, float angle )
 {
 	return Shape2( SH2_RECT, ctr, scl, angle );
 }
-Shape2 Shape2::RectCorners( const Vector2 &p1, const Vector2 &p2, float angle ) // TODO : check if this is correct
+Shape2 Shape2::Rectangle2( const Vector2 &p1, const Vector2 &p2, float angle ) // TODO : check if this is correct
 {
 	Vector2 ctr = { ( p1.x + p2.x ) / 2, ( p1.y + p2.y ) / 2 }; // finds the center of the rectangle
 
@@ -297,8 +297,7 @@ V2Vect_t Shape2::getWorldVerts() const
 
 // ================= VERTEX ACCESSORS
 
-// compares the angle of each vertex and finds the ID of
-// the one directly to the right of the given angle
+// compares the angle of each vertex and finds the ID of the one directly to the right of the given angle
 int Shape2::getInsertRawID(    float angle ) const
 {
 	int id = 0;
@@ -331,7 +330,7 @@ int Shape2::getInsertScaledID( float angle ) const
 		float a = atan2( v.y, v.x ) * RtoD; // TODO : check if this is correct
 		if ( a < 0 ){ a += 360.0f; }
 
-		float d = abs( angle - a );
+		float d = abs( angle - a ); // TODO : check if this is correct
 		if ( d < min )
 		{
 			min = d;
@@ -352,7 +351,7 @@ int Shape2::getInsertWorldID( float angle ) const
 		float a = atan2( v.y, v.x ) * RtoD; // TODO : check if this is correct
 		if ( a < 0 ){ a += 360.0f; }
 
-		float d = abs( angle - a );
+		float d = abs( angle - a ); // TODO : check if this is correct
 		if ( d < min )
 		{
 			min = d;
@@ -434,9 +433,15 @@ Vector2 Shape2::getWorldVertex( int index ) const
 {
 	index %= _verts.size(); // wrap around
 
-	Vector2 v = { _verts[ index ].x * _scales.x, _verts[ index ].y * _scales.y }; // TODO : check if this is correct
+	Vector2 v = _verts[ index ];
+	v.x *= _scales.x;
+	v.y *= _scales.y;
 
-	return RotateVertex( v, _angle );
+	v = RotateVertex( v, _angle );
+	v.x += _center.x;
+	v.y += _center.y;
+
+	return v;
 }
 
 // ================================== MUTATORS
@@ -483,7 +488,7 @@ void Shape2::moveAngle( float delta ){ setAngle( _angle + delta ); }
 void Shape2::setCenter(  const Vector2 &ctr ){   _center = ctr; }
 void Shape2::moveCenter( const Vector2 &delta ){ _center.x += delta.x; _center.y += delta.y; }
 
-void Shape2::setScales(    const Vector2 &scl ){    _scales.x = abs( scl.x ); _scales.y = abs( scl.y ); }
+void Shape2::setScales(    const Vector2 &scl ){    _scales.x = scl.x; _scales.y = scl.y; }
 void Shape2::changeScales( const Vector2 &factor ){ _scales.x *= factor.x; _scales.y *= factor.y; }
 
 void Shape2::updateCenter()
@@ -529,6 +534,19 @@ void Shape2::updateType()
 }
 
 // ================================== SHAPE PROPERTIES
+
+byte_t Shape2::getFacetC() const
+{
+	switch( _type )
+	{
+		case SH2_NULL: return 0;
+		case SH2_POIN: return 0;
+		case SH2_LINE: return 1;
+		case SH2_CIRC: return 0;
+		case SH2_ELLI: return 0;
+		default:       return _verts.size();
+	}
+}
 
 Vector2 Shape2::getTop() const // top = lowest y
 {
@@ -693,10 +711,9 @@ float Shape2::getMaxRadius() const
 float Shape2::getAvgRadius() const
 {
 	float avg = 0;
-	for ( auto &v : _verts )
-	{
-		avg += getDistanceTo00( v );;
-	}
+
+	for ( auto &v : _verts ){ avg += getDistanceTo00( v ); }
+
 	return avg / _verts.size();
 }
 
@@ -716,20 +733,33 @@ float Shape2::getPerim() const // TODO : check if this is correct
 
 float Shape2::getArea() const // TODO : check if this is correct
 {
-	if ( _verts.size() < 3 )
+	if ( isArealess() )
 	{
 		log( "Shape2::getArea() : Not enough vertices to calculate area", WARN );
 		return 0;
 	}
 
-	float area = 0;
-
-	for ( byte_t i = 0; i < ( byte_t )_verts.size(); i++ ) // Shoelace formula
+	if ( isEliptical() )
 	{
+		float a = getMaxRadius();
+		float b = getMinRadius();
+		return PI * a * b;
+	}
+
+	if ( isRectangular() )
+	{
+		float a = getScaleX() * 2;
+		float b = getScaleY() * 2;
+		return a * b;
+	}
+
+	float area = 0;
+	for ( byte_t i = 0; i < ( byte_t )_verts.size(); i++ )
+	{ // Shoelace formula : TODO : check if this is correc
 		const Vector2 p1 = _verts[ i ];
 		const Vector2 p2 = _verts[( i + 1 ) % _verts.size() ]; // wrap around
 
-		area += ( p1.x * p2.y ) - ( p2.x * p1.y ); // TODO : check if this is correct
+		area += ( p1.x * p2.y ) - ( p2.x * p1.y );
 	}
 	return abs( area / 2 );
 }

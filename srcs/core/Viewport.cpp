@@ -182,11 +182,11 @@ void Viewport2D::updateCamera()
 
 // ================================ OBJECTS TRACKING
 
-BaseObject *Viewport2D::getTrackedObject() const { return _trackedObject; }
+ShapeObject *Viewport2D::getTrackedObject() const { return _trackedObject; }
 
 bool Viewport2D::isTracking() const { return _trackingObject; }
 
-bool Viewport2D::trackObject( BaseObject *obj, bool overrideTracking )
+bool Viewport2D::trackObject( ShapeObject *obj, bool overrideTracking )
 {
 	if ( obj == nullptr )
 	{

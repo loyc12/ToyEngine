@@ -5,7 +5,7 @@
 
 void Object2D::onAdd()
 {
-	log( "Object2D::onAdd()", DEBUG, _id );
+	log( "Object2D::onAdd()", DEBUG, getID() );
 	// _isActive = true;
 	// _isDynamic = true;
 	// _isCollide = true;
@@ -14,7 +14,7 @@ void Object2D::onAdd()
 
 void Object2D::onCpy( const Object2D &obj )
 {
-	log( "Object2D::onCpy()", DEBUG, _id );
+	log( "Object2D::onCpy()", DEBUG, getID() );
 	// _isActive = obj.getIsActive();
 	// _isDynamic = obj.getIsDynamic();
 	// _isCollide = obj.getIsCollide();
@@ -25,15 +25,16 @@ void Object2D::onCpy( const Object2D &obj )
 
 void Object2D::onDel()
 {
-	log( "Object2D::onDel()", DEBUG, _id );
+	log( "Object2D::onDel()", DEBUG, getID() );
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
 Object2D::Object2D() :
 	BaseObject( E_OBJ2D ),
-	PhysicObject(),
+	ShapeObject(),
 	RenderObject(),
+	PhysicObject(),
 	ScriptObject()
 {
 	Object2D::onAdd();
@@ -41,8 +42,9 @@ Object2D::Object2D() :
 
 Object2D::Object2D( const Object2D &obj ) :
 	BaseObject( E_OBJ2D ),
-	PhysicObject( obj ),
+	ShapeObject( obj ),
 	RenderObject( obj ),
+	PhysicObject( obj ),
 	ScriptObject( obj )
 {
 	if ( this == &obj ) return;
@@ -56,10 +58,11 @@ Object2D &Object2D::operator=( const Object2D &obj )
 	if ( this == &obj ) return *this;
 
 	BaseObject::onCpy( obj );
-
-	PhysicObject::onCpy( obj );
+	ShapeObject::onCpy( obj );
 	RenderObject::onCpy( obj );
+	PhysicObject::onCpy( obj );
 	ScriptObject::onCpy( obj );
+
 	Object2D::onCpy( obj );
 
 	return *this;
@@ -69,33 +72,28 @@ Object2D::~Object2D() // automatic inverted call order
 {
 	Object2D::onDel();
 	// ScriptObject::onDel();
-	// RenderObject::onDel();
 	// PhysicObject::onDel();
+	// RenderObject::onDel();
+	// ShapeObject::onDel();
 	// BaseObject::onDel();
 }
 
-// ================================ ACCESSORS
-
-// ================================ OPERATORS
-
-// ================================ METHODS
+// ================================ ACCESSORS / MUTATORS
 
 // ================================ OBJECTS FACTORY
 
-void GenerateObject2D( shape_e shape, Color color, Vector2 size, Vector2 pos, bool isActive, bool isDynamic, bool isCollide, bool isVisible )
+void GenerateObject2D( Shape2 shape, Color color, bool isTangible, bool isDynamic, bool isCollide, bool isVisible, bool isActive )
 {
 	log( "GenerateObject2D()", DEBUG );
 
-	Object2D *obj = new Object2D;
+	Object2D *obj = new Object2D; // NOTE : automatically added to the engine's object list
 
 	obj->setShape( shape );
 	obj->setColor( color );
-	obj->setSize( size );
-	obj->setPosition( pos );
 
-	obj->setIsActive( isActive );
-	obj->setIsDynamic( isDynamic );
-	obj->setIsCollide( isCollide );
-	obj->setIsVisible( isVisible );
-
+	obj->setIsTangible( isTangible );
+	obj->setIsDynamic(  isDynamic  );
+	obj->setIsCollide(  isCollide  );
+	obj->setIsVisible(  isVisible  );
+	obj->setIsActive(   isActive   );
 }

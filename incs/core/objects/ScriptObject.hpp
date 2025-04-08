@@ -2,12 +2,13 @@
 # define SCRIPTOBJECT_HPP
 
 # include <raylib.h>
-# include "./RenderObject.hpp"
+# include "./PhysicObject.hpp"
 
 class ScriptObject :
 	virtual public BaseObject,
-	virtual public PhysicObject,
-	virtual public RenderObject
+	virtual public ShapeObject,
+	virtual public RenderObject,
+	virtual public PhysicObject
 {
 	// this class is used to run scripts from an object
 	protected:
@@ -26,13 +27,12 @@ class ScriptObject :
 		ScriptObject &operator=( const ScriptObject &obj );
 		virtual ~ScriptObject();
 
-	// ================================ ACCESSORS
+	// ================================ ACCESSORS / MUTATORS
 		bool getIsActive() const;			void setIsActive( bool _isActive );
 
-	// ================================ OPERATORS
+	// ================================ TICK METHODS
+		void onScriptTick() override; // ENTRYPOINT : (re)runs the object's scripts
 
-	// ================================ METHODS
-		void onScriptTick() override; // ENTRYPOINT : runs the object's scripts
 		// TODO : used a customizable function pointer array to add/remove scripts to an object
 };
 

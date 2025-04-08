@@ -30,9 +30,6 @@ void BaseObject::onAdd()
 	log( "BaseObject::onAdd()", DEBUG, _id );
 
 	_id = 0;
-	_pos = { 0, 0 };
-	_size = { 1, 1 };
-	_isSpherical =  true;
 
 	addToEngine();
 }
@@ -41,9 +38,6 @@ void BaseObject::onCpy( const BaseObject &obj )
 {
 	log( "BaseObject::onCpy()", DEBUG, _id );
 	_type = obj.getType();
-	_pos = obj.getPosition();
-	_size = obj.getSize();
-	_isSpherical = obj.isSpherical();
 }
 
 void BaseObject::onDel() // inverted call order
@@ -90,10 +84,9 @@ BaseObject &BaseObject::operator=( const BaseObject &obj )
 
 BaseObject::~BaseObject(){ BaseObject::onDel(); }
 
-// ================================ OPERATORS
-
 // ================================ TICK METHODS
 
+void BaseObject::onShapeTick(){  log( "BaseObject::onShapeTick()  : not implemented", WARN ); }
 void BaseObject::onScriptTick(){ log( "BaseObject::onScriptTick() : not implemented", WARN ); }
 void BaseObject::onPhysicTick(){ log( "BaseObject::onPhysicTick() : not implemented", WARN ); }
 void BaseObject::onRenderTick(){ log( "BaseObject::onRenderTick() : not implemented", WARN ); }
@@ -101,93 +94,12 @@ void BaseObject::onRenderTick(){ log( "BaseObject::onRenderTick() : not implemen
 // ================================ ACCESSORS
 
 objectType_e BaseObject::getType() const { return _type; }
-uint BaseObject::getID() const { return _id; }
+uint         BaseObject::getID()   const { return _id; }
 
-bool BaseObject::isSpherical() const { return _isSpherical; }
-bool BaseObject::setSpherical( bool isSpherical ){ _isSpherical = isSpherical; return _isSpherical; }
+// ================================ MUTATORS
 
-Vector2 BaseObject::getTop()    const { return { _pos.x, (_pos.y - _size.y) }; }
-Vector2 BaseObject::getBot()    const { return { _pos.x, (_pos.y + _size.y) }; }
-Vector2 BaseObject::getLeft()   const { return { (_pos.x - _size.x), _pos.y }; }
-Vector2 BaseObject::getRight()  const { return { (_pos.x + _size.x), _pos.y }; }
-
-Vector2 BaseObject::getTopLeft()  const { return { (_pos.x - _size.x), (_pos.y - _size.y) }; }
-Vector2 BaseObject::getTopRight() const { return { (_pos.x + _size.x), (_pos.y - _size.y) }; }
-Vector2 BaseObject::getBotLeft()  const { return { (_pos.x - _size.x), (_pos.y + _size.y) }; }
-Vector2 BaseObject::getBotRight() const { return { (_pos.x + _size.x), (_pos.y + _size.y) }; }
-
-Vector2 BaseObject::getPosition() const { return _pos; }
-Vector2 BaseObject::setPosition(  const Vector2 &pos ){ _pos = pos; return _pos; }
-Vector2 BaseObject::movePosition( const Vector2 &delta ){ _pos.x += delta.x; _pos.y += delta.y; return _pos; }
-
-// returns the position difference between this object and the given object
-Vector2 BaseObject::getRelPosition( const BaseObject &obj ) const
-{
-	Vector2 relPos = Vector2();
-	relPos.x = obj.getPosition().x - _pos.x;
-	relPos.y = obj.getPosition().y - _pos.y;
-	return relPos;
-}
-
-Vector2 BaseObject::getSize() const { return _size; }
-Vector2 BaseObject::setSize(  const Vector2 &size )
-{
-	if ( size.x < 0 || size.y < 0 ){ log( "BaseObject::setSize() : size cannot be negative : clamping to EPS", WARN ); }
-
-	_size.x = max( size.x, EPS );
-	_size.y = max( size.y, EPS );
-
-	return _size;
-}
-
-Vector2 BaseObject::moveSize( const Vector2 &delta ){ return setSize({ _size.x + delta.x, _size.y + delta.y }); }
-
-// returns the size difference between this object and the given object
-Vector2 BaseObject::getRelSize( const BaseObject &obj ) const
-{
-	Vector2 relSize = Vector2();
-
-	relSize.x = obj.getSize().x - _size.x;
-	relSize.y = obj.getSize().y - _size.y;
-
-	return relSize;
-}
-
-// ================================ DIMENSIONS GETTERS
+void BaseObject::setType( objectType_e type ){ _type = type; } // NOTE : UNSAFE
+void BaseObject::setID( objID_t id ){         _id    = id;   } // NOTE : UNSAFE
 
 
-float BaseObject::getPerim() const
-{
-	if ( _isSpherical ) // calculate the perimiter of an elliptic shape
-	{
-		if ( _size.x == _size.y ){ return PI * _size.x * 2; } // circle
 
-		// if not a perfect circle, we use Ramanujan's approximation
-		return PI * ( 3 * ( _size.x + _size.y ) - sqrt( ( 3 * _size.x + _size.y ) * ( _size.x + 3 * _size.y )));
-	}
-	return ( _size.x + _size.y ) * 4;
-}
-float BaseObject::getArea() const
-{
-	if ( _isSpherical ){ return PI * _size.x * _size.y; }
-	return _size.x * _size.y * 4;
-}
-
-float BaseObject::getMinRadius() const { return getMinSide(); }
-float BaseObject::getMaxRadius() const
-{
-	if ( _isSpherical ){ return ( _size.x > _size.y ? _size.x : _size.y); }
-
-  // for a rectangle, the corner is the furthest point from the center
-	return getHalfDiago();
-}
-float BaseObject::getAvgRadius() const
-{
-	if ( _isSpherical ){ return ( _size.x + _size.y ) / 2; }
-
-	// if not a circle, we use the average between the diagonal and the smallest side, because fuck it we ballin'
-	return ( getHalfDiago() + getMinSide() ) / 2;
-}
-
-float BaseObject::getHalfDiago() const { return ( sqrt( sqr( _size.x ) + sqr( _size.y ))); }
-float BaseObject::getFullDiago() const { return getHalfDiago() * 2; }

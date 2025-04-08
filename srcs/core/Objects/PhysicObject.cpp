@@ -5,7 +5,7 @@
 
 void PhysicObject::onAdd()
 {
-	log( "PhysicObject::onAdd()", DEBUG, _id );
+	log( "PhysicObject::onAdd()", DEBUG, getID() );
 	_isDynamic = true;
 	_isCollide = true;
 
@@ -20,7 +20,7 @@ void PhysicObject::onAdd()
 
 void PhysicObject::onCpy( const PhysicObject &obj )
 {
-	log( "PhysicObject::onCpy()", DEBUG, _id );
+	log( "PhysicObject::onCpy()", DEBUG, getID() );
 	_isDynamic = obj.getIsDynamic();
 	_isCollide = obj.getIsCollide();
 
@@ -35,18 +35,23 @@ void PhysicObject::onCpy( const PhysicObject &obj )
 
 void PhysicObject::onDel()
 {
-	log( "PhysicObject::onDel()", DEBUG, _id );
+	log( "PhysicObject::onDel()", DEBUG, getID() );
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
 PhysicObject::PhysicObject() :
-	BaseObject( E_PHYSIC )
+	BaseObject( E_PHYSIC ),
+	ShapeObject(),
+	RenderObject()
 {
 	PhysicObject::onAdd();
 }
 
-PhysicObject::PhysicObject( const PhysicObject &obj ) : BaseObject( obj )
+PhysicObject::PhysicObject( const PhysicObject &obj ) :
+	BaseObject( obj ),
+	ShapeObject( obj ),
+	RenderObject( obj )
 {
 	if ( this == &obj ) return;
 
@@ -59,7 +64,10 @@ PhysicObject &PhysicObject::operator=( const PhysicObject &obj )
 	if ( this == &obj ) return *this;
 
 	BaseObject::onCpy( obj );
+	ShapeObject::onCpy( obj );
 	PhysicObject::onCpy( obj );
+
+	RenderObject::onCpy( obj );
 
 	return *this;
 }
@@ -67,6 +75,8 @@ PhysicObject &PhysicObject::operator=( const PhysicObject &obj )
 PhysicObject::~PhysicObject() // automatic inverted call order
 {
 	PhysicObject::onDel();
+	// RenderObject::onDel();
+	// ShapeObject::onDel();
 	// BaseObject::onDel();
 }
 
@@ -76,7 +86,6 @@ PhysicObject::~PhysicObject() // automatic inverted call order
 bool PhysicObject::getIsDynamic() const { return _isDynamic; }
 bool PhysicObject::getIsCollide() const { return _isCollide; }
 
-Vector2 PhysicObject::getPosition()     const { return BaseObject::getPosition(); }
 Vector2 PhysicObject::getVelocity()     const { return _vel; }
 Vector2 PhysicObject::getAcceleration() const { return _acc; }
 Vector2 PhysicObject::getForce() const
@@ -87,10 +96,7 @@ Vector2 PhysicObject::getForce() const
 	return force;
 }
 
-Vector2 PhysicObject::getRelPosition( const PhysicObject &obj ) const
-{
-	return BaseObject::getRelPosition( obj );
-}
+
 Vector2 PhysicObject::getRelVelocity( const PhysicObject &obj ) const
 {
 	Vector2 relVel = Vector2();
@@ -133,7 +139,6 @@ float PhysicObject::getInertia() const
 bool PhysicObject::setIsDynamic( bool isDynamic ){ _isDynamic = isDynamic; return _isDynamic; }
 bool PhysicObject::setIsCollide( bool isCollide ){ _isCollide = isCollide; return _isCollide; }
 
-Vector2 PhysicObject::setPosition( const Vector2 &pos ){ return BaseObject::setPosition( pos ); }
 Vector2 PhysicObject::setVelocity( const Vector2 &vel ){ _vel = vel; return _vel; }
 Vector2 PhysicObject::setAcceleration( const Vector2 &acc ){ _acc = acc; return _acc; }
 
@@ -158,7 +163,6 @@ float PhysicObject::setElasticity( float elasticity )
 
 // ================================ MUTATORS
 
-Vector2 PhysicObject::movePosition( const Vector2 &delta ){ return BaseObject::movePosition( delta ); }
 Vector2 PhysicObject::moveVelocity( const Vector2 &delta ){ _vel.x += delta.x; _vel.y += delta.y; return _vel; }
 Vector2 PhysicObject::moveAcceleration( const Vector2 &delta ){ _acc.x += delta.x; _acc.y += delta.y; return _acc; }
 
@@ -168,7 +172,7 @@ float PhysicObject::moveElasticity( float delta ){ return setElasticity( _elas +
 
 Vector2 PhysicObject::applyForce( const Vector2 &force )
 {
-	log ( "PhysicObject::ApplyForce()", DEBUG, _id );
+	log ( "PhysicObject::ApplyForce()", DEBUG, getID() );
 
 	Vector2 acc = Vector2();
 	acc.x = force.x / _mass;
@@ -181,7 +185,7 @@ Vector2 PhysicObject::applyForce( const Vector2 &force )
 // Applies a force in the opposite direction of the object's velocity
 Vector2 PhysicObject::applyBreak( const Vector2 &breakForce )
 {
-	log ( "PhysicObject::ApplyBreak()", DEBUG, _id );
+	log ( "PhysicObject::ApplyBreak()", DEBUG, getID() );
 
 	Vector2 acc = Vector2();
 	Vector2 vel = getVelocity();
@@ -204,7 +208,7 @@ Vector2 PhysicObject::applyBreak( const Vector2 &breakForce )
 void PhysicObject::onPhysicTick() // calculates the object's physics
 {
 	if ( !_isDynamic ) return;
-	log( "PhysicObject::onPhysicTick()", DEBUG, _id );
+	log( "PhysicObject::onPhysicTick()", DEBUG, getID() );
 
 	OnPhysicCall( this ); // DEBUG ?
 
