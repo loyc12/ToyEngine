@@ -269,17 +269,48 @@ Shape2 Shape2::Dodecagon( const Vector2 &ctr, const Vector2 &scl, float angle )
 	return s;
 }
 
-Shape2 Shape2::Polygon( const Vector2 &ctr, float scl, int sides, float angle ){ return Polygon( ctr, { scl, scl }, sides, angle ); }
-Shape2 Shape2::Polygon( const Vector2 &ctr, const Vector2 &scl, int sides, float angle )
+Shape2 Shape2::Polygon( const Vector2 &ctr, float scl, byte_t sides, float angle ){ return Polygon( ctr, { scl, scl }, sides, angle ); }
+Shape2 Shape2::Polygon( const Vector2 &ctr, const Vector2 &scl, byte_t sides, float angle )
 {
 	if ( sides < 3 )
 	{
-		log( "Shape2::Polygon() : sides must be >= 3", WARN );
+		log( "Shape2::Polygon() : Polygon needs at least 3 vertices", WARN );
 		return Shape2();
 	}
 
 	Shape2 s( SH2_POLY, ctr, scl, angle );
 	s._verts = CalcPolyVerts( sides );
+	return s;
+}
+
+Shape2 Shape2::Polygon( const V2Vect_t &worldVerts )
+{
+	if ( worldVerts.size() < 3 )
+	{
+		log( "Shape2::Polygon() : Polygon needs at least 3 vertices", WARN );
+		return Shape2();
+	}
+
+	Vector2 ctr = { 0, 0 };
+	for ( auto &v : worldVerts )
+	{
+		ctr.x += v.x;
+		ctr.y += v.y;
+	}
+	ctr.x /= worldVerts.size();
+	ctr.y /= worldVerts.size();
+
+	Shape2 s( SH2_POIN, ctr, { 1, 1 }, 0 );
+	s._type = SH2_POLY;
+
+	for ( auto &v : worldVerts ){ s.addRawVertex({ v.x - ctr.x, v.y - ctr.y }); }
+
+	return s;
+}
+Shape2 Shape2::Polygon( const Vector2 &ctr, const Vector2 &scl, const V2Vect_t &rawVerts, float angle )
+{
+	Shape2 s( SH2_POLY, ctr, scl, angle );
+	s._verts = rawVerts;
 	return s;
 }
 

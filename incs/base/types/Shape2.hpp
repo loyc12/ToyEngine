@@ -95,8 +95,11 @@ class Shape2 // NOTE : test the shit out of this class before using
 		static Shape2 Dodecagon( const Vector2 &ctr, float scl,          float angle = 0 );
 		static Shape2 Dodecagon( const Vector2 &ctr, const Vector2 &scl, float angle = 0 );
 
-		static Shape2 Polygon( const Vector2 &ctr, float scl,          int sides, float angle = 0 );
-		static Shape2 Polygon( const Vector2 &ctr, const Vector2 &scl, int sides, float angle = 0 );
+		static Shape2 Polygon( const Vector2 &ctr, float scl,          byte_t sides, float angle = 0 );
+		static Shape2 Polygon( const Vector2 &ctr, const Vector2 &scl, byte_t sides, float angle = 0 );
+
+		static Shape2 Polygon( const V2Vect_t &worldVerts );
+		static Shape2 Polygon( const Vector2 &ctr, const Vector2 &scl, const V2Vect_t &rawVerts, float angle = 0 );
 
 	// ================================== ACCESSORS
 		inline sh2_type_e getType() const { return _type; };
@@ -178,16 +181,16 @@ class Shape2 // NOTE : test the shit out of this class before using
 		inline bool isSquare()      const { return ( _type == SH2_SQUR ); };
 		inline bool isRectangle()   const { return ( _type == SH2_RECT ); };
 
+		inline bool isEliptical() const { return ( _type == SH2_ELLI || _type == SH2_CIRC ); };
+		inline bool isCircle()    const { return ( _type == SH2_CIRC ); };
+		inline bool isEllipse()    const { return ( _type == SH2_ELLI ); };
+
 		inline bool isPolygonal() const { return ( _type == SH2_PENT || _type == SH2_HEXA || _type == SH2_OCTA || _type == SH2_DODE || _type == SH2_POLY ); };
 		inline bool isPentagon()  const { return ( _type == SH2_PENT ); };
 		inline bool isHexagon()   const { return ( _type == SH2_HEXA ); };
 		inline bool isOctogon()   const { return ( _type == SH2_OCTA ); };
 		inline bool isDodecagon() const { return ( _type == SH2_DODE ); };
 		inline bool isPolygon()   const { return ( _type == SH2_POLY ); };
-
-		inline bool isEliptical() const { return ( _type == SH2_ELLI || _type == SH2_CIRC ); };
-		inline bool isCircle()    const { return ( _type == SH2_CIRC ); };
-		inline bool isEllipse()    const { return ( _type == SH2_ELLI ); };
 
 		byte_t getFacetC() const;
 
