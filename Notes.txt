@@ -21,7 +21,7 @@ Performance
 
 General
 	- Use ScriptObject as an Entity Component System Interface
-	- replace EXIT_SUCCESS with true & so on
+	- Replace EXIT_SUCCESS with true & so on
 	- Implement a timescale engine var
 
 Nomenclature
