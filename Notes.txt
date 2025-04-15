@@ -6,10 +6,10 @@ Style
 
 Refactor
 	- Use Precise ints : (u)intx_t, posint_t, etc
-	- Use fixed_t instead of floats
+	- Use fixed_t or scalar_t instead of floats
 	- Use angle_t instead of floats
 	- Use chain_t instead of List
-	- Use bank_t< 2 > instead of Vect2
+	- Use bank_t< N > instead of VectN
 	- Rework the input system ( why not just use raylib inputs directly )
 	- Add vertex to shapes in the other direction to sort out rendering of triangles
 	- Define circles and ellipses as high facet count polygons

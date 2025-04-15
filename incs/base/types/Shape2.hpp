@@ -2,7 +2,9 @@
 # define SHAPE2_HPP
 
 # include <raylib.h>
+//# include "./Angle.hpp"
 # include "../defs.hpp"
+
 
 typedef vector< Vector2 > V2Vect_t; // TODO : move me
 
@@ -322,6 +324,10 @@ class Shape2 // NOTE : test the shit out of this class before using
 		friend Shape2 &operator/=( Shape2 &lhs, float rhs );
 		//friend Shape2 &operator%=( Shape2 &lhs, float rhs );
 
+	// ================================== OUTPUT OPERATORS
+		//friend ostream &operator<<( ostream &out, const Shape2 &s ); // TODO : implement this
 };
+
+typedef Shape2 shape2_t;
 
 #endif // SHAPE2_HPP

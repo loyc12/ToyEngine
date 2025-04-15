@@ -86,8 +86,10 @@ class FixedPoint
 	FixedPoint &operator=( const long &l );
 	FixedPoint &operator=( const float &f );
 	FixedPoint &operator=( const double &d );
+
+	friend ostream &operator<<( ostream &out, const FixedPoint &fp );
 };
 
-ostream &operator<<( ostream &out, const FixedPoint &fp );
+typedef FixedPoint fixed_t;
 
 #endif // FIXEDPOINT_HPP
