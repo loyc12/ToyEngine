@@ -1,6 +1,6 @@
 #include <raylib.h>
-#include "../../incs/core.hpp"
-#include "../../incs/game.hpp"
+#include "../../../incs/core.hpp"
+#include "../../../incs/game.hpp"
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
@@ -107,9 +107,13 @@ void Engine::setState( engineState_e newState )
 // ==================== ENGINE SHORTCUTS
 // Shortcuts to the engine and its components
 
-Engine     *GNG = Engine::getEngine();
-Controller *GCN = GNG->getController();
-Viewport2D *GVP = GNG->getViewport();
+Engine      *GNG = Engine::getEngine();
+Controller  *GCN = GNG->getController();
+Viewport2D  *GVP = GNG->getViewport();
+CompManager *GCM = GNG->getCompManager();
 
 float    GDTS(){ return GNG->getDeltaTime(); }
 inputs_s &GIN(){ return GNG->getLatestInputs(); }
+
+GameEntity *NullNTT = nullptr; // NOTE : Null Value Entity
+BaseComp   *NullCMP = nullptr; //     NOTE : Null Value Component

@@ -1,6 +1,6 @@
 #include <raylib.h>
-#include "../../incs/core.hpp"
-#include "../../incs/game.hpp"
+#include "../../../incs/core.hpp"
+#include "../../../incs/game.hpp"
 
 // ================================ STATE METHODS
 
@@ -110,8 +110,12 @@ void Engine::init()
 	if ( getState() > ES_INITIALIZING ){ log( "Engine::init() : Engine already initialized",  ERROR ); return; }
 	if ( getState() < ES_CLOSED){        log( "Engine::init() : how did you even get here ?", ERROR ); return; }
 
-	_controller = new Controller();   GCN = _controller;
-	_viewport2D = new Viewport2D();   GVP = _viewport2D;
+	_controller  = new Controller();   GCN = _controller;
+	_viewport2D  = new Viewport2D();   GVP = _viewport2D;
+	_compManager = new CompManager();  GCM = _compManager;
+
+	NullNTT = new GameEntity( false, 0 ); // NOTE : Null Value Entity
+	NullCMP = new BaseComp( false ); //      NOTE : Null Value Component
 
 	ObjectContainer.clear();
 
@@ -180,6 +184,7 @@ void Engine::close()
 	OnGameClose(); // from game.hpp
 	setState( ES_CLOSED );
 
+	delete _compManager;  _compManager = nullptr;  GCM = nullptr;
 	delete _viewport2D;   _viewport2D = nullptr;   GVP = nullptr;
 	delete _controller;   _controller = nullptr;   GCN = nullptr;
 

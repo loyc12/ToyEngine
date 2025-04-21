@@ -1,6 +1,7 @@
 #ifndef LIBS_HPP
 # define LIBS_HPP
 
+#include <cstddef>
 # include <iostream>
 # include <iomanip>
 # include <sstream>
@@ -11,8 +12,8 @@
 # include <vector>
 # include <list>
 # include <map>
+# include <unordered_map>
 # include <iterator>
-
 # include <algorithm>
 
 # include <sys/types.h>
@@ -50,8 +51,11 @@ using std::array;
 using std::vector;
 using std::list;
 using std::map;
+using std::unordered_map;
 using std::pair;
 using std::iterator;
+
+using std::byte;
 
 // ================================ SHORTHAND
 

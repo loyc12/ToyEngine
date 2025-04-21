@@ -1,5 +1,5 @@
 #include <raylib.h>
-#include "../../incs/core.hpp"
+#include "../../../incs/core.hpp"
 
 // ================================ CORE METHODS
 

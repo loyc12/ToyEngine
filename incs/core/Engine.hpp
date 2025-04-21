@@ -4,8 +4,11 @@
 # include <raylib.h>
 # include "../base.hpp"
 # include "./objects/Object2D.hpp"
-# include "./parts/Viewport.hpp"
-# include "./parts/Controller.hpp"
+# include "./system/Viewport.hpp"
+# include "./system/Controller.hpp"
+# include "./system/CompManager.hpp"
+#include "component/BaseComp.hpp"
+#include "entity/GameEntity.hpp"
 
 # define MOVE_SPEED 128
 # define ZOOM_SPEED 16
@@ -36,8 +39,9 @@ class Engine
 		float   _DT; // delta time
 		float   _TS; // time scale
 
-		Viewport2D *_viewport2D;
-		Controller *_controller;
+		Viewport2D  *_viewport2D;
+		Controller  *_controller;
+		CompManager *_compManager;
 
 		objVect_t ObjectContainer;
 
@@ -104,6 +108,7 @@ class Engine
 		Camera2D   &getCamera();
 		Viewport2D *getViewport();
 
+		CompManager *getCompManager();
 		BaseObject *getObjectByID( objID_t id );
 
 		objID_t  getNewID();
@@ -123,11 +128,15 @@ class Engine
 // ==================== ENGINE SHORTCUTS
 // Shortcuts to the engine and its components
 
-extern Engine     *GNG;
-extern Viewport2D *GVP;
-extern Controller *GCN;
+extern Engine      *GNG;
+extern Viewport2D  *GVP;
+extern Controller  *GCN;
+extern CompManager *GCM;
 
 extern float    GDTS();
 extern inputs_s &GIN();
+
+extern GameEntity *NullNTT; // NOTE : Null Value Entity
+extern BaseComp	  *NullCMP; // NOTE : Null Value Component
 
 #endif // ENGINE_HPP

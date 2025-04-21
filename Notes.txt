@@ -3,6 +3,7 @@ Debug
 	- Fix object copying subcalls
 
 Style
+	- Implement a string wraper that autoconverts from other string-like types, to use in debug messages
 
 Refactor
 	- Use Precise ints : (u)intx_t, posint_t, etc
