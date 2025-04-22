@@ -1,3 +1,4 @@
+
 #ifndef COMP_MANAGER_TPP
 # define COMP_MANAGER_TPP
 

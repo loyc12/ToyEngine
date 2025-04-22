@@ -1,6 +1,3 @@
 # Suppress specific diagnostics
 Diagnostics:
-  Suppress: ["fe_expected_compiler_job"]
-
-# Set logging level
-Log: verbose
+  Suppress: ["fe_expected_compiler_job", "expected exactly one compiler job"]
