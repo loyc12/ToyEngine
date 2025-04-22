@@ -86,7 +86,7 @@ class CompManager
 
 		//TTC CompT &getNewComponentByType( NttID_t id, comp_e compType );
 
-	// ================ STATIC METHODS
+	// ================================ STATIC METHODS
 
 		// NOTE : these log errors if the check fails ( returns false )
 		static bool isValidID( NttID_t id ); //        NOTE : Checks if the ID is above the current ID use range ( _maxID )
@@ -94,7 +94,7 @@ class CompManager
 		static bool isValidNtt( GameEntity *Ntt ); //  NOTE : Checks if the entity is valid ( ID != 0 )
 		TTC static bool isValidComp( CompT *comp ); // NOTE : Checks if the component is valid ( ID != 0 )
 
-	// ================================ FACTORY METHODS
+	// ================ FACTORY METHODS
 		static GameEntity &GetNullEntity(); //  NOTE : returns a null entity ( ID = 0 )
 		static CompArr    &GetNullCompArr(); // NOTE : returns a null array of components ( all nullptr )
 		static BaseComp   &GetNullComp();   //  NOTE : returns a null BaseComponent ( innactive )
@@ -107,7 +107,7 @@ class CompManager
 		static GameEntity *NttFactory( NttID_t id ); //      NOTE : allocs new entity with given ID
 		static GameEntity *NttFactory( GameEntity *Ntt ); // NOTE : allocs + copies entity
 
-	// ================================ TICK METHODS
+	// ================================ UPDATE METHODS
 		void updateAllEntities(); //   NOTE : calls the onTick() method of all components in the map ( one entity at a time )
 		void updateAllComponents(); // NOTE : calls the onTick() method of all components in the map ( each component type at a time)
 
