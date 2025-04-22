@@ -1,13 +1,18 @@
 #include "../../../incs/core.hpp"
 #include "../../../incs/game.hpp"
 
+ECpair     &NullECPair  = CompManager::getNullECpair();
+GameEntity &NullNtt     = CompManager::getNullEntity();
+CompArr    &NullCompArr = CompManager::getNullCompArr();
+BaseComp   &NullComp    = CompManager::getNullComp();
+
 // ================================ CORE METHODS
 void CompManager::clearAllPairs() // TODO : TEST ME
 {
 	// NOTE : mutex this if we ever multithread onTick() calls
 	for( auto it = _NttMap.begin(); it != _NttMap.end(); ++it )
 	{
-		NCpair &pair = it->second;
+		ECpair &pair = it->second;
 		for ( byte_t i = 0; i < COMP_TYPE_COUNT; ++i )
 		{
 			if( pair.Comps[ i ] != nullptr )
@@ -24,11 +29,26 @@ void CompManager::clearAllPairs() // TODO : TEST ME
 
 // ================================ ACCESSORS / MUTATORS
 
+bool CompManager::isValidType( comp_e type ) const // NOTE : Checks if the type is valid ( 0 <= type < COMP_TYPE_COUNT )
+{
+	if( type == COMP_BASE_TYPE )
+	{
+		log( "Component type cannot be COMP_BASE_TYPE", ERROR );
+		return false;
+	}
+	if( type >= COMP_TYPE_COUNT )
+	{
+		log( "Component type is out of range", ERROR );
+		return false;
+	}
+	return true;
+}
+
 bool CompManager::isValidID( NttID_t id ) const // NOTE : Checks if the ID is above the current ID use range ( _maxID )
 {
 	if( id == 0 )
 	{
-		log( "Entity ID is 0", ERROR );
+		log( "Entity ID cannot be 0", ERROR );
 		return false;
 	}
 	if( id <= _maxID )
@@ -42,10 +62,10 @@ bool CompManager::isUsedID( NttID_t id ) const // NOTE : Checks if the ID is use
 {
 	if( id == 0 )
 	{
-		log( "Entity ID is 0", ERROR );
+		log( "Entity ID cannot be 0", ERROR );
 		return true;
 	}
-	if( !hasEntityByID( id ) )
+	if( !hasEntity( id ) )
 	{
 		log( "Entity does not exist in the map", ERROR );
 		return false;
@@ -56,10 +76,10 @@ bool CompManager::isFreeID( NttID_t id ) const // NOTE : Checks if the ID is unu
 {
 	if( id == 0 )
 	{
-		log( "Entity ID is 0", ERROR );
+		log( "Entity ID cannot be 0", ERROR );
 		return false;
 	}
-	if( hasEntityByID( id ) )
+	if( hasEntity( id ) )
 	{
 		log( "Entity already exists in the map", ERROR );
 		return false;
@@ -67,47 +87,35 @@ bool CompManager::isFreeID( NttID_t id ) const // NOTE : Checks if the ID is unu
 	return true;
 }
 
-// ================ ENTITY METHODS // TODO : TEST US
-
-GameEntity &CompManager::getNullEntity(){ return *NullNTT; }
+// ================ ENTITY METHODS
 
 NttID_t CompManager::getEntityCount(){ return _NttMap.size(); }
-bool CompManager::hasEntity( GameEntity &Ntt ) const { return hasEntityByID( Ntt.getID() );}
-bool CompManager::addEntity( GameEntity &Ntt )
+GameEntity CompManager::getEntity( NttID_t id )
 {
-	NttID_t id = Ntt.getID();
-	if ( isUsedID( id )){ return false; }
-
-	_NttMap[ id ] = { &Ntt, {} };
-	return true;
-}
-bool CompManager::delEntity( GameEntity &Ntt ){ return delEntityByID( Ntt.getID() ); }
-
-GameEntity &CompManager::getEntityByID( NttID_t id )
-{
-	if ( isFreeID( id )){ return *NullNTT; }
+	if( isFreeID( id )){ return NullNtt; } // NOTE : returns a null entity ( ID = 0 )
 	return *_NttMap.find( id )->second.Ntt;
 }
-bool CompManager::hasEntityByID( NttID_t id ) const
+
+bool CompManager::hasEntity( NttID_t id ) const
 {
-	if ( id == 0 ){ return false; }
+	if( id == 0 ){ return false; }
 	return _NttMap.find( id ) != _NttMap.end();
 }
-bool CompManager::addEntityByID( NttID_t id )
+bool CompManager::addEntity( NttID_t id )
 {
-	if ( isUsedID( id )){ return false; }
+	if( isUsedID( id )){ return false; }
 
 	GameEntity *Ntt = new GameEntity( false, id );
 	_NttMap[ id ] = { Ntt, {} };
 
-	if ( id >= _maxID ){ _maxID = id + 1; }
+	if( id >= _maxID ){ _maxID = id + 1; }
 	return true;
 }
-bool CompManager::delEntityByID( NttID_t id )
+bool CompManager::delEntity( NttID_t id )
 {
-	if ( isFreeID( id )){ return false; }
+	if( isFreeID( id )){ return false; }
 
-	NCpair &pair = _NttMap.find( id )->second;
+	ECpair &pair = _NttMap.find( id )->second;
 
 	for ( byte_t i = 0; i < COMP_TYPE_COUNT; ++i )
 	{
@@ -117,6 +125,8 @@ bool CompManager::delEntityByID( NttID_t id )
 			pair.Comps[ i ] = nullptr;
 		}
 	}
+
+	pair.Ntt->delID(); // NOTE: prevents the entity from trying to remove itself from the map ( aka infinite loop )
 	delete pair.Ntt;
 	pair.Ntt = nullptr;
 
@@ -124,112 +134,237 @@ bool CompManager::delEntityByID( NttID_t id )
 	return true;
 }
 
-// ================ COMPONENT METHODS (ID) // TODO : TEST US
+bool CompManager::hasThatEntity( GameEntity *Ntt ) const { return hasEntity( Ntt->getID() );}
+bool CompManager::addThatEntity( GameEntity *Ntt )
+{
+	NttID_t id = Ntt->getID();
+	if( isUsedID( id )){ return false; }
 
-BaseComp &CompManager::getNullComp(){    return *NullCMP; }
-CompArr  &CompManager::getNullCompArr(){ return  NullNTT->getCompArr(); }
+	_NttMap[ id ] = { Ntt, {} };
+	return true;
+}
+bool CompManager::delThatEntity( GameEntity *Ntt ){ return delEntity( Ntt->getID() ); }
+
+bool CompManager::cpyEntityOver( GameEntity &src, GameEntity &dst ){ return ( cpyEntityOver( src.getID(), dst.getID() )); }
+bool CompManager::cpyEntityOver( GameEntity &src, NttID_t     dst ){ return ( cpyEntityOver( src.getID(), dst )); }
+bool CompManager::cpyEntityOver( NttID_t     src, GameEntity &dst ){ return ( cpyEntityOver( src,         dst.getID() )); }
+bool CompManager::cpyEntityOver( NttID_t     src, NttID_t     dst )
+{
+	if( isFreeID( src )){ return false; }
+	if( isFreeID( dst )){ return false; }
+
+	ECpair &srcPair = _NttMap.find( src )->second;
+	ECpair &dstPair = _NttMap.find( dst )->second;
+
+	for ( byte_t i = 0; i < COMP_TYPE_COUNT; ++i )
+	{
+		if(   srcPair.Comps[ i ] == nullptr && dstPair.Comps[ i ] == nullptr ){ continue; }
+		elif( srcPair.Comps[ i ] != nullptr && dstPair.Comps[ i ] == nullptr )
+		{
+			dstPair.Comps[ i ] = new BaseComp(  *srcPair.Comps[ i ] ); // WIP NOTE : probably does not return the correct type
+		}
+		elif( srcPair.Comps[ i ] == nullptr && dstPair.Comps[ i ] != nullptr )
+		{
+			delete dstPair.Comps[ i ];
+			dstPair.Comps[ i ] = nullptr;
+		}
+		elif( srcPair.Comps[ i ] != nullptr && dstPair.Comps[ i ] != nullptr )
+		{
+			*dstPair.Comps[ i ] = *srcPair.Comps[ i ];
+		}
+	}
+	return true;
+}
+
+
+
+// ================ COMPONENT METHODS
 
 CompArr &CompManager::getNttCompArr( GameEntity &Ntt ){ return getNttCompArr( Ntt.getID() ); }
 CompArr &CompManager::getNttCompArr( NttID_t id )
 {
-	if ( isFreeID( id )){ return NullNTT->getCompArr(); }
+	if( isFreeID( id )){ return NullCompArr; } // NOTE : returns a null array of components ( all nullptr )
 	return _NttMap.find( id )->second.Comps;
 }
 
 CompC_t CompManager::getCompCount( NttID_t id ) const
 {
-	if ( isFreeID( id )){ return 0; }
+	if( isFreeID( id )){ return 0; }
 
 	const CompArr &comps = _NttMap.find( id )->second.Comps;
-	CompC_t count = 0;
 
-	for( byte_t i = 0; i < COMP_TYPE_COUNT; ++i ){ if( comps[ i ] != nullptr ){ count++; }}
+	CompC_t count = 0;
+	for( byte_t i = 0; i < COMP_TYPE_COUNT; ++i )
+	{
+		if( comps[ i ] != nullptr ){ count++; }
+	}
 	return count;
 }
-TTC bool CompManager::hasComponent( NttID_t id, CompT &component ) const
+TTC CompT &CompManager::getComponent( NttID_t id )
+{
+	if( isFreeID( id )){ return ( CompT )NullComp; } // NOTE : returns a null BaseComponent ( innactive )
+
+	comp_e compType = CompT::getType();
+	CompArr &comps = _NttMap.find( id )->second.Comps;
+
+	if( comps[ compType ] == nullptr )
+	{
+		log( "Component does not exist in the array", ERROR );
+		return NullComp;
+	}
+	return *comps[ compType ];
+}
+
+TTC CompT CompManager::cpyComponent( NttID_t id ) const
+{ // NOTE : overloading of const is fine, since we are only copying the componetn via its reference, and not modifying it
+	return const_cast<CompManager*>( this )->getComponent< CompT >( id );
+}
+
+TTC bool CompManager::hasThatComponent( NttID_t id, CompT *component ) const
+{
+	if( isFreeID( id )){ return false; }
+
+	comp_e compType = CompT::getType();
+	const CompArr &comps = _NttMap.find( id )->second.Comps;
+
+	if( comps[ compType ] != nullptr ) { return false; }
+
+	return ( component == comps[ compType ]); // NOTE : compares the component pointers
+}
+
+TTC bool CompManager::addThatComponent( NttID_t id, CompT *component )
+{
+	if( isFreeID( id )){ return false; }
+
+	comp_e compType = CompT::getType();
+	CompArr &comps = _NttMap.find( id )->second.Comps;
+
+	if( comps[ compType ] != nullptr )
+	{
+		log( "CompManager::addThatComponent() : Removing Previous Component", DEBUG );
+		delete comps[ compType ];
+	}
+
+	comps[ compType ] = *component;
+	return true;
+}
+
+TTC bool CompManager::delThatComponent( NttID_t id, CompT *component )
+{
+	if( isFreeID( id )){ return false; }
+
+	comp_e compType = CompT::getType();
+	CompArr &comps = _NttMap.find( id )->second.Comps;
+
+	if( comps[ compType ] == nullptr )
+	{
+		log( "CompManager::delThatComponent() : Component does not exist in the array", ERROR );
+		return false;
+	}
+
+	delete comps[ compType ];
+	comps[ compType ] = nullptr;
+
+	return true;
+}
+
+// ================ COMPONENT METHODS ( specific comps )
+
+TTC bool CompManager::hasComponent( NttID_t id ) const
 {
 	if( isFreeID( id )){ return false; }
 
 	const CompArr &comps = _NttMap.find( id )->second.Comps;
-	return ( comps[ component.getType() ] != nullptr );
+	return ( comps[ CompT::getType() ] != nullptr );
 }
-TTC bool CompManager::addComponent( NttID_t id, CompT &component )
-{
-	if( isUsedID( id )){ return false; }
 
-	CompArr &comps = _NttMap.find( id )->second.Comps;
-	if ( comps[ component.getType() ] != nullptr )
-	{
-		log( "Component already exists in the array", ERROR );
-		return false;
-	}
-
-	comps[ component.getType() ] = new CompT( component );
-	return true;
-}
-TTC bool CompManager::delComponent( NttID_t id, CompT &component )
+TTC bool CompManager::addComponent( NttID_t id )
 {
 	if( isFreeID( id )){ return false; }
 
 	CompArr &comps = _NttMap.find( id )->second.Comps;
-	if( comps[ component.getType() ] == nullptr )
+	if( comps[ CompT::getType() ] != nullptr )
 	{
-		log( "Component does not exist in the array", ERROR );
+		log( "CompManager::addComponent() : Component already exists in the array", ERROR );
 		return false;
 	}
 
-	delete comps[ component.getType() ];
-	comps[ component.getType() ] = nullptr;
+	comps[ CompT::getType() ] = new BaseComp();
 	return true;
 }
 
-// ================ COMPONENT METHODS (TYPE) // TODO : TEST US
-
-TTC CompT &CompManager::getComponentByType( NttID_t id, comp_e component_type )
+TTC bool CompManager::delComponent( NttID_t id )
 {
-	if ( isFreeID( id )){ return *NullCMP; }
+	if( isFreeID( id )){ return false; }
 
+	comp_e compType = CompT::getType();
 	CompArr &comps = _NttMap.find( id )->second.Comps;
-	if ( comps[ component_type ] == nullptr )
+	if( comps[ compType ] == nullptr )
 	{
-		log( "Component does not exist in the array", ERROR );
-		return *comps[ 0 ];
-	}
-	return *comps[ component_type ];
-}
-bool CompManager::hasComponentByType( NttID_t id, comp_e component_type ) const
-{
-	if ( isFreeID( id )){ return false; }
-
-	const CompArr &comps = _NttMap.find( id )->second.Comps;
-	return ( comps[ component_type ] != nullptr );
-}
-bool CompManager::addComponentByType( NttID_t id, comp_e component_type )
-{
-	if ( isFreeID( id )){ return false; }
-
-	CompArr &comps = _NttMap.find( id )->second.Comps;
-	if ( comps[ component_type ] != nullptr )
-	{
-		log( "Component already exists in the array", ERROR );
+		log( "CompManager::delComponent() : Component does not exist in the array", ERROR );
 		return false;
 	}
+	delete comps[ compType];
+	comps[ compType ] = nullptr;
 
-	comps[ component_type ] = new BaseComp();
 	return true;
 }
-bool CompManager::delComponentByType( NttID_t id, comp_e component_type )
+
+// ================================ STATIC METHODS
+
+GameEntity &CompManager::getNullEntity()
 {
-	if ( isFreeID( id )){ return false; }
+	static GameEntity val( false, 0 );
+	return val;
+}
+CompArr &CompManager::getNullCompArr()
+{
+	static CompArr val = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+	return val;
+}
+BaseComp &CompManager::getNullComp()
+{
+	static BaseComp val( false );
+	return val;
+}
+ECpair &CompManager::getNullECpair()
+{
+	static ECpair val = { nullptr, {} };
+	return val;
+}
 
-	CompArr &comps = _NttMap.find( id )->second.Comps;
-	if ( comps[ component_type ] == nullptr )
+// ================================ TICK METHODS
+
+void CompManager::updateAllEntities()
+{
+	for( auto it = _NttMap.begin(); it != _NttMap.end(); ++it )
 	{
-		log( "Component does not exist in the array", ERROR );
-		return false;
+		ECpair &pair = it->second;
+		for ( byte_t i = 0; i < COMP_TYPE_COUNT; ++i )
+		{
+			if( pair.Comps[ i ] != nullptr ){ pair.Comps[ i ]->onTick(); }
+		}
 	}
+}
 
-	delete comps[ component_type ];
-	comps[ component_type ] = nullptr;
-	return true;
+void CompManager::updateAllComponents()
+{
+	for ( byte_t i = 0; i < COMP_TYPE_COUNT; ++i )
+	{
+		for( auto it = _NttMap.begin(); it != _NttMap.end(); ++it )
+		{
+			ECpair &pair = it->second;
+			if( pair.Comps[ i ] != nullptr ){ pair.Comps[ i ]->onTick(); }
+		}
+	}
+}
+
+void CompManager::updateComponentByType( comp_e compType )
+{
+	if( !isValidType( compType) )
+	for( auto it = _NttMap.begin(); it != _NttMap.end(); ++it )
+	{
+		ECpair &pair = it->second;
+		if( pair.Comps[ compType ] != nullptr ){ pair.Comps[ compType ]->onTick(); }
+	}
 }

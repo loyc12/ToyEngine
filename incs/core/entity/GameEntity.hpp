@@ -13,32 +13,41 @@ class GameEntity
 {
 	private:
 	// ================================ ATTRIBUTES
-		NttID_t _id;
+		NttID_t _id; // NOTE : if the ID is 0, the entity is not supposed to be in CompManager's map
 
 	// ================================ CORE METHODS
 		// NOTE : mutex these is multithreading is implemented
-		bool addToManager(); //   NOTE : automatically adds this instance to the CompManager's map
-		bool delFromManager(); // NOTE : automatically removes this instance to the CompManager's map
+		bool addToManager(); //   NOTE : automatically adds this instance to CompManager's map
+		bool delFromManager(); // NOTE : automatically removes this instance to CompManager's map
 		void onCpy( const GameEntity &rhs );
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
-		inline GameEntity(){ addToManager(); }
-		inline GameEntity( bool addEntity, NttID_t id = 0) : _id( id ){ if( addEntity ) addToManager(); } // NOTE : should only be called by CompManager
-		inline GameEntity( const GameEntity &rhs ){ addToManager(); onCpy( rhs ); }
-		inline GameEntity &operator=( const GameEntity &rhs ) { onCpy( rhs ); return *this; }
-		inline ~GameEntity(){ delFromManager(); }
+		GameEntity();
+		GameEntity( bool addEntity, NttID_t id = 0); // NOTE : should only be called by CompManager
+		GameEntity( const GameEntity &rhs );
+		GameEntity &operator=( const GameEntity &rhs );
+		~GameEntity();
 
 	// ================================ ACCESSORS / MUTATORS
-		NttID_t   getID() const;
-		bool      setID( NttID_t id ); // NOTE : should only be called by CompManager
+		NttID_t getID() const;
+		bool    setID( NttID_t id ); // NOTE : should only be called by CompManager
+		bool    delID(); //             NOTE : should only be called by CompManager
 
-		CompC_t   getCompCount(); //                              redirects to CompManager method
-		bool      hasComponent( comp_e component_type ) const; // redirects to CompManager method
-		bool      addComponent( comp_e component_type ); //       redirects to CompManager method
-		bool      delComponent( comp_e component_type ); //       redirects to CompManager method
-		BaseComp &getComponent( comp_e component_type ); //       redirects to CompManager method
-		CompArr  &getCompArr(); //                                redirects to CompManager method
+		CompC_t  getCompCount(); // redirects to CompManager method
+		CompArr &getCompArr(); //   redirects to CompManager method
+
+		TTC CompT &getComponent(); // redirects to CompManager method
+		TTC CompT  cpyComponent(); // redirects to CompManager method
+
+		TTC bool hasComponent() const; // redirects to CompManager method
+		TTC bool addComponent(); //       redirects to CompManager method
+		TTC bool delComponent(); //       redirects to CompManager method
+
+		TTC bool hasThatComponent( CompT &component ) const; // redirects to CompManager method
+		TTC bool addThatComponent( CompT *component ); //       redirects to CompManager method
+		TTC bool delThatComponent( CompT &component ); //       redirects to CompManager method
+
 };
 typedef vector< GameEntity > NttVec;
 

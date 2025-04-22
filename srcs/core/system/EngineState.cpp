@@ -114,10 +114,7 @@ void Engine::init()
 	_viewport2D  = new Viewport2D();   GVP = _viewport2D;
 	_compManager = new CompManager();  GCM = _compManager;
 
-	NullNTT = new GameEntity( false, 0 ); // NOTE : Null Value Entity
-	NullCMP = new BaseComp( false ); //      NOTE : Null Value Component
-
-	ObjectContainer.clear();
+	ObjectContainer.clear(); // TODO : REMOVE ME
 
 	OnGameInit(); // from game.hpp
 
@@ -188,5 +185,5 @@ void Engine::close()
 	delete _viewport2D;   _viewport2D = nullptr;   GVP = nullptr;
 	delete _controller;   _controller = nullptr;   GCN = nullptr;
 
-	DelAllObjects();
+	DelAllObjects(); // TODO : REMOVE ME
 }

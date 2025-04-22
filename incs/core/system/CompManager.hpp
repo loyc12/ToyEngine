@@ -10,9 +10,9 @@ typedef struct
 {
 	GameEntity* Ntt;
 	CompArr     Comps;
-}             NCpair;
+}             ECpair;
 
-typedef std::unordered_map< NttID_t, NCpair > ECmap_t;
+typedef std::unordered_map< NttID_t, ECpair > ECmap_t;
 
 
 class CompManager
@@ -31,46 +31,63 @@ class CompManager
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		inline CompManager(){ _maxID = 0; };
-		inline ~CompManager(){ clearAllPairs(); }; // TODO : TEST ME
+		inline ~CompManager(){ clearAllPairs(); };
 
 	// ================================ ACCESSORS / MUTATORS
-		bool        isValidID( NttID_t id ) const;
-		bool        isUsedID(  NttID_t id ) const;
-		bool        isFreeID(  NttID_t id ) const;
+		bool isValidType( comp_e type ) const;
+		bool isValidID( NttID_t id ) const;
+		bool isUsedID(  NttID_t id ) const;
+		bool isFreeID(  NttID_t id ) const;
 
-	// ================ ENTITY METHODS // TODO : TEST US
-		GameEntity &getNullEntity();
-
+	// ================ ENTITY METHODS
 		NttID_t     getEntityCount();
-		bool        hasEntity( GameEntity &Ntt ) const;
-		bool        addEntity( GameEntity &Ntt );
-		bool        delEntity( GameEntity &Ntt );
+		GameEntity  getEntity( NttID_t id );
 
-		GameEntity &getEntityByID( NttID_t id );
-		bool        hasEntityByID( NttID_t id ) const;
-		bool        addEntityByID( NttID_t id );
-		bool        delEntityByID( NttID_t id );
+		bool hasEntity( NttID_t id ) const;
+		bool addEntity( NttID_t id ); // NOTE : should only be called by GameEntity's AddToManager()
+		bool delEntity( NttID_t id );
 
-		// ================ COMPONENT METHODS // TODO : TEST US
-		BaseComp &getNullComp();
-		CompArr  &getNullCompArr();
+		bool hasThatEntity( GameEntity *Ntt ) const;
+		bool addThatEntity( GameEntity *Ntt );
+		bool delThatEntity( GameEntity *Ntt );
 
+		bool cpyEntityOver( GameEntity &src, GameEntity &dst );
+		bool cpyEntityOver( GameEntity &src, NttID_t     dst );
+		bool cpyEntityOver( NttID_t     src, GameEntity &dst );
+		bool cpyEntityOver( NttID_t     src, NttID_t     dst );
+
+	// ================ COMPONENT METHODS
 		CompArr  &getNttCompArr( GameEntity &Ntt );
 		CompArr  &getNttCompArr( NttID_t id );
 
-		CompC_t     getCompCount( NttID_t id ) const;
-		TTC bool    hasComponent( NttID_t id, CompT &component ) const;
-		TTC bool    addComponent( NttID_t id, CompT &component );
-		TTC bool    delComponent( NttID_t id, CompT &component );
+		CompC_t    getCompCount( NttID_t id ) const;
+		TTC CompT &getComponent( NttID_t id );
+		TTC CompT  cpyComponent( NttID_t id ) const;
 
-		TTC CompT  &getComponentByType( NttID_t id, comp_e component_type );
-		bool        hasComponentByType( NttID_t id, comp_e component_type ) const;
-		bool        addComponentByType( NttID_t id, comp_e component_type );
-		bool        delComponentByType( NttID_t id, comp_e component_type );
+		TTC bool hasComponent( NttID_t id ) const;
+		TTC bool addComponent( NttID_t id );
+		TTC bool delComponent( NttID_t id );
+
+		TTC bool hasThatComponent( NttID_t id, CompT *component ) const;
+		TTC bool addThatComponent( NttID_t id, CompT *component );
+		TTC bool delThatComponent( NttID_t id, CompT *component );
+
+	// ================================ STATIC METHODS
+		static GameEntity &getNullEntity(); //  NOTE : returns a null entity ( ID = 0 )
+		static CompArr    &getNullCompArr(); // NOTE : returns a null array of components ( all nullptr )
+		static BaseComp   &getNullComp();   //  NOTE : returns a null BaseComponent ( innactive )
+		static ECpair     &getNullECpair(); //  NOTE : returns a null ECpair ( Ntt = nullptr, Comps = nullptr )
 
 	// ================================ TICK METHODS
-
+		void updateAllEntities(); //   calls the onTick() method of all components in the map ( one entity at a time )
+		void updateAllComponents(); // calls the onTick() method of all components in the map ( each component type at a time)
+		void updateComponentByType( comp_e compType ); // calls the onTick() method of all components of the given type in the map
 };
+
+extern ECpair			&NullECPair;
+extern GameEntity &NullNtt;
+extern CompArr    &NullCompArr;
+extern BaseComp   &NullComp;
 
 #endif // COMP_MANAGER_HPP
 

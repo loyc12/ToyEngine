@@ -114,6 +114,3 @@ CompManager *GCM = GNG->getCompManager();
 
 float    GDTS(){ return GNG->getDeltaTime(); }
 inputs_s &GIN(){ return GNG->getLatestInputs(); }
-
-GameEntity *NullNTT = nullptr; // NOTE : Null Value Entity
-BaseComp   *NullCMP = nullptr; //     NOTE : Null Value Component

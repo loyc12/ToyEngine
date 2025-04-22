@@ -43,7 +43,7 @@ class Engine
 		Controller  *_controller;
 		CompManager *_compManager;
 
-		objVect_t ObjectContainer;
+		objVect_t ObjectContainer; // TODO : REMOVE ME
 
 		engineState_e _state;
 		std::mutex mtx_state;
@@ -84,8 +84,7 @@ class Engine
 		Engine &operator=( const Engine &cpy ) = delete;
 
 	public:
-		Engine(); ~Engine();
-
+		Engine();     ~Engine();
 		static Engine *getEngine();
 
 	// ================================ OBJECTS METHODS
@@ -117,7 +116,7 @@ class Engine
 		engineState_e  getState();
 
 		float getDeltaTime() const; // multiplied by the time scale
-		void setTimeScale( float timeScale );
+		void  setTimeScale( float timeScale );
 
 	// ================================ MUTEXED ACCESSORS
 	private:
@@ -135,8 +134,5 @@ extern CompManager *GCM;
 
 extern float    GDTS();
 extern inputs_s &GIN();
-
-extern GameEntity *NullNTT; // NOTE : Null Value Entity
-extern BaseComp	  *NullCMP; // NOTE : Null Value Component
 
 #endif // ENGINE_HPP
