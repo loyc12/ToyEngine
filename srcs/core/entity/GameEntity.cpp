@@ -33,10 +33,10 @@ GameEntity::GameEntity()
 	log( "GameEntity::GameEntity()" );
 	addToManager();
 }
-GameEntity::GameEntity( bool addEntity, NttID_t id ) : _id( id ) // NOTE : should only be called by CompManager
+GameEntity::GameEntity( bool addEntityToManager, NttID_t id ) : _id( id ) // NOTE : should only be called by CompManager
 {
 	log( "GameEntity::GameEntity( bool, NttID_t )" );
-	if ( addEntity ){ addToManager(); }
+	if ( addEntityToManager ){ addToManager(); }
 }
 GameEntity::GameEntity( const GameEntity &rhs )
 {

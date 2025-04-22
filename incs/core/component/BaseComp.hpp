@@ -7,22 +7,25 @@
 typedef byte_t CompC_t;
 typedef enum : CompC_t
 {
-	COMP_POSITION = 0,
-	COMP_MOVEMENT,
-	COMP_COLLIDE,
+	COMP_SCRIPT = 0,
 	COMP_PHYSIC,
+	COMP_MOVEMENT,
+	COMP_POSITION,
+	COMP_COLLIDE,
 	COMP_RENDER,
-	COMP_SCRIPT,
 	COMP_TYPE_COUNT,
 	COMP_BASE_TYPE = 255, // NOTE : should never be used for actual Components
 
 } comp_e;
+
+typedef uint32_t NttID_t;
 
 // NOTE : Components, like Entities, are created and destroyed via the Component Manager
 class BaseComp
 {
 	protected:
 	// ================================ ATTRIBUTES
+		NttID_t _id; // NOTE : if the ID is 0, the component is not supposed to be in CompManager's map
 		bool _active; // NOTE : mutex this if we ever multithread onTick() calls
 
 		inline virtual void onAdd(){} //                                              NOTE : ovveride this in derived classes
@@ -34,11 +37,15 @@ class BaseComp
 		inline BaseComp( ){ _active = true; onAdd(); }
 		inline virtual ~BaseComp(){         onDel(); };
 
-		inline BaseComp( bool isActive ) : _active( isActive ){ onAdd(); }
-		inline BaseComp( const BaseComp &rhs ){   onAdd(); onCpy( rhs ); }
-		inline BaseComp &operator=( const BaseComp &rhs ){ onCpy( rhs ); return *this; }
+		inline BaseComp( bool isActive, NttID_t id = 0) : _id( id ), _active( isActive ){ onAdd(); }
+		inline BaseComp( const BaseComp &rhs ){ onAdd();   onCpy( rhs ); }
+		inline BaseComp &operator=( const BaseComp &rhs ){ onCpy( rhs );   return *this; }
 
 	// ================================ ACCESSORS / MUTATORS
+		inline NttID_t getID() const {      return _id; } //            NOTE : should only be called by CompManager
+		inline bool    setID( NttID_t id ){ _id = id; return true; } // NOTE : should only be called by CompManager
+		inline bool    delID() {            _id = 0;  return true; } // NOTE : should only be called by CompManager
+
 	  inline virtual comp_e getStaticType() const { return COMP_BASE_TYPE; } // NOTE : ovveride this in derived classes
 		inline comp_e         getType() const {       return getStaticType(); }
 
@@ -55,5 +62,7 @@ class BaseComp
 typedef array< BaseComp*, COMP_TYPE_COUNT > CompArr; // NOTE : Components should be stored
 
 # define TTC template <typename CompT> // NOTE : shorthand for template usage
+
+
 
 #endif // BASE_COMP_HPP

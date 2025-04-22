@@ -46,6 +46,12 @@ Viewport2D *Engine::getViewport()
 	return _viewport2D;
 }
 
+CompManager *Engine::getCompManager()
+{
+	log( "Engine::getCompManager()" );
+	return _compManager;
+}
+
 BaseObject *Engine::getObjectByID( objID_t id )
 {
 	log( "Engine::getObjectByID()" );

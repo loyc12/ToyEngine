@@ -34,14 +34,25 @@ class CompManager
 		inline ~CompManager(){ clearAllPairs(); };
 
 	// ================================ ACCESSORS / MUTATORS
-		bool isValidType( comp_e type ) const;
-		bool isValidID( NttID_t id ) const;
-		bool isUsedID(  NttID_t id ) const;
-		bool isFreeID(  NttID_t id ) const;
+		// NOTE : these log errors if the check fails ( returns false )
+		bool isValidID( NttID_t id ) const; // NOTE : Checks if the ID is above the current ID use range ( _maxID )
+		bool isUsedID(  NttID_t id ) const; // NOTE : Checks if the ID is used in the map
+		bool isFreeID(  NttID_t id ) const; // NOTE : Checks if the ID is unused in the map
+
+		bool isValidType( comp_e type ) const; // NOTE : Checks if the type is valid ( 0 <= type < COMP_TYPE_COUN
+
+		bool isValidNtt( GameEntity *Ntt ) const; // NOTE : Checks if the entity is valid ( ID != 0 )
+		bool isUsedNtt(  GameEntity *Ntt ) const; // NOTE : Checks if the entity is valid ( ID != 0 )
+		bool isFreeNtt(  GameEntity *Ntt ) const; // NOTE : Checks if the entity is valid ( ID != 0 )
+
+		TTC bool isValidComp( CompT *comp ) const; // NOTE : Checks if the component is valid ( ID != 0 )
+		TTC bool isFreeComp(  CompT *comp ) const; // NOTE : Checks if the component is valid ( ID != 0 )
+		TTC bool isUsedComp(  CompT *comp ) const; // NOTE : Checks if the component is valid ( ID != 0 )
+
 
 	// ================ ENTITY METHODS
-		NttID_t     getEntityCount();
-		GameEntity  getEntity( NttID_t id );
+		NttID_t    getEntityCount();
+		GameEntity getEntity( NttID_t id );
 
 		bool hasEntity( NttID_t id ) const;
 		bool addEntity( NttID_t id ); // NOTE : should only be called by GameEntity's AddToManager()
@@ -51,10 +62,15 @@ class CompManager
 		bool addThatEntity( GameEntity *Ntt );
 		bool delThatEntity( GameEntity *Ntt );
 
+		// NOTE : ( add if not there ) + copy entity and its components
 		bool cpyEntityOver( GameEntity &src, GameEntity &dst );
 		bool cpyEntityOver( GameEntity &src, NttID_t     dst );
 		bool cpyEntityOver( NttID_t     src, GameEntity &dst );
 		bool cpyEntityOver( NttID_t     src, NttID_t     dst );
+
+		// NOTE : add + copy entity and its components
+		bool dupEntity( GameEntity &src );
+		bool dupEntity( NttID_t src );
 
 	// ================ COMPONENT METHODS
 		CompArr  &getNttCompArr( GameEntity &Ntt );
@@ -72,17 +88,23 @@ class CompManager
 		TTC bool addThatComponent( NttID_t id, CompT *component );
 		TTC bool delThatComponent( NttID_t id, CompT *component );
 
+		//TTC CompT &getNewComponentByType( NttID_t id, comp_e compType );
+
 	// ================================ STATIC METHODS
 		static GameEntity &getNullEntity(); //  NOTE : returns a null entity ( ID = 0 )
 		static CompArr    &getNullCompArr(); // NOTE : returns a null array of components ( all nullptr )
 		static BaseComp   &getNullComp();   //  NOTE : returns a null BaseComponent ( innactive )
 		static ECpair     &getNullECpair(); //  NOTE : returns a null ECpair ( Ntt = nullptr, Comps = nullptr )
 
+		TTC static CompT  *dupComponent( CompT *component ); // NOTE : alloc + copy component
+
 	// ================================ TICK METHODS
 		void updateAllEntities(); //   calls the onTick() method of all components in the map ( one entity at a time )
 		void updateAllComponents(); // calls the onTick() method of all components in the map ( each component type at a time)
 		void updateComponentByType( comp_e compType ); // calls the onTick() method of all components of the given type in the map
 };
+
+
 
 extern ECpair			&NullECPair;
 extern GameEntity &NullNtt;

@@ -5,8 +5,6 @@
 # include "../component/BaseComp.hpp"
 # include "../../base.hpp"
 
-typedef uint32_t NttID_t;
-
 // NOTE : Entities, like Components, are created and destroyed via the CompManager
 // NOTE : However, creating an entity anywhere adds calls the apropriate CompManager functions and adds it to the map
 class GameEntity
@@ -24,7 +22,7 @@ class GameEntity
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		GameEntity();
-		GameEntity( bool addEntity, NttID_t id = 0); // NOTE : should only be called by CompManager
+		GameEntity( bool addEntityToManager, NttID_t id = 0); // NOTE : should only be called by CompManager
 		GameEntity( const GameEntity &rhs );
 		GameEntity &operator=( const GameEntity &rhs );
 		~GameEntity();
@@ -39,6 +37,7 @@ class GameEntity
 
 		TTC CompT &getComponent(); // redirects to CompManager method
 		TTC CompT  cpyComponent(); // redirects to CompManager method
+		TTC CompT *dupComponent(); // redirects to CompManager method
 
 		TTC bool hasComponent() const; // redirects to CompManager method
 		TTC bool addComponent(); //       redirects to CompManager method
