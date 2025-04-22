@@ -34,21 +34,17 @@ class CompManager
 		inline ~CompManager(){ clearAllPairs(); };
 
 	// ================================ ACCESSORS / MUTATORS
+
+	// ================ CHECK METHODS
 		// NOTE : these log errors if the check fails ( returns false )
-		bool isValidID( NttID_t id ) const; // NOTE : Checks if the ID is above the current ID use range ( _maxID )
-		bool isUsedID(  NttID_t id ) const; // NOTE : Checks if the ID is used in the map
-		bool isFreeID(  NttID_t id ) const; // NOTE : Checks if the ID is unused in the map
+		bool isUsedID( NttID_t id ) const; // NOTE : Checks if the ID is used in the map
+		bool isFreeID( NttID_t id ) const; // NOTE : Checks if the ID is unused in the map
 
-		bool isValidType( comp_e type ) const; // NOTE : Checks if the type is valid ( 0 <= type < COMP_TYPE_COUN
+		bool isUsedNtt( GameEntity *Ntt ) const; // NOTE : Checks if the entity is valid ( ID != 0 )
+		bool isFreeNtt( GameEntity *Ntt ) const; // NOTE : Checks if the entity is valid ( ID != 0 )
 
-		bool isValidNtt( GameEntity *Ntt ) const; // NOTE : Checks if the entity is valid ( ID != 0 )
-		bool isUsedNtt(  GameEntity *Ntt ) const; // NOTE : Checks if the entity is valid ( ID != 0 )
-		bool isFreeNtt(  GameEntity *Ntt ) const; // NOTE : Checks if the entity is valid ( ID != 0 )
-
-		TTC bool isValidComp( CompT *comp ) const; // NOTE : Checks if the component is valid ( ID != 0 )
-		TTC bool isFreeComp(  CompT *comp ) const; // NOTE : Checks if the component is valid ( ID != 0 )
-		TTC bool isUsedComp(  CompT *comp ) const; // NOTE : Checks if the component is valid ( ID != 0 )
-
+		TTC bool isFreeComp( CompT *comp ) const; // NOTE : Checks if the component is valid ( ID != 0 )
+		TTC bool isUsedComp( CompT *comp ) const; // NOTE : Checks if the component is valid ( ID != 0 )
 
 	// ================ ENTITY METHODS
 		NttID_t    getEntityCount();
@@ -90,18 +86,32 @@ class CompManager
 
 		//TTC CompT &getNewComponentByType( NttID_t id, comp_e compType );
 
-	// ================================ STATIC METHODS
-		static GameEntity &getNullEntity(); //  NOTE : returns a null entity ( ID = 0 )
-		static CompArr    &getNullCompArr(); // NOTE : returns a null array of components ( all nullptr )
-		static BaseComp   &getNullComp();   //  NOTE : returns a null BaseComponent ( innactive )
-		static ECpair     &getNullECpair(); //  NOTE : returns a null ECpair ( Ntt = nullptr, Comps = nullptr )
+	// ================ STATIC METHODS
 
-		TTC static CompT  *dupComponent( CompT *component ); // NOTE : alloc + copy component
+		// NOTE : these log errors if the check fails ( returns false )
+		static bool isValidID( NttID_t id ); //        NOTE : Checks if the ID is above the current ID use range ( _maxID )
+		static bool isValidType( comp_e type ); //     NOTE : Checks if the type is valid ( 0 <= type < COMP_TYPE_COUN
+		static bool isValidNtt( GameEntity *Ntt ); //  NOTE : Checks if the entity is valid ( ID != 0 )
+		TTC static bool isValidComp( CompT *comp ); // NOTE : Checks if the component is valid ( ID != 0 )
+
+	// ================================ FACTORY METHODS
+		static GameEntity &GetNullEntity(); //  NOTE : returns a null entity ( ID = 0 )
+		static CompArr    &GetNullCompArr(); // NOTE : returns a null array of components ( all nullptr )
+		static BaseComp   &GetNullComp();   //  NOTE : returns a null BaseComponent ( innactive )
+		static ECpair     &GetNullECpair(); //  NOTE : returns a null ECpair ( Ntt = nullptr, Comps = nullptr )
+
+		TTC static CompT  *CompFactory(); //                   NOTE : allocs new component
+		TTC static CompT  *CompFactory( CompT *component ); // NOTE : allocs + copies component
+
+		static GameEntity *NttFactory(); //                  NOTE : allocs new entity ( ID = 0 )
+		static GameEntity *NttFactory( NttID_t id ); //      NOTE : allocs new entity with given ID
+		static GameEntity *NttFactory( GameEntity *Ntt ); // NOTE : allocs + copies entity
 
 	// ================================ TICK METHODS
-		void updateAllEntities(); //   calls the onTick() method of all components in the map ( one entity at a time )
-		void updateAllComponents(); // calls the onTick() method of all components in the map ( each component type at a time)
-		void updateComponentByType( comp_e compType ); // calls the onTick() method of all components of the given type in the map
+		void updateAllEntities(); //   NOTE : calls the onTick() method of all components in the map ( one entity at a time )
+		void updateAllComponents(); // NOTE : calls the onTick() method of all components in the map ( each component type at a time)
+
+		void updateComponentByType( comp_e compType ); // NOTE : calls the onTick() method of all components of the given type in the map
 };
 
 

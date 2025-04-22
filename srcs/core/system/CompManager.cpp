@@ -1,12 +1,13 @@
 #include "../../../incs/core.hpp"
 #include "../../../incs/game.hpp"
 
-ECpair     &NullECPair  = CompManager::getNullECpair();
-GameEntity &NullNtt     = CompManager::getNullEntity();
-CompArr    &NullCompArr = CompManager::getNullCompArr();
-BaseComp   &NullComp    = CompManager::getNullComp();
+ECpair     &NullECPair  = CompManager::GetNullECpair();
+GameEntity &NullNtt     = CompManager::GetNullEntity();
+CompArr    &NullCompArr = CompManager::GetNullCompArr();
+BaseComp   &NullComp    = CompManager::GetNullComp();
 
 // ================================ CORE METHODS
+
 void CompManager::clearAllPairs() // TODO : TEST ME
 {
 	// NOTE : mutex this if we ever multithread onTick() calls
@@ -29,20 +30,8 @@ void CompManager::clearAllPairs() // TODO : TEST ME
 
 // ================================ ACCESSORS / MUTATORS
 
-bool CompManager::isValidID( NttID_t id ) const
-{
-	if( id == 0 )
-	{
-		log( "Entity ID cannot be 0", WARN );
-		return false;
-	}
-	if( id <= _maxID )
-	{
-		log( "Entity ID must be greater than curretn maxID", WARN );
-		return false;
-	}
-	return true;
-}
+// ================ CHECK METHODS
+
 bool CompManager::isUsedID( NttID_t id ) const
 {
 	if( id == 0 )
@@ -72,31 +61,6 @@ bool CompManager::isFreeID( NttID_t id ) const
 	return true;
 }
 
-
-bool CompManager::isValidType( comp_e type ) const
-{
-	if( type == COMP_BASE_TYPE )
-	{
-		log( "Component type cannot be COMP_BASE_TYPE", WARN );
-		return false;
-	}
-	if( type >= COMP_TYPE_COUNT )
-	{
-		log( "Component type is out of range", WARN );
-		return false;
-	}
-	return true;
-}
-
-bool CompManager::isValidNtt( GameEntity *Ntt ) const
-{
-	if( Ntt == nullptr )
-	{
-		log( "Entity is null", WARN );
-		return false;
-	}
-	return true;
-}
 bool CompManager::isUsedNtt( GameEntity *Ntt ) const
 {
 	if( Ntt == nullptr )
@@ -136,15 +100,6 @@ bool CompManager::isFreeNtt( GameEntity *Ntt ) const
 	return true;
 }
 
-TTC bool CompManager::isValidComp( CompT *comp ) const
-{
-	if( comp == nullptr )
-	{
-		log( "Component is null", WARN );
-		return false;
-	}
-	return true;
-}
 TTC bool CompManager::isFreeComp( CompT *comp ) const
 {
 	if( comp == nullptr )
@@ -202,8 +157,7 @@ bool CompManager::addEntity( NttID_t id )
 {
 	if( !isFreeID( id )){ return false; }
 
-	GameEntity *Ntt = new GameEntity( false, id );
-	_NttMap[ id ] = { Ntt, {} };
+	_NttMap[ id ] = { NttFactory( id ), {} };
 
 	if( id >= _maxID ){ _maxID = id + 1; }
 	return true;
@@ -272,7 +226,7 @@ bool CompManager::cpyEntityOver( NttID_t     src, NttID_t     dst )
 		{
 			if( dstPair.Comps[ i ] == nullptr )
 			{
-				dstPair.Comps[ i ] = dupComponent( srcPair.Comps[ i ] );
+				dstPair.Comps[ i ] = CompFactory( srcPair.Comps[ i ] );
 				if( dstPair.Comps[ i ] == nullptr )
 				{
 					log( "CompManager::cpyEntityOver() : Failed to allocate memory for new component", ERROR );
@@ -296,14 +250,13 @@ bool CompManager::dupEntity( NttID_t src )
 	ECpair &srcPair = _NttMap.find( src )->second;
 	NttID_t newID = getNewID();
 
-	GameEntity *Ntt = new GameEntity( false, newID );
-	_NttMap[ newID ] = { Ntt, {} };
+	_NttMap[ newID ] = { NttFactory( srcPair.Ntt ), {} };
 
 	for ( byte_t i = 0; i < COMP_TYPE_COUNT; ++i )
 	{
 		if( srcPair.Comps[ i ] != nullptr )
 		{
-			_NttMap[ newID ].Comps[ i ] = dupComponent( srcPair.Comps[ i ] );
+			_NttMap[ newID ].Comps[ i ] = CompFactory( srcPair.Comps[ i ] );
 			if( _NttMap[ newID ].Comps[ i ] == nullptr )
 			{
 				log( "CompManager::dupEntity() : Failed to allocate memory for new component", ERROR );
@@ -424,7 +377,7 @@ TTC bool CompManager::addComponent( NttID_t id )
 		return false;
 	}
 
-	comps[ CompT::getType() ] = new CompT( true, id );
+	comps[ CompT::getType() ] = CompFactory< CompT >( id );
 	return true;
 }
 
@@ -445,30 +398,90 @@ TTC bool CompManager::delComponent( NttID_t id )
 	return true;
 }
 
-// ================================ STATIC METHODS
+// =================== STATIC METHODS
 
-GameEntity &CompManager::getNullEntity()
+bool CompManager::isValidID( NttID_t id )
+{
+	if( id == 0 )
+	{
+		log( "Entity ID cannot be 0", WARN );
+		return false;
+	}
+	//if( id <= GCM->getMaxID() )
+	//{
+	//	log( "Entity ID must be greater than curretn maxID", WARN );
+	//	return false;
+	//}
+	return true;
+}
+bool CompManager::isValidType( comp_e type )
+{
+	if( type == COMP_BASE_TYPE )
+	{
+		log( "Component type cannot be COMP_BASE_TYPE", WARN );
+		return false;
+	}
+	if( type >= COMP_TYPE_COUNT )
+	{
+		log( "Component type is out of range", WARN );
+		return false;
+	}
+	return true;
+}
+bool CompManager::isValidNtt( GameEntity *Ntt )
+{
+	if( Ntt == nullptr )
+	{
+		log( "Entity is null", WARN );
+		return false;
+	}
+	return true;
+}
+TTC bool CompManager::isValidComp( CompT *comp )
+{
+	if( comp == nullptr )
+	{
+		log( "Component is null", WARN );
+		return false;
+	}
+	return true;
+}
+
+// ================================ FACTORY METHODS
+
+GameEntity &CompManager::GetNullEntity()
 {
 	static GameEntity val( false, 0 );
 	return val;
 }
-CompArr &CompManager::getNullCompArr()
+CompArr &CompManager::GetNullCompArr()
 {
 	static CompArr val = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 	return val;
 }
-BaseComp &CompManager::getNullComp()
+BaseComp &CompManager::GetNullComp()
 {
 	static BaseComp val( false );
 	return val;
 }
-ECpair &CompManager::getNullECpair()
+ECpair &CompManager::GetNullECpair()
 {
 	static ECpair val = { nullptr, {} };
 	return val;
 }
 
-TTC CompT *CompManager::dupComponent( CompT *component )
+TTC CompT *CompManager::CompFactory()
+{ // NOTE : alloc new component
+	CompT *newComp = new CompT( true, 0 );
+
+	if( newComp == nullptr )
+	{
+		log( "CompManager::CompFactory(1) : Failed to allocate memory for new component", ERROR );
+		return nullptr;
+	}
+	return newComp;
+}
+TTC CompT *CompManager::CompFactory( CompT *component )
 { // NOTE : alloc + copy component
 	if( component == nullptr ){ return nullptr; }
 
@@ -476,16 +489,55 @@ TTC CompT *CompManager::dupComponent( CompT *component )
 
 	if( newComp == nullptr )
 	{
-		log( "CompManager::dupComponent() : Failed to allocate memory for new component", ERROR );
+		log( "CompManager::CompFactory(2) : Failed to allocate memory for new component", ERROR );
 		return nullptr;
 	}
 	return newComp;
 }
 
+GameEntity *CompManager::NttFactory()
+{ // NOTE : alloc new entity ( ID = 0 )
+	GameEntity *newNtt = new GameEntity( false, 0 );
+
+	if( newNtt == nullptr )
+	{
+		log( "CompManager::NttFactory(1) : Failed to allocate memory for new entity", ERROR );
+		return nullptr;
+	}
+	return newNtt;
+}
+GameEntity *CompManager::NttFactory( NttID_t id )
+{ // NOTE : alloc new entity with given ID
+	if( !isValidID( id )){ return nullptr; }
+
+	GameEntity *newNtt = new GameEntity( false, id );
+
+	if( newNtt == nullptr )
+	{
+		log( "CompManager::NttFactory(2) : Failed to allocate memory for new entity", ERROR );
+		return nullptr;
+	}
+	return newNtt;
+}
+GameEntity *CompManager::NttFactory( GameEntity *Ntt )
+{ // NOTE : alloc + copy entity
+	if( Ntt == nullptr ){ return nullptr; }
+
+	GameEntity *newNtt = new GameEntity( *Ntt );
+
+	if( newNtt == nullptr )
+	{
+		log( "CompManager::NttFactory(3) : Failed to allocate memory for new entity", ERROR );
+		return nullptr;
+	}
+	return newNtt;
+}
+
 // ================================ TICK METHODS
 
 void CompManager::updateAllEntities()
-{
+{	// NOTE : calls the onTick() method of all components in the map ( one entity at a time )
+	// NOTE : mutex this if we ever multithread onTick() calls
 	for( auto it = _NttMap.begin(); it != _NttMap.end(); ++it )
 	{
 		ECpair &pair = it->second;
@@ -495,9 +547,9 @@ void CompManager::updateAllEntities()
 		}
 	}
 }
-
 void CompManager::updateAllComponents()
-{
+{	// NOTE : calls the onTick() method of all components in the map ( each component type at a time)
+	// NOTE : mutex this if we ever multithread onTick() calls
 	for ( byte_t i = 0; i < COMP_TYPE_COUNT; ++i )
 	{
 		for( auto it = _NttMap.begin(); it != _NttMap.end(); ++it )
@@ -509,7 +561,7 @@ void CompManager::updateAllComponents()
 }
 
 void CompManager::updateComponentByType( comp_e compType )
-{
+{	// NOTE : calls the onTick() method of all components of the given type in the map
 	if( !isValidType( compType) )
 	for( auto it = _NttMap.begin(); it != _NttMap.end(); ++it )
 	{
