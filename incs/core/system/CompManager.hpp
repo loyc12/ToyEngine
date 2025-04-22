@@ -97,7 +97,7 @@ class CompManager
 	// ================ FACTORY METHODS
 		static GameEntity &GetNullEntity(); //  NOTE : returns a null entity ( ID = 0 )
 		static CompArr    &GetNullCompArr(); // NOTE : returns a null array of components ( all nullptr )
-		static BaseComp   &GetNullComp();   //  NOTE : returns a null BaseComponent ( innactive )
+		TTC static CompT  &GetNullComp();   //  NOTE : returns a null BaseComponent ( innactive )
 		static ECpair     &GetNullECpair(); //  NOTE : returns a null ECpair ( Ntt = nullptr, Comps = nullptr )
 
 		TTC static CompT  *CompFactory(); //                   NOTE : allocs new component
@@ -114,12 +114,12 @@ class CompManager
 		void updateComponentByType( comp_e compType ); // NOTE : calls the onTick() method of all components of the given type in the map
 };
 
-
-
 extern ECpair			&NullECPair;
 extern GameEntity &NullNtt;
 extern CompArr    &NullCompArr;
 extern BaseComp   &NullComp;
+
+# include "./CompManager.tpp"
 
 #endif // COMP_MANAGER_HPP
 

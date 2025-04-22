@@ -4,7 +4,7 @@
 ECpair     &NullECPair  = CompManager::GetNullECpair();
 GameEntity &NullNtt     = CompManager::GetNullEntity();
 CompArr    &NullCompArr = CompManager::GetNullCompArr();
-BaseComp   &NullComp    = CompManager::GetNullComp();
+BaseComp   &NullComp    = CompManager::GetNullComp< BaseComp >();
 
 // ================================ CORE METHODS
 
@@ -104,11 +104,6 @@ GameEntity &CompManager::GetNullEntity()
 CompArr &CompManager::GetNullCompArr()
 {
 	static CompArr val = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
-	return val;
-}
-BaseComp &CompManager::GetNullComp()
-{
-	static BaseComp val( false );
 	return val;
 }
 ECpair &CompManager::GetNullECpair()
