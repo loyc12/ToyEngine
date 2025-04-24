@@ -119,7 +119,7 @@ extern GameEntity &NullNtt;
 extern CompArr    &NullCompArr;
 extern BaseComp   &NullComp;
 
-# include "./CompManager.tpp"
+# include "./CompManagerT.hpp"
 
 #endif // COMP_MANAGER_HPP
 

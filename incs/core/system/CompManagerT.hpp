@@ -2,7 +2,8 @@
 #ifndef COMP_MANAGER_TPP
 # define COMP_MANAGER_TPP
 
-# include "./CompManager.hpp"
+# pragma once
+#  include "./CompManager.hpp"
 
 // ================================ ACCESSORS / MUTATORS
 
