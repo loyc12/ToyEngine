@@ -21,11 +21,13 @@ class GameEntity
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
+		~GameEntity();
+
 		GameEntity();
 		GameEntity( bool addEntityToManager, NttID_t id = 0); // NOTE : should only be called by CompManager
+
 		GameEntity( const GameEntity &rhs );
 		GameEntity &operator=( const GameEntity &rhs );
-		~GameEntity();
 
 	// ================================ ACCESSORS / MUTATORS
 		NttID_t getID() const;

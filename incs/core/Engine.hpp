@@ -7,8 +7,10 @@
 # include "./system/Viewport.hpp"
 # include "./system/Controller.hpp"
 # include "./system/CompManager.hpp"
-#include "component/BaseComp.hpp"
+
 #include "entity/GameEntity.hpp"
+#include "component/BaseComp.hpp"
+#include "component/CompPos.hpp"
 
 # define MOVE_SPEED 128
 # define ZOOM_SPEED 16

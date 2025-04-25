@@ -5,13 +5,13 @@
 
 bool GameEntity::addToManager()
 {
-	log( "GameEntity::addToManager()" );
+	log( "GameEntity::addToManager()", DEBUG, _id );
 	GCM->addThatEntity( this );
 	return true;
 }
 bool GameEntity::delFromManager()
 {
-	log( "GameEntity::delFromManager()" );
+	log( "GameEntity::delFromManager()", DEBUG, _id );
 	if ( _id == 0 ){ return false; } // NOTE : if the ID is 0, the entity is not supposed to be in the map
 
 	GCM->delThatEntity( this ); // TODO : make sure this doesn't lead to an infinite loop
@@ -28,44 +28,45 @@ void GameEntity::onCpy( const GameEntity &rhs )
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
+GameEntity::~GameEntity()
+{
+	log( "GameEntity::~GameEntity()", DEBUG, _id );
+	delFromManager();
+}
+
 GameEntity::GameEntity()
 {
-	log( "GameEntity::GameEntity()" );
+	log( "GameEntity::GameEntity(1)", DEBUG);
 	addToManager();
 }
 GameEntity::GameEntity( bool addEntityToManager, NttID_t id ) : _id( id ) // NOTE : should only be called by CompManager
 {
-	log( "GameEntity::GameEntity( bool, NttID_t )" );
+	log( "GameEntity::GameEntity(2)", DEBUG, _id );
 	if ( addEntityToManager ){ addToManager(); }
 }
+
 GameEntity::GameEntity( const GameEntity &rhs )
 {
-	log( "GameEntity::GameEntity( const GameEntity & )" );
 	addToManager();
-	onCpy( rhs );
+	*this = rhs; // NOTE : calls the copy assignment operator
 }
 GameEntity &GameEntity::operator=( const GameEntity &rhs )
 {
-	log( "GameEntity::operator=( const GameEntity & )" );
+	log( "GameEntity::operator=()", DEBUG, _id );
 	onCpy( rhs );
 	return *this;
-}
-GameEntity::~GameEntity()
-{
-	log( "GameEntity::~GameEntity()", DEBUG );
-	delFromManager();
 }
 
 // ================================ ACCESSORS / MUTATORS
 
 NttID_t GameEntity::getID() const
 {
-	log( "GameEntity::getID()" );
+	log( "GameEntity::getID()", DEBUG, _id );
 	return _id;
 }
 bool GameEntity::setID( NttID_t id ) // NOTE : should only be called by CompManager
 {
-	log( "GameEntity::setID()" );
+	log( "GameEntity::setID()", DEBUG, _id );
 	if ( id == 0 ){ return false; }
 
 	_id = id;
@@ -74,7 +75,7 @@ bool GameEntity::setID( NttID_t id ) // NOTE : should only be called by CompMana
 
 bool GameEntity::delID() // NOTE : should only be called by CompManager
 {
-	log( "GameEntity::delID()" );
+	log( "GameEntity::delID()", DEBUG, _id );
 	if ( _id == 0 ){ return false; }
 
 	_id = 0;
@@ -85,55 +86,55 @@ bool GameEntity::delID() // NOTE : should only be called by CompManager
 
 CompC_t GameEntity::getCompCount()
 {
-	log( "GameEntity::getCompCount()" );
+	log( "GameEntity::getCompCount()", DEBUG, _id );
 	return GCM->getCompCount( _id );
 }
 CompArr &GameEntity::getCompArr()
 {
-	log( "GameEntity::getCompArr()" );
+	log( "GameEntity::getCompArr()", DEBUG, _id );
 	return GCM->getNttCompArr( _id );
 }
 
 TTC CompT &GameEntity::getComponent()
 {
-	log( "GameEntity::getComponent()" );
+	log( "GameEntity::getComponent()", DEBUG, _id );
 	return GCM->getComponent< CompT >( _id );
 }
 TTC CompT GameEntity::cpyComponent()
 {
-	log( "GameEntity::cpyComponent()" );
+	log( "GameEntity::cpyComponent()", DEBUG, _id );
 	return GCM->cpyComponent< CompT >( _id );
 }
 
 TTC bool GameEntity::hasComponent() const
 {
-	log( "GameEntity::hasComponent()" );
+	log( "GameEntity::hasComponent()", DEBUG, _id );
 	return GCM->hasComponent< CompT >( _id );
 }
 TTC bool GameEntity::addComponent()
 {
-	log( "GameEntity::addComponent()" );
+	log( "GameEntity::addComponent()", DEBUG, _id );
 	return GCM->addThatComponent( _id, this );
 }
 TTC bool GameEntity::delComponent()
 {
-	log( "GameEntity::delComponent()" );
+	log( "GameEntity::delComponent()", DEBUG, _id );
 	return GCM->delThatComponent( _id, this );
 }
 
 TTC bool GameEntity::hasThatComponent( CompT &component ) const
 {
-	log( "GameEntity::hasThatComponent()" );
+	log( "GameEntity::hasThatComponent()", DEBUG, _id );
 	return GCM->hasThatComponent< CompT >( _id, &component );
 }
 TTC bool GameEntity::addThatComponent( CompT *component )
 {
-	log( "GameEntity::addThatComponent()" );
+	log( "GameEntity::addThatComponent()", DEBUG, _id );
 	return GCM->addThatComponent< CompT >( _id, component );
 }
 TTC bool GameEntity::delThatComponent( CompT &component )
 {
-	log( "GameEntity::delThatComponent()" );
+	log( "GameEntity::delThatComponent()", DEBUG, _id );
 	return GCM->delThatComponent< CompT >( _id, &component );
 }
 

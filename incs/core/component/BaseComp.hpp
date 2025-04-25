@@ -25,7 +25,7 @@ class BaseComp
 {
 	protected:
 	// ================================ ATTRIBUTES
-		NttID_t _id; // NOTE : if the ID is 0, the component is not supposed to be in CompManager's map
+		NttID_t _id; //  NOTE : if the ID is 0, the component is not supposed to be in CompManager's map
 		bool _active; // NOTE : mutex this if we ever multithread onTick() calls
 
 		inline virtual void onAdd(){} //                                              NOTE : ovveride this in derived classes
@@ -34,17 +34,18 @@ class BaseComp
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
-		inline BaseComp( ){ _active = true; onAdd(); }
-		inline virtual ~BaseComp(){         onDel(); };
+		inline virtual ~BaseComp(){ onDel(); };
 
+		inline BaseComp() : _active( true ){ onAdd(); }
 		inline BaseComp( bool isActive, NttID_t id = 0) : _id( id ), _active( isActive ){ onAdd(); }
-		inline BaseComp( const BaseComp &rhs ){ onAdd();   onCpy( rhs ); }
-		inline BaseComp &operator=( const BaseComp &rhs ){ onCpy( rhs );   return *this; }
+
+		inline BaseComp( const BaseComp &rhs ){ *this = rhs; }
+		inline BaseComp &operator=( const BaseComp &rhs ){ onCpy( rhs ); return *this; }
 
 	// ================================ ACCESSORS / MUTATORS
-		inline NttID_t getID() const {      return _id; } //            NOTE : should only be called by CompManager
-		inline bool    setID( NttID_t id ){ _id = id; return true; } // NOTE : should only be called by CompManager
+		inline NttID_t getID() const { return _id; } //                 NOTE : should only be called by CompManager
 		inline bool    delID() {            _id = 0;  return true; } // NOTE : should only be called by CompManager
+		inline bool    setID( NttID_t id ){ _id = id; return true; } // NOTE : should only be called by CompManager
 
 	  inline virtual comp_e getStaticType() const { return COMP_BASE_TYPE; } // NOTE : ovveride this in derived classes
 		inline comp_e         getType() const {       return getStaticType(); }
@@ -56,7 +57,7 @@ class BaseComp
 	// NOTE : should return false if the component did not tick ( for example, if the "_active" flag is set to false )
 	// NOTE : use CRTP if onTick() becomes a performance bottleneck
 	// NOTE : should only be called by CompManager
-	inline virtual bool onTick(){ return false; }
+	inline virtual bool onTick(){ return _active; } // NOTE : ovveride this in derived classes
 };
 
 typedef array< BaseComp*, COMP_TYPE_COUNT > CompArr; // NOTE : Components should be stored

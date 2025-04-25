@@ -6,11 +6,11 @@
 # include "./base.hpp"
 # include "./core.hpp"
 
-# include "./game/gameGlobals.hpp"
 # include "./game/injector.hpp"
 
 // ====================== GAME SELECTOR
-# include "./game/game_1/gameTest.hpp"
+# include "./game/game_1/gameGlobals.hpp"
+
 
 // add here the game includes
 

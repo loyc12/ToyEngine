@@ -17,11 +17,8 @@ Refactor
 
 Performance
 
-
 General
 	- Use ScriptObject as an Entity Component System Interface
-	- Replace true with true & so on
-	- Implement a timescale engine var
 
 Nomenclature
 	- set( val )         : v0 = v

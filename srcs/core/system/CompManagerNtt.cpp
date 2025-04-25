@@ -99,8 +99,16 @@ bool CompManager::hasThatEntity( GameEntity *Ntt ) const
 }
 bool CompManager::addThatEntity( GameEntity *Ntt )
 {
-	if( !isFreeNtt( Ntt )){ return false; }
-	return addEntity( Ntt->getID() );
+	if( !isFreeNtt( Ntt ))
+	{
+		log( "CompManager::addThatEntity() : Entity already exists in the map", WARN );
+		return false;
+	}
+	Ntt->setID( getNewID() );
+	log( "CompManager::addThatEntity()", DEBUG, Ntt->getID() );
+
+	_NttMap[ Ntt->getID() ] = { Ntt, {} };
+	return true;
 }
 bool CompManager::delThatEntity( GameEntity *Ntt )
 {
