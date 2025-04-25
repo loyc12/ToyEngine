@@ -52,5 +52,7 @@ class GameEntity
 };
 typedef vector< GameEntity > NttVec;
 
+# include "./GameEntityT.hpp"
+
 #endif // GAME_ENTITY_HPP
 

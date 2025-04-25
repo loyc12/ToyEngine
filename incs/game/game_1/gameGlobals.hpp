@@ -25,4 +25,6 @@ inline Object2D *G_Polygon;
 
 inline Object2D *G_Player;
 
+inline GameEntity *G_Entity;
+
 #endif // GAME_GLOBALS_HPP

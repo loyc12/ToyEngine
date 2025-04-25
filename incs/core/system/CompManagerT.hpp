@@ -3,7 +3,7 @@
 # define COMP_MANAGER_TPP
 
 # pragma once
-#  include "./CompManager.hpp"
+# include "./CompManager.hpp"
 
 // ================================ ACCESSORS / MUTATORS
 
@@ -52,7 +52,7 @@ TTC bool CompManager::isUsedComp( CompT *comp ) const
 
 TTC CompT &CompManager::getComponent( NttID_t id )
 {
-	if( !isUsedID( id )){ return ( CompT )NullComp; } // NOTE : returns a null BaseComponent ( innactive )
+	if( !isUsedID( id )){ return NullComp; } // NOTE : returns a null BaseComponent ( innactive )
 
 	comp_e compType = CompT::getType();
 	CompArr &comps = _NttMap.find( id )->second.Comps;
@@ -186,6 +186,19 @@ TTC CompT *CompManager::CompFactory()
 	if( newComp == nullptr )
 	{
 		log( "CompManager::CompFactory(1) : Failed to allocate memory for new component", ERROR );
+		return nullptr;
+	}
+	return newComp;
+}
+TTC CompT *CompManager::CompFactory( NttID_t id )
+{ // NOTE : alloc new component with given ID
+	if( id == 0 ){ return nullptr; }
+
+	CompT *newComp = new CompT( true, id );
+
+	if( newComp == nullptr )
+	{
+		log( "CompManager::CompFactory(2) : Failed to allocate memory for new component", ERROR );
 		return nullptr;
 	}
 	return newComp;

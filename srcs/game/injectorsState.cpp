@@ -73,6 +73,10 @@ void OnGameStart()
 	G_Player->setShape( Shape2::Circle( { 0, 0 }, 12 ));
 	G_Player->setColor( GOLD );
 
+	G_Entity = new GameEntity;
+	G_Entity->addComponent< CompPos >();
+	G_Entity->getComponent< CompPos >().setPos({ 4, 2 });
+
 	log( "Created " + std::to_string( GNG->getObjectCount() ) + " objects", INFO );
 }
 void OnGameResume()

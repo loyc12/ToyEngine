@@ -13,7 +13,8 @@ class CompPos : public BaseComp
 	// ================================ CORE METHODS
 		inline virtual void onAdd() override {} // NOTE : No additional behavior for CompPos
 		inline virtual void onDel() override {} // NOTE : No additional behavior for CompPos
-		virtual void onCpy( const CompPos &rhs );
+		//virtual void onCpy( const BaseComp &rhs );
+		virtual void onCpy( const CompPos  &rhs );
 
 	public:
 	// ================================ CONSTRUCTORS / DESTRUCTORS
@@ -23,8 +24,11 @@ class CompPos : public BaseComp
 		CompPos( bool isActive, NttID_t id = 0 );
 		CompPos( bool isActive, NttID_t id = 0, Vector2 pos = { 0, 0 });
 
-		CompPos( const CompPos &rhs );
-		CompPos &operator=( const CompPos &rhs );
+		//CompPos( const BaseComp &rhs );
+		CompPos( const CompPos  &rhs );
+
+		//CompPos &operator=( const BaseComp &rhs );
+		CompPos &operator=( const CompPos  &rhs );
 
 	// ================================ ACCESSORS / MUTATORS
 		inline Vector2 getPos() const { return _pos; }
@@ -35,7 +39,7 @@ class CompPos : public BaseComp
 		inline void changePos( Vector2 pos ){ _pos.x += pos.x; _pos.y += pos.y; }
 		inline void changePos( float x, float y ){ _pos.x += x; _pos.y += y; }
 
-	  inline virtual comp_e getStaticType() const override { return COMP_POSITION; }
+		inline static comp_e getType(){ return COMP_POSITION; }
 
 	// ================================ TICK METHODS
 		inline virtual bool onTick() override { return _active; } // NOTE : No additional behavior for CompPos

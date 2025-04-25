@@ -2,9 +2,14 @@
 # define COMP_MANAGER_HPP
 
 # include <raylib.h>
-# include "../component/BaseComp.hpp"
-# include "../entity/GameEntity.hpp"
 # include "../../base.hpp"
+# include "../component/BaseComp.hpp"
+
+// ================================ FORWARD DECLARATIONS
+class GameEntity;
+typedef vector< GameEntity > NttVec;
+
+// =============================== CORE
 
 typedef struct
 {
@@ -101,6 +106,7 @@ class CompManager
 		static ECpair     &GetNullECpair(); //  NOTE : returns a null ECpair ( Ntt = nullptr, Comps = nullptr )
 
 		TTC static CompT  *CompFactory(); //                   NOTE : allocs new component
+		TTC static CompT  *CompFactory( NttID_t id ); //       NOTE : allocs new component with given ID
 		TTC static CompT  *CompFactory( CompT *component ); // NOTE : allocs + copies component
 
 		static GameEntity *NttFactory(); //                  NOTE : allocs new entity ( ID = 0 )

@@ -89,11 +89,16 @@ void OnRenderUI() // only called when the game is launched
 	string plInfo = "G_Player  : " + to_string( ( int )playerScreenPos.x ) + ":" + to_string( ( int )playerScreenPos.y ) + " | " + to_string( ( int )playerWorldPos.x ) + ":" + to_string( ( int )playerWorldPos.y );
 	log( plInfo, INFO );
 
+	Vector2 GameEntityWorldPos = G_Entity->getComponent< CompPos >().getPos();
+	string geInfo = "G_Entity : " + to_string( ( int )GameEntityWorldPos.x ) + ":" + to_string( ( int )GameEntityWorldPos.y );
+	log( geInfo, INFO );
+
 	int FontSizeUI = DEBUG_FONT_SIZE;
 
 	DrawText( moInfo.c_str(), FontSizeUI, ( 2.5f * FontSizeUI ), FontSizeUI, WHITE );
 	DrawText( caInfo.c_str(), FontSizeUI, ( 4.0f * FontSizeUI ), FontSizeUI, WHITE );
 	DrawText( plInfo.c_str(), FontSizeUI, ( 5.5f * FontSizeUI ), FontSizeUI, WHITE );
+	DrawText( geInfo.c_str(), FontSizeUI, ( 7.0f * FontSizeUI ), FontSizeUI, WHITE );
 
 	// DEBUG : drawing to each corner of the screen for debug purposes
 	DrawText( "TL", FontSizeUI,                               FontSizeUI,                               FontSizeUI, WHITE );

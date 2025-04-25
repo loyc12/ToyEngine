@@ -44,11 +44,10 @@ class BaseComp
 
 	// ================================ ACCESSORS / MUTATORS
 		inline NttID_t getID() const { return _id; } //                 NOTE : should only be called by CompManager
-		inline bool    delID() {            _id = 0;  return true; } // NOTE : should only be called by CompManager
+		inline bool    delID(){             _id = 0;  return true; } // NOTE : should only be called by CompManager
 		inline bool    setID( NttID_t id ){ _id = id; return true; } // NOTE : should only be called by CompManager
 
-	  inline virtual comp_e getStaticType() const { return COMP_BASE_TYPE; } // NOTE : ovveride this in derived classes
-		inline comp_e         getType() const {       return getStaticType(); }
+	  inline static comp_e getType(){ return COMP_BASE_TYPE; } //     NOTE : ovveride this in derived classes
 
 		inline bool isActive(){ return _active; }
 		inline bool isActive( bool activate ){ _active = activate; return _active; }
@@ -62,7 +61,17 @@ class BaseComp
 
 typedef array< BaseComp*, COMP_TYPE_COUNT > CompArr; // NOTE : Components should be stored
 
-# define TTC template <typename CompT> // NOTE : shorthand for template usage
+// ================================ TEMPLATES
+
+#include <concepts>
+#include <type_traits>
+
+// NOTE : this is a concept to check if a type is derived from BaseComp
+template <typename T>
+concept IsBaseComp = std::is_base_of<BaseComp, T>::value;
+
+// NOTE : this is shorthand to define a template that requires the type to be derived from BaseComp
+# define TTC template <typename CompT> requires IsBaseComp< CompT >
 
 
 
