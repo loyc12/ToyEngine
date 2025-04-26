@@ -14,7 +14,8 @@ bool GameEntity::delFromManager()
 	log( "GameEntity::delFromManager()", DEBUG, _id );
 	if ( _id == 0 ){ return false; } // NOTE : if the ID is 0, the entity is not supposed to be in the map
 
-	GCM->delThatEntity( this ); // TODO : make sure this doesn't lead to an infinite loop
+	GCM->rmvThatEntity( this ); // TODO : make sure this doesn't lead to an infinite loop
+	_id = 0;
 	return true;
 }
 void GameEntity::onCpy( const GameEntity &rhs )

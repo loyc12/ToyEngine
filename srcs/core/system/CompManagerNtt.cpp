@@ -67,6 +67,20 @@ bool CompManager::addEntity( NttID_t id )
 	if( id >= _maxID ){ _maxID = id + 1; }
 	return true;
 }
+bool CompManager::rmvEntity( NttID_t id )
+{
+	if( !isUsedID( id )){ return false; }
+
+	ECpair &pair = _NttMap.find( id )->second;
+
+	for ( byte_t i = 0; i < COMP_TYPE_COUNT; ++i )
+	{
+		if( pair.Comps[ i ] != nullptr ){ pair.Comps[ i ] = nullptr; }
+	}
+
+	pair.Ntt->delID();
+	return true;
+}
 bool CompManager::delEntity( NttID_t id )
 {
 	if( !isUsedID( id )){ return false; }
@@ -109,6 +123,11 @@ bool CompManager::addThatEntity( GameEntity *Ntt )
 
 	_NttMap[ Ntt->getID() ] = { Ntt, {} };
 	return true;
+}
+bool CompManager::rmvThatEntity( GameEntity *Ntt )
+{
+	if( !isUsedNtt( Ntt )){ return false; }
+	return rmvEntity( Ntt->getID() );
 }
 bool CompManager::delThatEntity( GameEntity *Ntt )
 {

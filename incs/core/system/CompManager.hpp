@@ -57,11 +57,13 @@ class CompManager
 
 		bool hasEntity( NttID_t id ) const;
 		bool addEntity( NttID_t id ); // NOTE : should only be called by GameEntity's AddToManager()
-		bool delEntity( NttID_t id );
+		bool rmvEntity( NttID_t id );
+		bool delEntity( NttID_t id ); // NOTE : also frees the memory of the entity
 
 		bool hasThatEntity( GameEntity *Ntt ) const;
 		bool addThatEntity( GameEntity *Ntt );
-		bool delThatEntity( GameEntity *Ntt );
+		bool rmvThatEntity( GameEntity *Ntt );
+		bool delThatEntity( GameEntity *Ntt ); // NOTE : also frees the memory of the entity
 
 		// NOTE : ( add if not there ) + copy entity and its components
 		bool cpyEntityOver( GameEntity &src, GameEntity &dst );
@@ -83,11 +85,13 @@ class CompManager
 
 		TTC bool hasComponent( NttID_t id ) const;
 		TTC bool addComponent( NttID_t id );
-		TTC bool delComponent( NttID_t id );
+		TTC bool rmvComponent( NttID_t id );
+		TTC bool delComponent( NttID_t id ); // NOTE : also frees the memory of the component
 
 		TTC bool hasThatComponent( NttID_t id, CompT *component ) const;
 		TTC bool addThatComponent( NttID_t id, CompT *component );
-		TTC bool delThatComponent( NttID_t id, CompT *component );
+		TTC bool rmvThatComponent( NttID_t id, CompT *component );
+		TTC bool delThatComponent( NttID_t id, CompT *component ); // NOTE : also frees the memory of the component
 
 		//TTC CompT &getNewComponentByType( NttID_t id, comp_e compType );
 
@@ -100,10 +104,10 @@ class CompManager
 		TTC static bool isValidComp( CompT *comp ); // NOTE : Checks if the component is valid ( ID != 0 )
 
 	// ================ FACTORY METHODS
+		static ECpair     &GetNullECpair(); //  NOTE : returns a null ECpair ( Ntt = nullptr, Comps = nullptr )
 		static GameEntity &GetNullEntity(); //  NOTE : returns a null entity ( ID = 0 )
 		static CompArr    &GetNullCompArr(); // NOTE : returns a null array of components ( all nullptr )
-		TTC static CompT  &GetNullComp();   //  NOTE : returns a null BaseComponent ( innactive )
-		static ECpair     &GetNullECpair(); //  NOTE : returns a null ECpair ( Ntt = nullptr, Comps = nullptr )
+		TTC static CompT  &GetNullComp();   //  NOTE : returns a null component of the specified type ( innactive )
 
 		TTC static CompT  *CompFactory(); //                   NOTE : allocs new component
 		TTC static CompT  *CompFactory( NttID_t id ); //       NOTE : allocs new component with given ID
@@ -123,7 +127,6 @@ class CompManager
 extern ECpair			&NullECPair;
 extern GameEntity &NullNtt;
 extern CompArr    &NullCompArr;
-extern BaseComp   &NullComp;
 
 # include "./CompManagerT.hpp"
 

@@ -21,7 +21,6 @@ class CompPos : public BaseComp
 		virtual ~CompPos();
 
 		CompPos();
-		CompPos( bool isActive, NttID_t id = 0 );
 		CompPos( bool isActive, NttID_t id = 0, Vector2 pos = { 0, 0 });
 
 		//CompPos( const BaseComp &rhs );

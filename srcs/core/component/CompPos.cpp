@@ -33,11 +33,6 @@ CompPos::CompPos() : BaseComp(), _pos({ 0, 0 })
 	log( "CompPos::CompPos(1)", DEBUG, _id );
 	onAdd();
 }
-CompPos::CompPos( bool isActive, NttID_t id ) : BaseComp( isActive, id ), _pos({ 0, 0 })
-{
-	log( "CompPos::CompPos(2)", DEBUG, _id );
-	onAdd();
-}
 CompPos::CompPos( bool isActive, NttID_t id, Vector2 pos ) : BaseComp( isActive, id ), _pos( pos )
 {
 	log( "CompPos::CompPos(3)", DEBUG, _id );
