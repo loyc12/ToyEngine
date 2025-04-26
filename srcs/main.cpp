@@ -14,19 +14,19 @@ void test_CompManager()
 
 	ent = GCM->getEntity( 2 );
 	ent.addComponent< CompPos >();
-	log( "Entity ID: " + std::to_string( ent.getID()), INFO );
+	qlog( "Entity ID: " + std::to_string( ent.getID()), INFO, 0 );
 
 	ent = GCM->getEntity( 1 );
 	CompPos pos = ent.getComponent< CompPos >();
-	log( "Entity ID: " + std::to_string( ent.getID()), INFO );
-	log( "Component ID: " + std::to_string( pos.getID()), INFO );
-	log( "Component Pos: " + std::to_string( pos.getPos().x ) + ", " + std::to_string( pos.getPos().y ), INFO );
+	qlog( "Entity ID: "     + std::to_string( ent.getID()), INFO, 0 );
+	qlog( "Component ID: "  + std::to_string( pos.getID()), INFO, 0 );
+	qlog( "Component Pos: " + std::to_string( pos.getPos().x ) + ", " + std::to_string( pos.getPos().y ), INFO, 0 );
 	ent.delComponent< CompPos >();
 	ent.addThatComponent( new CompPos( true, 1, { 2, 2 } ) );
 
 	pos = ent.getComponent< CompPos >();
-	log( "Component ID: " + std::to_string( pos.getID()), INFO );
-	log( "Component Pos: " + std::to_string( pos.getPos().x ) + ", " + std::to_string( pos.getPos().y ), INFO );
+	qlog( "Component ID: "  + std::to_string( pos.getID()), INFO, 0 );
+	qlog( "Component Pos: " + std::to_string( pos.getPos().x ) + ", " + std::to_string( pos.getPos().y ), INFO, 0 );
 
 	ent.delEntity();
 	ent = GCM->getEntity( 1 );
@@ -39,15 +39,16 @@ int main()
 {
 	flog( 0 );
 
-	GNG->switchState( ES_STARTED );
-	test_CompManager();
+	//GNG->switchState( ES_STARTED );
+	//test_CompManager();
 
-	//GNG->switchState( ES_RUNNING );
-	//GNG->launchLoop();
+	GNG->switchState( ES_RUNNING );
+
+	GNG->launchLoop();
 
 	GNG->switchState( ES_CLOSED );
 
 	delete GNG;   GNG = nullptr;
 
-	log( "Exiting main()", INFO );
+	qlog( "Exiting main()", INFO, 0 );
 }

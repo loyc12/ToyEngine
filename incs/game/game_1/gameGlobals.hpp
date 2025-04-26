@@ -5,7 +5,7 @@
 
 // ==================== GLOBAL VARIABLES
 // Gobal Variables not contained in the engine
-/*
+
 inline Object2D *G_Point;
 inline Object2D *G_Line;
 inline Object2D *G_Triangle;
@@ -24,6 +24,6 @@ inline Object2D *G_Dodecagon;
 inline Object2D *G_Polygon;
 
 inline Object2D *G_Player;
-*/
+
 
 #endif // GAME_GLOBALS_HPP

@@ -32,10 +32,10 @@ bool log( const char *msg, log_level_e lvl, objID_t id, const char *file, int li
 
 	static bool disregard_log_file = false;
 
-	if ( LOG_FILE && !disregard_log_file )
+	if ( !disregard_log_file && LOG_FILE )
 	{
 		static ofstream log_file;
-		if ( open_log_file( log_file ) == EXIT_FAILURE )
+		if ( !open_log_file( log_file ) )
 		{
 			disregard_log_file = true;
 			log( "Failed to open log file. Logging to console instead", ERROR );

@@ -15,7 +15,7 @@ void OnPhysicCall( PhysicObject *obj )
 	if ( obj == nullptr ){ return; }
 	flog( obj->getID() );
 
-	/*
+
 	//obj->changeAcceleration( { 0.0f, 0.1f } ); // DEBUG : gravity
 	if ( GIN().EQU ) { obj->moveAngle( 1.0f ); }  // DEBUG : rotation
 	if ( GIN().MIN ) { obj->moveAngle( -1.0f ); } // DEBUG : rotation
@@ -24,7 +24,7 @@ void OnPhysicCall( PhysicObject *obj )
 	if ( GIN().K2 ) { obj->movePosition( { 0.0f,  1.0f  } ); } // DEBUG : move down
 	if ( GIN().K4 ) { obj->movePosition( { -1.0f, 0.0f  } ); } // DEBUG : move left
 	if ( GIN().K6 ) { obj->movePosition( { 1.0f,  0.0f  } ); } // DEBUG : move right
-	*/
+
 }
 
 void OnScriptCall( ScriptObject *obj )

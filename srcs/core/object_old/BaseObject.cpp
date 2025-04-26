@@ -17,7 +17,9 @@ bool BaseObject::addToEngine()
 bool BaseObject::delFromEngine()
 {
 	flog( _id );
-	GNG->delObjectByID( _id );		_id = 0;
+	GNG->delObjectByID( _id );
+
+	_id = 0;
 
 	return true;
 }
@@ -41,14 +43,14 @@ void BaseObject::onDel() // inverted call order
 	// NOTE : if the object is being tracked, stop tracking it
 	if ( GVP != nullptr && GVP->isTracking() && GVP->getTrackedObject() == this )
 	{
-		log( "untracking object", DEBUG, _id );
+		qlog( "onDel : Untracking object", INFO, _id );
 		GVP->untrackObject();
 	}
 	if ( _id != 0 )
 	{
 		if ( !delFromEngine() )
 		{
-			log( "failed to delete object from engine", ERROR, _id );
+			qlog( "onDel : Failed to delete object from engine", ERROR, _id );
 			return;
 		}
 	}
@@ -82,10 +84,10 @@ BaseObject::~BaseObject(){ flog( _id ); BaseObject::onDel(); }
 
 // ================================ TICK METHODS
 
-void BaseObject::onShapeTick(){  log( "BaseObject : not implemented", WARN, _id, HERE ); }
-void BaseObject::onScriptTick(){ log( "BaseObject : not implemented", WARN, _id, HERE ); }
-void BaseObject::onPhysicTick(){ log( "BaseObject : not implemented", WARN, _id, HERE ); }
-void BaseObject::onRenderTick(){ log( "BaseObject : not implemented", WARN, _id, HERE ); }
+void BaseObject::onShapeTick(){  qlog( "BaseObject : function not implemented", WARN, _id ); }
+void BaseObject::onScriptTick(){ qlog( "BaseObject : function not implemented", WARN, _id ); }
+void BaseObject::onPhysicTick(){ qlog( "BaseObject : function not implemented", WARN, _id ); }
+void BaseObject::onRenderTick(){ qlog( "BaseObject : function not implemented", WARN, _id ); }
 
 // ================================ ACCESSORS
 

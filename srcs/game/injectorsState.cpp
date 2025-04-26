@@ -11,7 +11,7 @@ void OnGameInit()
 void OnGameStart()
 { // NOTE : this is a temporary solution, the engine should be able to load the game from a file
 	flog( 0 );
-	/*
+
 	G_Point = new Object2D;
 	G_Point->setShape( Shape2::Point({ 0, 0 }));
 	G_Point->setColor( WHITE );
@@ -69,8 +69,8 @@ void OnGameStart()
 	G_Player->setShape( Shape2::Circle( { 0, 0 }, 12 ));
 	G_Player->setColor( GOLD );
 
-	log( "Created " + std::to_string( GNG->getObjectCount() ) + " objects", INFO );
-	*/
+	qlog( "Created " + std::to_string( GNG->getObjectCount() ) + " objects", INFO, 0 );
+
 }
 void OnGameResume()
 {

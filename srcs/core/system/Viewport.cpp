@@ -75,11 +75,11 @@ void Viewport2D::setTarget( Vector2 target, bool overrideTracking )
 	{
 		if ( !overrideTracking )
 		{
-			log( "Already tracking an object", INFO );
-			log( "Use overrideTracking = true to override", INFO );
+			qlog( "setTarget : Already tracking an object", INFO, 0 );
+			qlog( "setTarget : Use overrideTracking = true to override", INFO, 0 );
 			return;
 		}
-		else { log( "Overriding tracking", INFO ); }
+		else { qlog( "setTarget : Overriding tracking", INFO, 0 ); }
 	}
 	_trackingObject = false;
 	_camera.target = target;
@@ -110,7 +110,7 @@ void Viewport2D::open()
 	flog( 0 );
 	if ( IsWindowReady() )
 	{
-		log( "Window already opened", INFO );
+		qlog( "open : Window already opened", WARN, 0 );
 		return;
 	}
 
@@ -126,7 +126,7 @@ void Viewport2D::close()
 	flog( 0 );
 	if ( !IsWindowReady() )
 	{
-		log( "Window already closed", INFO );
+		qlog( "close : Window already closed", WARN, 0 );
 		return;
 	}
 
@@ -192,8 +192,8 @@ bool Viewport2D::trackObject( ShapeObject *obj, bool overrideTracking )
 	flog( 0 );
 	if ( obj == nullptr )
 	{
-		log( "cannot track a nullptr", INFO );
-		log( "Use untrackObject() to stop tracking", DEBUG );
+		qlog( "trackObject : Cannot track a nullptr", INFO, 0 );
+		qlog( "trackObject : Use untrackObject() to stop tracking", DEBUG, 0 );
 		return false;
 	}
 
@@ -201,11 +201,11 @@ bool Viewport2D::trackObject( ShapeObject *obj, bool overrideTracking )
 	{
 		if ( !overrideTracking )
 		{
-			log( "Already tracking an object", INFO );
-			log( "Use overrideTracking = true to override", DEBUG );
+			qlog( "trackObject : Already tracking an object", WARN, 0 );
+			qlog( "trackObject : Use overrideTracking = true to override", INFO, 0 );
 			return false;
 		}
-		else { log( "Overriding tracking", INFO ); }
+		else { qlog( "trackObject : Overriding tracking", INFO, 0 ); }
 	}
 
 	_trackedObject  = obj;

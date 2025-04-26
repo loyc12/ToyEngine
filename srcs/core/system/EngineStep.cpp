@@ -10,7 +10,7 @@ bool Engine::launchLoop()
 	flog( 0 );
 	if ( getState() < ES_STARTED )
 	{
-		log( "Engine not yet started", ERROR );
+		qlog( "launchLoop : Engine not yet started", ERROR, 0 );
 		return false;
 	}
 
@@ -26,7 +26,7 @@ bool Engine::launchLoop()
 void Engine::runStep()
 {
 	flog( 0 );
-	if ( getState() < ES_STARTED ){ log( "Engine not started", ERROR ); return; }
+	if ( getState() < ES_STARTED ){ qlog( "runStep : Engine not started", ERROR, 0 ); return; }
 
 	_DT = GetFrameTime();
 

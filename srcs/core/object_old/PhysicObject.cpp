@@ -156,21 +156,21 @@ float PhysicObject::setMass( float mass )
 {
 	flog( getID() );
 	if ( mass > 0 ){ _mass = mass; }
-	else { mass = EPS; log( "PhysicObject::setMass() : mass cannot be negative : clamping to EPS", WARN ); }
+	else { mass = EPS; qlog( "setMass : Mass cannot be negative : clamping to EPS", WARN, getID() ); }
 	return mass;
 }
 float PhysicObject::setFriction( float friction )
 {
 	flog( getID() );
 	if ( friction >= 0 ){ _fric = friction; }
-	else { _fric = 0; log( "PhysicObject::setFriction() : friction cannot be negative : clamping to 0", WARN ); }
+	else { _fric = 0; qlog( "setFriction : Friction cannot be negative : clamping to 0", WARN, getID() ); }
 	return _fric;
 }
 float PhysicObject::setElasticity( float elasticity )
 {
 	flog( getID() );
 	if ( elasticity >= 0 ){ _elas = elasticity; }
-	else { _elas = 0; log( "PhysicObject::setElasticity() : elasticity cannot be negative : clamping to 0", WARN ); }
+	else { _elas = 0; qlog( "setElasticity : Elasticity cannot be negative : clamping to 0", WARN, getID() ); }
 	return _elas;
 }
 
@@ -179,8 +179,8 @@ float PhysicObject::setElasticity( float elasticity )
 Vector2 PhysicObject::moveVelocity( const Vector2 &delta ){ _vel.x += delta.x; _vel.y += delta.y; return _vel; }
 Vector2 PhysicObject::moveAcceleration( const Vector2 &delta ){ _acc.x += delta.x; _acc.y += delta.y; return _acc; }
 
-float PhysicObject::moveMass( float delta ){ return setMass( _mass + delta ); }
-float PhysicObject::moveFriction( float delta ){ return setFriction( _fric + delta ); }
+float PhysicObject::moveMass(       float delta ){ return setMass(       _mass + delta ); }
+float PhysicObject::moveFriction(   float delta ){ return setFriction(   _fric + delta ); }
 float PhysicObject::moveElasticity( float delta ){ return setElasticity( _elas + delta ); }
 
 Vector2 PhysicObject::applyForce( const Vector2 &force )

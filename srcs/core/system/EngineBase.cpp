@@ -35,7 +35,7 @@ Controller *Engine::getController(){     return _controller; }
 Camera2D   &Engine::getCamera(){         return _viewport2D->getCamera(); }
 Viewport2D *Engine::getViewport(){       return _viewport2D; }
 
-CompManager *Engine::getCompManager(){    return _compManager; }
+CompManager *Engine::getCompManager(){   return _compManager; }
 
 BaseObject *Engine::getObjectByID( objID_t id )
 {
@@ -45,12 +45,12 @@ BaseObject *Engine::getObjectByID( objID_t id )
 	{
 		if ( (*it)->getID() == id )
 		{
-			log( "Found requested object" );
+			qlog( "getObjectByID : Found requested object", DEBUG, id );
 			return *it;
 		}
 	}
 
-	log( "Failed to find requested object", WARN );
+	qlog( "getObjectByID : Failed to find requested object", WARN, id );
 	return nullptr;
 }
 
@@ -72,7 +72,7 @@ void  Engine::setTimeScale( float timeScale )
 	flog( 0 );
 	if ( timeScale < 0 )
 	{
-		log( "Time scale cannot be negative", WARN );
+		qlog( "setTimeScale : Time scale cannot be negative", WARN, 0 );
 		_TS = 0;
 		return;
 	}

@@ -9,7 +9,7 @@ BaseObject *Engine::addObject( BaseObject *obj, bool checkForDupID ) // NOTE : f
 	flog( 0 );
 	if ( obj == nullptr )
 	{
-		log( "Object cannot be a nullptr", WARN );
+		qlog( "addObject : Object cannot be a nullptr", WARN, 0 );
 		return nullptr;
 	}
 
@@ -19,13 +19,13 @@ BaseObject *Engine::addObject( BaseObject *obj, bool checkForDupID ) // NOTE : f
 		{
 			if ( *it == obj  )
 			{
-				log( "Object already in container", WARN );
+				qlog( "addObject : Object already in container", WARN, obj->getID() );
 				return nullptr;
 			}
 		}
 	}
 
-	log( "Adding object");
+	qlog( "addObject : Adding object", DEBUG, obj->getID() );
 	ObjectContainer.push_back( obj );
 
 	return obj;
@@ -36,7 +36,7 @@ bool Engine::delObject( BaseObject *obj )
 	flog( 0 );
 	if ( obj == nullptr )
 	{
-		log( "Object cannot be a nullptr", WARN );
+		qlog( "delObject : Object cannot be a nullptr", WARN, 0 );
 		return false;
 	}
 
@@ -44,13 +44,13 @@ bool Engine::delObject( BaseObject *obj )
 	{
 		if ( *it == obj )
 		{
-			log( "Deleting object" );
+			qlog( "delObject : Deleting object", DEBUG, obj->getID() );
 			ObjectContainer.erase( it );
 			return true;
 		}
 	}
 
-	log( "Failed to find requested object", WARN );
+	qlog( "delObject : Failed to find requested object", WARN, obj->getID() );
 	return false;
 }
 
@@ -61,13 +61,13 @@ bool Engine::delObjectByID( objID_t id )
 	{
 		if ( (*it)->getID() == id )
 		{
-			log( "Deleting object" );
+			qlog( "delObjectByID : Deleting object", DEBUG, id );
 			ObjectContainer.erase( it );
 			return true;
 		}
 	}
 
-	log( "Failed to find requested object", WARN );
+	qlog( "delObjectByID : Failed to find requested object", WARN, id );
 	return false;
 }
 
@@ -76,7 +76,7 @@ void Engine::DelAllObjects()
 	flog( 0 );
 	if ( ObjectContainer.empty() )
 	{
-		log( "ObjectContainer already empty", WARN );
+		qlog( "DelAllObjects : ObjectContainer already empty", INFO, 0 );
 		return;
 	}
 
@@ -84,12 +84,12 @@ void Engine::DelAllObjects()
 	{
 		if ( ObjectContainer[ 0 ] == nullptr )
 		{
-			log( "Removing nullptr object", WARN );
+			qlog( "DelAllObjects : Removing nullptr object", WARN, 0 );
 			ObjectContainer.erase( ObjectContainer.begin() ); // NOTE : this should not happen with proper runtime memory managment
 		}
 		else { delete ObjectContainer[ 0 ]; } // NOTE : the object destructor will call delFromEngine() which will remove the object from the container
 	}
 	ObjectContainer.clear();
 
-	log( "Deleted all objects" );
+	qlog( "DelAllObjects : Deleted all objects", INFO, 0 );
 }

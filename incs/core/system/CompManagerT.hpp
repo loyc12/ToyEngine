@@ -14,17 +14,17 @@ TTC bool CompManager::isFreeComp( CompT *comp ) const
 	flog( 0 );
 	if( comp == nullptr )
 	{
-		log( "Component is null", WARN );
+		qlog( "isFreeComp : Component is null", DEBUG, 0 );
 		return false;
 	}
 	if( comp->getID() == 0 )
 	{
-		log( "Component ID cannot be 0", WARN );
+		qlog( "isFreeComp : Component ID cannot be 0", WARN, 0 );
 		return false;
 	}
 	if( hasThatComponent( comp->getID(), comp ))
 	{
-		log( "Component already exists in the map", WARN );
+		qlog( "isFreeComp : Component already exists in the map", DEBUG, 0 );
 		return false;
 	}
 	return true;
@@ -34,17 +34,17 @@ TTC bool CompManager::isUsedComp( CompT *comp ) const
 	flog( 0 );
 	if( comp == nullptr )
 	{
-		log( "Component is null", WARN );
+		qlog( "isUsedComp : Component is null", DEBUG, 0 );
 		return false;
 	}
 	if( comp->getID() == 0 )
 	{
-		log( "Component ID cannot be 0", WARN );
+		qlog( "isUsedComp : Component ID cannot be 0", WARN, 0 );
 		return false;
 	}
 	if( !hasThatComponent( comp->getID(), comp ))
 	{
-		log( "Component does not exist in the map", WARN );
+		qlog( "isUsedComp : Component does not exist in the map", DEBUG, 0 );
 		return false;
 	}
 	return true;
@@ -62,7 +62,7 @@ TTC CompT &CompManager::getComponent( NttID_t id )
 
 	if( comps[ compType ] == nullptr )
 	{
-		log( "Component does not exist in the array", ERROR );
+		qlog( "getComponent : Component does not exist in the array", WARN, 0 );
 		return GetNullComp< CompT >();
 	}
 	return ( CompT& )*comps[ compType ];
@@ -89,7 +89,7 @@ TTC bool CompManager::addComponent( NttID_t id )
 	CompArr &comps = _NttMap.find( id )->second.Comps;
 	if( comps[ CompT::getType() ] != nullptr )
 	{
-		log( "Component already exists in the array", ERROR );
+		qlog( "addComponent : Component already exists in the array", WARN, 0 );
 		return false;
 	}
 
@@ -106,7 +106,7 @@ TTC bool CompManager::rmvComponent( NttID_t id )
 
 	if( comps[ compType ] == nullptr )
 	{
-		log( "Component does not exist in the array", WARN );
+		qlog( "rmvComponent : Component does not exist in the array", WARN, 0 );
 		return false;
 	}
 	comps[ compType ] = nullptr;
@@ -122,7 +122,7 @@ TTC bool CompManager::delComponent( NttID_t id )
 	CompArr &comps = _NttMap.find( id )->second.Comps;
 	if( comps[ compType ] == nullptr )
 	{
-		log( "Component does not exist in the array", ERROR );
+		qlog( "delComponent : Component does not exist in the array", WARN, 0 );
 		return false;
 	}
 	delete comps[ compType ];
@@ -155,7 +155,7 @@ TTC bool CompManager::addThatComponent( NttID_t id, CompT *component )
 
 	if( comps[ compType ] != nullptr )
 	{
-		log( "Removing Previous Component", INFO );
+		qlog( "addThatComponent : Removing Previous Component", DEBUG, 0 );
 		delete comps[ compType ];
 	}
 
@@ -172,7 +172,7 @@ TTC bool CompManager::rmvThatComponent( NttID_t id, CompT *component )
 
 	if( comps[ compType ] == nullptr )
 	{
-		log( "Component does not exist in the array", WARN );
+		qlog( "rmvThatComponent : Component does not exist in the array", WARN, 0 );
 		return false;
 	}
 
@@ -190,7 +190,7 @@ TTC bool CompManager::delThatComponent( NttID_t id, CompT *component )
 
 	if( comps[ compType ] == nullptr )
 	{
-		log( "Component does not exist in the array", ERROR );
+		qlog( "delThatComponent : Component does not exist in the array", WARN, 0 );
 		return false;
 	}
 
@@ -207,7 +207,7 @@ TTC bool CompManager::isValidComp( CompT *comp )
 	flog( 0 );
 	if( comp == nullptr )
 	{
-		log( "Component is null", WARN );
+		qlog( "isValidComp : Component is null", WARN, 0 );
 		return false;
 	}
 	return true;
@@ -229,7 +229,7 @@ TTC CompT *CompManager::CompFactory()
 
 	if( newComp == nullptr )
 	{
-		log( "Failed to allocate memory for new component", ERROR );
+		qlog( "CompFactory : Failed to allocate memory for new component", ERROR , 0);
 		return nullptr;
 	}
 	return newComp;
@@ -243,7 +243,7 @@ TTC CompT *CompManager::CompFactory( NttID_t id )
 
 	if( newComp == nullptr )
 	{
-		log( "Failed to allocate memory for new component", ERROR );
+		qlog( "CompFactory : Failed to allocate memory for new component", ERROR, 0 );
 		return nullptr;
 	}
 	return newComp;
@@ -257,7 +257,7 @@ TTC CompT *CompManager::CompFactory( CompT *component )
 
 	if( newComp == nullptr )
 	{
-		log( "Failed to allocate memory for new component", ERROR );
+		qlog( "CompFactory : Failed to allocate memory for new component", ERROR, 0 );
 		return nullptr;
 	}
 	return newComp;
