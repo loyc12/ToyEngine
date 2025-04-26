@@ -21,9 +21,9 @@ bool open_log_file( ofstream &log_file ) // orivate function
 	return true;
 }
 
-bool log( ostrs msg,       log_level_e lvl, objID_t id ){ return log( msg.str().c_str(), lvl, id ); }
-bool log( string msg,      log_level_e lvl, objID_t id ){ return log( msg.c_str(), lvl, id ); }
-bool log( const char *msg, log_level_e lvl, objID_t id )
+bool log( ostrs msg,       log_level_e lvl, objID_t id, const char *file, int line ) { return log( msg.str().c_str(), lvl, id, file, line ); }
+bool log( string msg,      log_level_e lvl, objID_t id, const char *file, int line ) { return log( msg.c_str(), lvl, id, file, line ); }
+bool log( const char *msg, log_level_e lvl, objID_t id, const char *file, int line )
 {
 	if ( lvl > LOG_LVL )           return true;
 	if ( !SHOW_OBJ_MSG && id > 0 ) return true;
@@ -55,6 +55,8 @@ bool log( const char *msg, log_level_e lvl, objID_t id )
 		case ERROR: *log_out << ( use_clr ? CLR_RED : "" ) << "[ERROR] " << ( use_clr ? CLR_RST : "" ) << msg; break;
 		default:    *log_out << ( use_clr ? CLR_MAG : "" ) << "[?????] " << ( use_clr ? CLR_RST : "" ) << msg; break;
 	}
+
+	if ( LOG_LINE && file != nullptr ) *log_out << " [" << file << ":" << line << "]";
 
 	if ( id > 0 ) *log_out << ( use_clr ? CLR_LGR : "" ) << " [" << id << "]" << ( use_clr ? CLR_RST : "" );
 

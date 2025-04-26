@@ -5,19 +5,19 @@
 
 void ScriptObject::onAdd()
 {
-	log( "ScriptObject::onAdd()", DEBUG, getID() );
+	flog( getID() );
 	_isActive = true;
 }
 
 void ScriptObject::onCpy( const ScriptObject &obj )
 {
-	log( "ScriptObject::onCpy()", DEBUG, getID() );
+	flog( getID() );
 	_isActive = obj.getIsActive();
 }
 
 void ScriptObject::onDel()
 {
-	log( "ScriptObject::onDel()", DEBUG, getID() );
+	flog( getID() );
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
@@ -28,6 +28,7 @@ ScriptObject::ScriptObject() :
 	RenderObject(),
 	PhysicObject()
 {
+	flog( getID() );
 	ScriptObject::onAdd();
 }
 
@@ -37,6 +38,7 @@ ScriptObject::ScriptObject( const ScriptObject &obj ) :
 	RenderObject( obj ),
 	PhysicObject( obj )
 {
+	flog( getID() );
 	if ( this == &obj ) return;
 
 	ScriptObject::onAdd();
@@ -45,6 +47,7 @@ ScriptObject::ScriptObject( const ScriptObject &obj ) :
 
 ScriptObject &ScriptObject::operator=( const ScriptObject &obj )
 {
+	flog( getID() );
 	if ( this == &obj ) return *this;
 
 	BaseObject::onCpy( obj );
@@ -59,6 +62,7 @@ ScriptObject &ScriptObject::operator=( const ScriptObject &obj )
 
 ScriptObject::~ScriptObject() // automatic inverted call order
 {
+	flog( getID() );
 	ScriptObject::onDel();
 	// PhysicObject::onDel();
 	// RenderObject::onDel();
@@ -77,8 +81,8 @@ void ScriptObject::setIsActive( bool isActive ){ _isActive = isActive; }
 
 void ScriptObject::onScriptTick()	// runs the object's scripts
 {
+	flog( getID() );
 	if ( !_isActive ) return;
-	log( "ScriptObject::onScriptTick()", DEBUG, getID() );
 
 	OnScriptCall( this ); // DEBUG ?
 }

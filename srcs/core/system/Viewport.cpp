@@ -5,13 +5,12 @@
 
 void Viewport2D::init()
 {
-	log( "Viewport2D::init()" );
-
+	flog( 0 );
 	_targetFPS = WINDOW_DEFAULT_FPS;
 
-	_windowSize     = {SCREEN_DEFAULT_WIDTH, SCREEN_DEFAULT_HEIGHT};
-	_mousePos       = {0, 0};
-	_mouseWorldPos  = {0, 0};
+	_windowSize     = { SCREEN_DEFAULT_WIDTH, SCREEN_DEFAULT_HEIGHT };
+	_mousePos       = { 0, 0 };
+	_mouseWorldPos  = { 0, 0 };
 
 	_camera.target   = { 0.0f, 0.0f };
 	_camera.zoom     = DEFAULT_ZOOM;
@@ -25,13 +24,13 @@ void Viewport2D::init()
 
 Viewport2D::Viewport2D()
 {
-	log( "Viewport2D::Viewport2D()" );
+	flog( 0 );
 	init();
 }
 
 Viewport2D::~Viewport2D()
 {
-	log( "Viewport2D::~Viewport2D()" );
+	flog( 0 );
 	close();
 }
 
@@ -71,23 +70,24 @@ void Viewport2D::moveTarget( Vector2 offset )
 }
 void Viewport2D::setTarget( Vector2 target, bool overrideTracking )
 {
+	flog( 0 );
 	if ( _trackingObject )
 	{
 		if ( !overrideTracking )
 		{
-			log( "Viewport2D::setTarget() : Already tracking an object", INFO );
-			log( "Viewport2D::setTarget() : Use overrideTracking = true to override", INFO );
+			log( "Already tracking an object", INFO );
+			log( "Use overrideTracking = true to override", INFO );
 			return;
 		}
-		else { log( "Viewport2D::setTarget() : Overriding tracking", INFO ); }
+		else { log( "Overriding tracking", INFO ); }
 	}
 	_trackingObject = false;
 	_camera.target = target;
 }
 
 float Viewport2D::getZoom(){ return _camera.zoom; }
-void Viewport2D::setZoom(   float zoom ){ _camera.zoom = zoom; }
-void Viewport2D::scaleZoom( float factor ){ _camera.zoom *= factor; }
+void  Viewport2D::setZoom(   float zoom ){   _camera.zoom = zoom; }
+void  Viewport2D::scaleZoom( float factor ){ _camera.zoom *= factor; }
 
 float Viewport2D::getRotation(){ return _camera.rotation; }
 //void Viewport2D::setRotation( float rotation ){ _camera.rotation = rotation; }
@@ -107,11 +107,10 @@ void Viewport2D::moveOffset( Vector2 &delta )
 
 void Viewport2D::open()
 {
-	log( "Viewport2D::open()" );
-
+	flog( 0 );
 	if ( IsWindowReady() )
 	{
-		log( "Viewport2D::open() : Window already opened", INFO );
+		log( "Window already opened", INFO );
 		return;
 	}
 
@@ -124,11 +123,10 @@ void Viewport2D::open()
 
 void Viewport2D::close()
 {
-	log( "Viewport2D::close()" );
-
+	flog( 0 );
 	if ( !IsWindowReady() )
 	{
-		log( "Viewport2D::close() : Window already closed", INFO );
+		log( "Window already closed", INFO );
 		return;
 	}
 
@@ -139,7 +137,7 @@ void Viewport2D::close()
 
 void Viewport2D::update()
 {
-	log( "Viewport2D::update()" );
+	flog( 0 );
 	updateCamera();
 	updateSize();
 	updateMouse();
@@ -147,26 +145,29 @@ void Viewport2D::update()
 
 void Viewport2D::refresh()
 {
-	log( "Viewport2D::refresh()" );
+	flog( 0 );
 	ClearBackground( BACKGROUND_COLOUR );
 	update();
 }
 
 void Viewport2D::updateSize()
 {
+	flog( 0 );
 	// sets _windowSize to the camera view size
 	_windowSize.x = GetScreenWidth()  * _camera.zoom;
 	_windowSize.y = GetScreenHeight() * _camera.zoom;
 }
 void Viewport2D::updateMouse()
 {
+	flog( 0 );
 	// sets _mousePos to were the mouse is in the world, accounting for the camera position
-	_mousePos = GetMousePosition();
+	_mousePos =      GetMousePosition();
 	_mouseWorldPos = GetScreenToWorld2D( _mousePos, _camera );
 
 }
 void Viewport2D::updateCamera()
 {
+	flog( 0 );
 	if ( _trackingObject ){ _camera.target = { _trackedObject->getPosition() }; }
 
 	// Clamping camera values
@@ -188,10 +189,11 @@ bool Viewport2D::isTracking() const { return _trackingObject; }
 
 bool Viewport2D::trackObject( ShapeObject *obj, bool overrideTracking )
 {
+	flog( 0 );
 	if ( obj == nullptr )
 	{
-		log( "Viewport2D::trackObject() : cannot track a nullptr", INFO );
-		log( "Viewport2D::trackObject() : Use untrackObject() to stop tracking", DEBUG );
+		log( "cannot track a nullptr", INFO );
+		log( "Use untrackObject() to stop tracking", DEBUG );
 		return false;
 	}
 
@@ -199,11 +201,11 @@ bool Viewport2D::trackObject( ShapeObject *obj, bool overrideTracking )
 	{
 		if ( !overrideTracking )
 		{
-			log( "Viewport2D::trackObject() : Already tracking an object", INFO );
-			log( "Viewport2D::trackObject() : Use overrideTracking = true to override", DEBUG );
+			log( "Already tracking an object", INFO );
+			log( "Use overrideTracking = true to override", DEBUG );
 			return false;
 		}
-		else { log( "Viewport2D::trackObject() : Overriding tracking", INFO ); }
+		else { log( "Overriding tracking", INFO ); }
 	}
 
 	_trackedObject  = obj;
@@ -214,6 +216,7 @@ bool Viewport2D::trackObject( ShapeObject *obj, bool overrideTracking )
 
 bool Viewport2D::untrackObject()
 {
+	flog( 0 );
 	_trackedObject = nullptr;
 
 	if ( !_trackingObject ){ return false; }

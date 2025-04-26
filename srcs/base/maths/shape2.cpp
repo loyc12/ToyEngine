@@ -5,7 +5,7 @@ V2Vect_t CalcPolyVerts( byte_t facets )
 {
 	if ( facets < 2 )
 	{
-		log( "CalcPolyVerts() : facets must be >= 2", WARN );
+		log( "facets must be >= 2", WARN );
 		return V2Vect_t();
 	}
 	V2Vect_t verts;   float angle = 360.0f / facets;
@@ -44,11 +44,12 @@ float getTriangleArea( const Vector2 &p1, const Vector2 &p2, const Vector2 &p3 )
 Shape2::Shape2( sh2_type_e type, const Vector2 &ctr, const Vector2 &scl, float angle )
 	: _type( type ), _angle( fmod( angle, 360.0f )), _center( ctr ), _scales( { scl.x, scl.y })
 {
+	flog( 0 );
 	_verts = V2Vect_t();
 	switch ( type )
 	{
 		case SH2_NULL: // makes a null shape
-			log("Shape2::Shape2() : Generating a null shape", DEBUG );
+			log( "Generating a null shape", DEBUG );
 			break;
 
 		case SH2_POIN: // makes a point at the center
@@ -105,11 +106,11 @@ Shape2::Shape2( sh2_type_e type, const Vector2 &ctr, const Vector2 &scl, float a
 			_verts = CalcPolyVerts( 12 );  break;
 
 		case SH2_POLY:
-			log( "Shape2::Shape2() : Vertex need to be manually set for polygons", DEBUG );
+			log( "Vertex need to be manually set for polygons", WARN );
 			break;
 
 		default:
-			log( "Shape2::Shape2() : Unknown shape type", WARN );
+			log( "Unknown shape type", WARN );
 			_type = SH2_NULL;
 			break;
 	}
@@ -117,12 +118,14 @@ Shape2::Shape2( sh2_type_e type, const Vector2 &ctr, const Vector2 &scl, float a
 
 Shape2::Shape2( const Shape2 &s ) : _type( s._type ), _angle( fmod( s._angle, 360.0f )), _center( s._center ), _scales( s._scales )
 {
+	flog( 0 );
 	_verts = V2Vect_t();
 	for ( auto &v : s._verts ){ _verts.push_back( v ); }
 }
 
 Shape2 Shape2::operator=( const Shape2 &s )
 {
+	flog( 0 );
 	if ( this != &s )
 	{
 		_type   = s._type;
@@ -274,7 +277,7 @@ Shape2 Shape2::Polygon( const Vector2 &ctr, const Vector2 &scl, byte_t sides, fl
 {
 	if ( sides < 3 )
 	{
-		log( "Shape2::Polygon() : Polygon needs at least 3 vertices", WARN );
+		log( "Polygon needs at least 3 vertices", WARN );
 		return Shape2();
 	}
 
@@ -287,7 +290,7 @@ Shape2 Shape2::Polygon( const V2Vect_t &worldVerts )
 {
 	if ( worldVerts.size() < 3 )
 	{
-		log( "Shape2::Polygon() : Polygon needs at least 3 vertices", WARN );
+		log( "Polygon needs at least 3 vertices", WARN );
 		return Shape2();
 	}
 
@@ -535,6 +538,7 @@ void Shape2::changeScales( const Vector2 &factor ){ _scales.x *= factor.x; _scal
 
 void Shape2::updateCenter()
 {
+	flog( 0 );
 	// TODO : check if this is correct
 	Vector2 ctr = Vector2();
 	for ( auto &v : _verts )
@@ -557,6 +561,7 @@ void Shape2::updateCenter()
 
 void Shape2::updateType()
 {
+	flog( 0 );
 	// NOTE : skips circular shapes for now
 	if ( _type == SH2_CIRC || _type == SH2_ELLI ) return;
 
@@ -777,7 +782,7 @@ float Shape2::getArea() const // TODO : check if this is correct
 {
 	if ( isArealess() )
 	{
-		log( "Shape2::getArea() : Not enough vertices to calculate area", WARN );
+		log( "Not enough vertices to calculate area", WARN );
 		return 0;
 	}
 

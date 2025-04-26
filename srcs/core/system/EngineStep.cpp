@@ -7,11 +7,10 @@
 
 bool Engine::launchLoop()
 {
-	log( "Engine::launch()" );
-
+	flog( 0 );
 	if ( getState() < ES_STARTED )
 	{
-		log( "Engine::launch() : Engine not yet started", ERROR );
+		log( "Engine not yet started", ERROR );
 		return false;
 	}
 
@@ -26,8 +25,8 @@ bool Engine::launchLoop()
 
 void Engine::runStep()
 {
-	log( "Engine::runStep()" );
-	if ( getState() < ES_STARTED ){ log( "Engine::runeStep() : Engine not started", ERROR ); return; }
+	flog( 0 );
+	if ( getState() < ES_STARTED ){ log( "Engine not started", ERROR ); return; }
 
 	_DT = GetFrameTime();
 
@@ -41,8 +40,7 @@ void Engine::runStep()
 
 void Engine::readInputs()
 {
-	log( "Engine::readInputs()" );
-
+	flog( 0 );
 	_controller->refreshInputs();
 
 	OnReadInputs(); // from game.hpp
@@ -50,8 +48,7 @@ void Engine::readInputs()
 
 void Engine::runPhysics()
 {
-	log( "Engine::runPhysics()" );
-
+	flog( 0 );
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ){ (*it)->onPhysicTick(); }
 
 	OnRunPhysics(); // from game.hpp
@@ -59,8 +56,7 @@ void Engine::runPhysics()
 
 void Engine::runScripts()
 {
-	log( "Engine::runScripts()" );
-
+	flog( 0 );
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ){ (*it)->onScriptTick(); }
 
 	OnRunScripts(); // from game.hpp
@@ -68,7 +64,7 @@ void Engine::runScripts()
 
 void Engine::runRenders()
 {
-	log( "Engine::runRenders()" );
+	flog( 0 );
 
 	BeginDrawing();
 	_viewport2D->refresh();
@@ -81,12 +77,10 @@ void Engine::runRenders()
 
 void Engine::renderWorld()
 {
-	log( "Engine::renderObjects()" );
+	flog( 0 );
 
 	BeginMode2D( _viewport2D->getCamera() );
-
 	for ( auto it = ObjectContainer.begin(); it != ObjectContainer.end(); it++ ){ (*it)->onRenderTick(); }
-
 	OnRenderWorld(); // from game.hpp
 
 	EndMode2D();
@@ -94,7 +88,6 @@ void Engine::renderWorld()
 
 void Engine::renderUIs()
 {
-	log( "Engine::renderUIs()" );
-
+	flog( 0 );
 	OnRenderUI(); // from game.hpp
 }

@@ -9,6 +9,7 @@ CompArr    &NullCompArr = CompManager::GetNullCompArr();
 
 void CompManager::clearAllPairs() // TODO : TEST ME
 {
+	flog( 0 );
 	// NOTE : mutex this if we ever multithread onTick() calls
 	for( auto it = _NttMap.begin(); it != _NttMap.end(); ++it )
 	{
@@ -33,6 +34,7 @@ void CompManager::clearAllPairs() // TODO : TEST ME
 
 bool CompManager::isUsedID( NttID_t id ) const
 {
+	flog( 0 );
 	if( id == 0 )
 	{
 		log( "Entity ID cannot be 0", WARN );
@@ -47,6 +49,7 @@ bool CompManager::isUsedID( NttID_t id ) const
 }
 bool CompManager::isFreeID( NttID_t id ) const
 {
+	flog( 0 );
 	if( id == 0 )
 	{
 		log( "Entity ID cannot be 0", WARN );
@@ -64,20 +67,17 @@ bool CompManager::isFreeID( NttID_t id ) const
 
 bool CompManager::isValidID( NttID_t id )
 {
+	flog( 0 );
 	if( id == 0 )
 	{
 		log( "Entity ID cannot be 0", WARN );
 		return false;
 	}
-	//if( id <= GCM->getMaxID() )
-	//{
-	//	log( "Entity ID must be greater than curretn maxID", WARN );
-	//	return false;
-	//}
 	return true;
 }
 bool CompManager::isValidType( comp_e type )
 {
+	flog( 0 );
 	if( type == COMP_BASE_TYPE )
 	{
 		log( "Component type cannot be COMP_BASE_TYPE", WARN );
@@ -97,16 +97,19 @@ bool CompManager::isValidType( comp_e type )
 
 ECpair &CompManager::GetNullECpair()
 {
+	flog( 0 );
 	static ECpair val = { nullptr, {} };
 	return val;
 }
 GameEntity &CompManager::GetNullEntity()
 {
+	flog( 0 );
 	static GameEntity val( false, 0 );
 	return val;
 }
 CompArr &CompManager::GetNullCompArr()
 {
+	flog( 0 );
 	static CompArr val = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 	return val;
 }

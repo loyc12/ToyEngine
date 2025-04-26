@@ -6,18 +6,18 @@
 
 void OnGameLaunch()
 {
-	log( "OnGameLaunch()", INFO );
+	flog( 0 );
 }
 
 void OnGameStep()
 {
+	flog( 0 );
 	//CloseWindow(); // DEBUG : to run the game loop only once
 }
 
 void OnReadInputs() // only called when the game is launched
 {
-	log( "OnReadInputs()", INFO );
-
+	flog( 0 );
 	inputs_s np = GIN(); // TODO make this shit global
 
 	float moveFactor = GDTS();
@@ -38,13 +38,12 @@ void OnReadInputs() // only called when the game is launched
 
 void OnRunScripts() // only called when the game is launched
 {
-	log( "OnRunScripts()", INFO );
+	flog( 0 );
 }
 
 void OnRunPhysics() // only called when the game is launched and unpaused
 {
-	log( "OnRunPhysics()", INFO );;
-
+	flog( 0 );
 	inputs_s np = GIN(); // TODO make this shit global
 
 	float moveFactor = GDTS() ;
@@ -73,11 +72,12 @@ void OnRunPhysics() // only called when the game is launched and unpaused
 
 void OnRenderWorld() // only called when the game is launched
 {
-	log( "OnRenderWorld()", INFO );
+	flog( 0 );
 }
 
 void OnRenderUI() // only called when the game is launched
 {
+	flog( 0 );
 	string moInfo = "Mouse  : " + to_string( ( int )GVP->getMouseWorldPos().x ) + ":" + to_string( ( int )GVP->getMouseWorldPos().y ) + " | " + to_string( ( int )GVP->getMousePos().x ) + ":" + to_string( ( int )GVP->getMousePos().y );
 	log( moInfo, INFO );
 

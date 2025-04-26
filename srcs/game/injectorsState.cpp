@@ -5,14 +5,13 @@
 // called when the engine changes state
 
 void OnGameInit()
-// NOTE : do not instanciate objects here ( or do anything that requires the engine to be started )
 {
-	log( "OnGameInit()", INFO );
+	// NOTE : do not instanciate objects here ( or do anything that requires the engine to be started )
+	flog( 0 );
 }
 void OnGameStart()
 {
-	log( "OnGameStart()", INFO );
-
+	flog( 0 );
 	// NOTE : this is a temporary solution, the engine should be able to load the game from a file
 
 	G_Point = new Object2D;
@@ -68,7 +67,6 @@ void OnGameStart()
 	//G_Polygon->setShape(   Shape2::Polygon({{ 16, 16 }, { 16, -32 }, { -16, -8 }, { -16, 24 }})); // TODO : debug my rendering
 	G_Polygon->setColor(   MAGENTA );
 
-
 	G_Player = new Object2D;
 	G_Player->setShape( Shape2::Circle( { 0, 0 }, 12 ));
 	G_Player->setColor( GOLD );
@@ -81,18 +79,18 @@ void OnGameStart()
 }
 void OnGameResume()
 {
-	log( "OnGameResume()", INFO );
+	flog( 0 );
 }
 
 void OnGamePause()
 {
-	log( "OnGamePause()", INFO );
+	flog( 0 );
 }
 void OnGameStop()
 {
-	log( "OnGameStop()", INFO );
+	flog( 0 );
 }
 void OnGameClose() // The engine takes care to delete all objects
 {
-	log( "OnGameClose()", INFO );
+	flog( 0 );
 }

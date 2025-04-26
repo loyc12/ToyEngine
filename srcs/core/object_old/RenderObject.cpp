@@ -5,7 +5,7 @@
 
 void RenderObject::onAdd()
 {
-	log( "RenderObject::onAdd()", DEBUG, getID() );
+	flog( getID() );
 	_isVisible = true;
 
 	// set default color and shape
@@ -14,13 +14,13 @@ void RenderObject::onAdd()
 
 void RenderObject::onCpy( const RenderObject &obj )
 {
-	log( "RenderObject::onCpy()", DEBUG, getID() );
+	flog( getID() );
 	_isVisible = obj.getIsVisible();
 }
 
 void RenderObject::onDel()
 {
-	log( "RenderObject::onDel()", DEBUG, getID() );
+	flog( getID() );
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
@@ -29,6 +29,7 @@ RenderObject::RenderObject() :
 	BaseObject( E_RENDER ),
 	ShapeObject()
 {
+	flog( getID() );
 	RenderObject::onAdd();
 }
 
@@ -36,6 +37,7 @@ RenderObject::RenderObject( const RenderObject &obj ) :
 	BaseObject( obj ),
 	ShapeObject( obj )
 {
+	flog( getID() );
 	if ( this == &obj ) return;
 
 	RenderObject::onAdd();
@@ -44,6 +46,7 @@ RenderObject::RenderObject( const RenderObject &obj ) :
 
 RenderObject &RenderObject::operator=( const RenderObject &obj )
 {
+	flog( getID() );
 	if ( this == &obj ) return *this;
 
 	BaseObject::onCpy( obj );
@@ -56,6 +59,7 @@ RenderObject &RenderObject::operator=( const RenderObject &obj )
 
 RenderObject::~RenderObject() // automatic inverted call order
 {
+	flog( getID() );
 	RenderObject::onDel();
 	// ShapeObject::onDel();
 	// BaseObject::onDel();
@@ -71,11 +75,10 @@ void  RenderObject::setColor( Color color ){ _color = color; }
 
 // ================================ TICK METHODS
 
-bool RenderObject::RenderSelf()
+bool RenderObject::renderSelf()
 {
+	flog( getID() );
 	if ( getShapeType() == SH2_NULL ) return false;
-
-	log( "RenderObject::RenderSelf()", DEBUG, getID() );
 
 	Shape2 s = getShape();
 	if ( s.isPoint() )
@@ -118,10 +121,10 @@ bool RenderObject::RenderSelf()
 
 void RenderObject::onRenderTick() // (re)renders the object
 {
+	flog( getID() );
 	if ( !_isVisible ) return;
-	log( "RenderObject::onRenderTick()", DEBUG, getID() );
 
-	RenderSelf();
+	renderSelf();
 
 	OnRenderCall( this );
 }

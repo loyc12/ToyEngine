@@ -7,44 +7,42 @@
 // Goes trought the steps needed to go from one state to another
 bool Engine::switchState(  engineState_e targetState )
 {
-	log( "Engine::switchState()" );
-
+	flog( 0 );
 	if ( getState() == targetState )
 	{
-		log( "Engine::switchState() : State matches current state : " + to_string( targetState ), WARN );
+		log( "State matches current state : " + to_string( targetState ), WARN );
 		return false;
 	}
 
 	engineState_e previousState = getState();
-
-	log( "Engine::switchState() : Changing state from " + to_string( getState() ) + " to " + to_string( targetState ), INFO );
+	log( "Changing state from " + to_string( getState() ) + " to " + to_string( targetState ), INFO );
 
 	// goes through the steps to raise the state
 	if ( targetState > getState() ){ switch ( getState() )
 	{
 		case ES_CLOSED:
-			log( "Engine::switchState() : Raising to ES_INITIALIZED", INFO );
+			log( "Raising to ES_INITIALIZED", INFO );
 			setState( ES_INITIALIZING ); init();
 			if ( getState() == targetState ) break;
 
-			[[fallthrough]];
+			[[ fallthrough ]];
 
 		case ES_INITIALIZED:
-			log( "Engine::switchState() : Raising to ES_STARTED", INFO );
+			log( "Raising to ES_STARTED", INFO );
 			setState( ES_STARTING ); start();
 			if ( getState() == targetState ) break;
 
-			[[fallthrough]];
+			[[ fallthrough ]];
 
 		case ES_STARTED:
-			log( "Engine::switchState() : Raising to ES_RUNNING", INFO );
+			log( "Raising to ES_RUNNING", INFO );
 			setState( ES_RESUMING ); resume();
 			if ( getState() == targetState ) break;
 
-			[[fallthrough]];
+			[[ fallthrough ]];
 
 		default:
-			log( "Engine::switchState() : Invalid state : Raising from " + to_string( previousState ) + " to " + to_string( targetState ), ERROR );
+			log( "Invalid state : Raising from " + to_string( previousState ) + " to " + to_string( targetState ), ERROR );
 			return false;
 	}}
 
@@ -52,52 +50,51 @@ bool Engine::switchState(  engineState_e targetState )
 	if ( targetState < getState() ){ switch ( getState() )
 	{
 		case ES_RUNNING:
-			log( "Engine::switchState() : Lowering to ES_STARTED", INFO );
+			log( "Lowering to ES_STARTED", INFO );
 			setState( ES_PAUSING ); pause();
 			if ( getState() == targetState ) break;
-			[[fallthrough]];
+			[[ fallthrough ]];
 
 		case ES_STARTED:
-			log( "Engine::switchState() : Lowering to ES_INITIALIZED", INFO );
+			log( "Lowering to ES_INITIALIZED", INFO );
 			setState( ES_STOPPING ); stop();
 			if ( getState() == targetState ) break;
-			[[fallthrough]];
+			[[ fallthrough ]];
 
 		case ES_INITIALIZED:
-			log( "Engine::switchState() : Lowering to ES_CLOSED", INFO );
+			log( "Lowering to ES_CLOSED", INFO );
 			setState( ES_CLOSING ); close();
 			if ( getState() == targetState ) break;
-			[[fallthrough]];
+			[[ fallthrough ]];
 
 		default:
-			log( "Engine::switchState() : Invalid state : Lowering from " + to_string( previousState ) + " to " + to_string( targetState ), ERROR );
+			log( "Invalid state : Lowering from " + to_string( previousState ) + " to " + to_string( targetState ), ERROR );
 			return false;
 	}}
 
-	log( "Engine::switchState() : DONE ! : State changed from " + to_string( previousState ) + " to " + to_string( targetState ), INFO );
+	log( "State changed from " + to_string( previousState ) + " to " + to_string( targetState ), INFO );
 	return true;
 }
 
 bool Engine::togglePause()
 {
-	log( "Engine::togglePause()" );
-
-	log( "Engine::togglePause() : Current state is " + to_string( getState() ), INFO );
+	flog( 0 );
+	log( "Current state is " + to_string( getState() ), INFO );
 
 	switch ( getState() )
 	{
 		case ES_RUNNING:
-			log( "Engine::togglePause() : Pausing engine", INFO );
+			log( "Pausing engine", INFO );
 			pause();
 			break;
 
 		case ES_STARTED:
-			log( "Engine::togglePause() : Resuming engine", INFO );
+			log( "Resuming engine", INFO );
 			resume();
 			break;
 
 		default:
-			log( "Engine::togglePause() : Engine is neither resumed nor paused", ERROR );
+			log( "Engine is neither resumed nor paused", ERROR );
 			return false;
 	}
 	return true;
@@ -105,10 +102,9 @@ bool Engine::togglePause()
 
 void Engine::init()
 {
-	log( "Engine::init()" );
-
-	if ( getState() > ES_INITIALIZING ){ log( "Engine::init() : Engine already initialized",  ERROR ); return; }
-	if ( getState() < ES_CLOSED){        log( "Engine::init() : how did you even get here ?", ERROR ); return; }
+	flog( 0 );
+	if ( getState() > ES_INITIALIZING ){ log( "Engine already initialized",  ERROR ); return; }
+	if ( getState() < ES_CLOSED){        log( "how did you even get here ?", ERROR ); return; }
 
 	_controller  = new Controller();   GCN = _controller;
 	_viewport2D  = new Viewport2D();   GVP = _viewport2D;
@@ -123,10 +119,9 @@ void Engine::init()
 
 void Engine::start()
 {
-	log( "Engine::start()" );
-
-	if ( getState() > ES_STARTING ){    log( "Engine::start() : Engine already started", ERROR ); return; }
-	if ( getState() < ES_INITIALIZED ){ log( "Engine::start() : Engine not initialized", ERROR ); return; }
+	flog( 0 );
+	if ( getState() > ES_STARTING ){    log( "Engine already started", ERROR ); return; }
+	if ( getState() < ES_INITIALIZED ){ log( "Engine not initialized", ERROR ); return; }
 
 	_viewport2D->open();
 
@@ -136,10 +131,9 @@ void Engine::start()
 
 void Engine::resume()
 {
-	log( "Engine::resume()" );
-
-	if ( getState() > ES_RESUMING ){ log( "Engine::resume() : Engine already running", ERROR ); return; }
-	if ( getState() < ES_STARTED ){  log( "Engine::resume() : Engine not yet started", ERROR ); return; }
+	flog( 0 );
+	if ( getState() > ES_RESUMING ){ log( "Engine already running", ERROR ); return; }
+	if ( getState() < ES_STARTED ){  log( "Engine not yet started", ERROR ); return; }
 
 	OnGameResume(); // from game.hpp
 	setState( ES_RUNNING );
@@ -149,10 +143,9 @@ void Engine::resume()
 
 void Engine::pause()
 {
-	log( "Engine::pause()" );
-
-	if ( getState() < ES_PAUSING ){ log( "Engine::pause() : Engine not currently running", ERROR ); return; }
-	if ( getState() > ES_RUNNING ){ log( "Engine::pause() : how did you even get here ?",  ERROR ); return; }
+	flog( 0 );
+	if ( getState() < ES_PAUSING ){ log( "Engine not currently running", ERROR ); return; }
+	if ( getState() > ES_RUNNING ){ log( "how did you even get here ?",  ERROR ); return; }
 
 	OnGamePause(); // from game.hpp
 	setState( ES_STARTED );
@@ -160,10 +153,9 @@ void Engine::pause()
 
 void Engine::stop()
 {
-	log( "Engine::stop()" );
-
-	if ( getState() < ES_STOPPING ){ log( "Engine::stop() : Engine not yet started",  ERROR ); return; }
-	if ( getState() > ES_STARTED ){  log( "Engine::stop() : Engine is still running", ERROR ); return; }
+	flog( 0 );
+	if ( getState() < ES_STOPPING ){ log( "Engine not yet started",  ERROR ); return; }
+	if ( getState() > ES_STARTED ){  log( "Engine is still running", ERROR ); return; }
 
 	_viewport2D->close();
 
@@ -173,10 +165,9 @@ void Engine::stop()
 
 void Engine::close()
 {
-	log( "Engine::close()" );
-
-	if ( getState() < ES_CLOSING ){     log( "Engine::close() : Engine not initialized", ERROR ); return; }
-	if ( getState() > ES_INITIALIZED ){ log( "Engine::close() : Engine still started",   ERROR ); return; }
+	flog( 0 );
+	if ( getState() < ES_CLOSING ){     log( "Engine not initialized", ERROR ); return; }
+	if ( getState() > ES_INITIALIZED ){ log( "Engine still started",   ERROR ); return; }
 
 	OnGameClose(); // from game.hpp
 	setState( ES_CLOSED );

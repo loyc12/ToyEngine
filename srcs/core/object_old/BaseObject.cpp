@@ -5,8 +5,7 @@
 
 bool BaseObject::addToEngine()
 {
-	log( "BaseObject::addToEngine()", DEBUG, _id );
-
+	flog( _id );
 	// getting a new ID here instead of in Engine::addObject() to prevent making setID() public
 	_id = GNG->getNewID();
 
@@ -17,8 +16,7 @@ bool BaseObject::addToEngine()
 
 bool BaseObject::delFromEngine()
 {
-	log( "BaseObject::delFromEngine()", DEBUG, _id );
-
+	flog( _id );
 	GNG->delObjectByID( _id );		_id = 0;
 
 	return true;
@@ -27,34 +25,30 @@ bool BaseObject::delFromEngine()
 
 void BaseObject::onAdd()
 {
-	log( "BaseObject::onAdd()", DEBUG, _id );
-
-	_id = 0;
-
+	flog( _id );
 	addToEngine();
 }
 
 void BaseObject::onCpy( const BaseObject &obj )
 {
-	log( "BaseObject::onCpy()", DEBUG, _id );
+	flog( _id );
 	_type = obj.getType();
 }
 
 void BaseObject::onDel() // inverted call order
 {
-	log( "BaseObject::onDel()", DEBUG, _id );
-
+	flog( _id );
 	// NOTE : if the object is being tracked, stop tracking it
 	if ( GVP != nullptr && GVP->isTracking() && GVP->getTrackedObject() == this )
 	{
-		log( "BaseObject::onDel() : untracking object", DEBUG, _id );
+		log( "untracking object", DEBUG, _id );
 		GVP->untrackObject();
 	}
 	if ( _id != 0 )
 	{
 		if ( !delFromEngine() )
 		{
-			log( "BaseObject::onDel() : failed to delete object from engine", ERROR, _id );
+			log( "failed to delete object from engine", ERROR, _id );
 			return;
 		}
 	}
@@ -62,11 +56,12 @@ void BaseObject::onDel() // inverted call order
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
 
-BaseObject::BaseObject() : _type( E_BASEOBJ ){ BaseObject::onAdd(); }
-BaseObject::BaseObject( objectType_e type ) : _type( type ){ BaseObject::onAdd(); }
+BaseObject::BaseObject() : _id( 0 ), _type( E_BASEOBJ ){ flog( _id ); BaseObject::onAdd(); }
+BaseObject::BaseObject( objectType_e type ) : _id( 0 ), _type( type ){ flog( _id ); BaseObject::onAdd(); }
 
-BaseObject::BaseObject( const BaseObject &obj ) : _type( E_BASEOBJ )
+BaseObject::BaseObject( const BaseObject &obj ) :  _id( 0 ), _type( E_BASEOBJ )
 {
+	flog( _id );
 	if ( this == &obj ) return;
 
 	BaseObject::onAdd();
@@ -75,6 +70,7 @@ BaseObject::BaseObject( const BaseObject &obj ) : _type( E_BASEOBJ )
 
 BaseObject &BaseObject::operator=( const BaseObject &obj )
 {
+	flog( _id );
 	if ( this == &obj ) return *this;
 
 	BaseObject::onCpy( obj );
@@ -82,14 +78,14 @@ BaseObject &BaseObject::operator=( const BaseObject &obj )
 	return *this;
 }
 
-BaseObject::~BaseObject(){ BaseObject::onDel(); }
+BaseObject::~BaseObject(){ flog( _id ); BaseObject::onDel(); }
 
 // ================================ TICK METHODS
 
-void BaseObject::onShapeTick(){  log( "BaseObject::onShapeTick()  : not implemented", WARN ); }
-void BaseObject::onScriptTick(){ log( "BaseObject::onScriptTick() : not implemented", WARN ); }
-void BaseObject::onPhysicTick(){ log( "BaseObject::onPhysicTick() : not implemented", WARN ); }
-void BaseObject::onRenderTick(){ log( "BaseObject::onRenderTick() : not implemented", WARN ); }
+void BaseObject::onShapeTick(){  log( "BaseObject : not implemented", WARN, _id, HERE ); }
+void BaseObject::onScriptTick(){ log( "BaseObject : not implemented", WARN, _id, HERE ); }
+void BaseObject::onPhysicTick(){ log( "BaseObject : not implemented", WARN, _id, HERE ); }
+void BaseObject::onRenderTick(){ log( "BaseObject : not implemented", WARN, _id, HERE ); }
 
 // ================================ ACCESSORS
 
@@ -99,7 +95,7 @@ uint         BaseObject::getID()   const { return _id; }
 // ================================ MUTATORS
 
 void BaseObject::setType( objectType_e type ){ _type = type; } // NOTE : UNSAFE
-void BaseObject::setID( objID_t id ){         _id    = id;   } // NOTE : UNSAFE
+void BaseObject::setID( objID_t id ){          _id   = id;   } // NOTE : UNSAFE
 
 
 

@@ -5,7 +5,7 @@
 
 void Controller::init()
 {
-	log( "Controller::init()" );
+	flog( 0 );
 
 	bzero( &_previousInputs, sizeof( inputs_s ) );
 	bzero( &_latestInputs,   sizeof( inputs_s ) );
@@ -15,12 +15,12 @@ void Controller::init()
 
 Controller::Controller()
 {
-	log( "Controller::Controller()" );
+	flog( 0 );
 	init();
 }
 Controller::~Controller()
 {
-	log( "Controller::~Controller()" );
+	flog( 0 );
 }
 
 // ================================ ACCESSORS
@@ -32,7 +32,7 @@ inputs_s &Controller::getPreviousInputs(){ return _previousInputs; }
 
 void Controller::refreshInputs() // NOTE : archaic way of doing things, but it works for now
 {
-	log( "Controller::refresh()" );
+	flog( 0 );
 
 	// SAVE PREVIOUS INPUTS
 	_previousInputs = _latestInputs;

@@ -5,6 +5,7 @@
 
 void CompManager::updateAllEntities()
 {	// NOTE : calls the onTick() method of all components in the map ( one entity at a time )
+	flog( 0 );
 	// NOTE : mutex this if we ever multithread onTick() calls
 	for( auto it = _NttMap.begin(); it != _NttMap.end(); ++it )
 	{
@@ -17,6 +18,7 @@ void CompManager::updateAllEntities()
 }
 void CompManager::updateAllComponents()
 {	// NOTE : calls the onTick() method of all components in the map ( each component type at a time)
+	flog( 0 );
 	// NOTE : mutex this if we ever multithread onTick() calls
 	for ( byte_t i = 0; i < COMP_TYPE_COUNT; ++i )
 	{
@@ -30,6 +32,7 @@ void CompManager::updateAllComponents()
 
 void CompManager::updateComponentByType( comp_e compType )
 {	// NOTE : calls the onTick() method of all components of the given type in the map
+	flog( 0 );
 	if( !isValidType( compType) )
 	for( auto it = _NttMap.begin(); it != _NttMap.end(); ++it )
 	{

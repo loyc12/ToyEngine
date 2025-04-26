@@ -34,6 +34,9 @@ class GameEntity
 		bool    setID( NttID_t id ); // NOTE : should only be called by CompManager
 		bool    delID(); //             NOTE : should only be called by CompManager
 
+		bool rmvEntity(); // redirects to CompManager method
+		bool delEntity(); // redirects to CompManager method
+
 		CompC_t  getCompCount(); // redirects to CompManager method
 		CompArr &getCompArr(); //   redirects to CompManager method
 

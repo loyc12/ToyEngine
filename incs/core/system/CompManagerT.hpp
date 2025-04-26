@@ -11,6 +11,7 @@
 
 TTC bool CompManager::isFreeComp( CompT *comp ) const
 {
+	flog( 0 );
 	if( comp == nullptr )
 	{
 		log( "Component is null", WARN );
@@ -30,6 +31,7 @@ TTC bool CompManager::isFreeComp( CompT *comp ) const
 }
 TTC bool CompManager::isUsedComp( CompT *comp ) const
 {
+	flog( 0 );
 	if( comp == nullptr )
 	{
 		log( "Component is null", WARN );
@@ -52,6 +54,7 @@ TTC bool CompManager::isUsedComp( CompT *comp ) const
 
 TTC CompT &CompManager::getComponent( NttID_t id )
 {
+	flog( 0 );
 	if( !isUsedID( id )){ return GetNullComp< CompT >(); } // NOTE : returns a null BaseComponent ( innactive )
 
 	comp_e compType = CompT::getType();
@@ -66,11 +69,13 @@ TTC CompT &CompManager::getComponent( NttID_t id )
 }
 TTC CompT CompManager::cpyComponent( NttID_t id ) const
 { // NOTE : overloading of const is fine, since we are only copying the componetn via its reference, and not modifying it
+	flog( 0 );
 	return const_cast<CompManager*>( this )->getComponent< CompT >( id );
 }
 
 TTC bool CompManager::hasComponent( NttID_t id ) const
 {
+	flog( 0 );
 	if( !isUsedID( id )){ return false; }
 
 	const CompArr &comps = _NttMap.find( id )->second.Comps;
@@ -78,12 +83,13 @@ TTC bool CompManager::hasComponent( NttID_t id ) const
 }
 TTC bool CompManager::addComponent( NttID_t id )
 {
+	flog( 0 );
 	if( !isUsedID( id )){ return false; }
 
 	CompArr &comps = _NttMap.find( id )->second.Comps;
 	if( comps[ CompT::getType() ] != nullptr )
 	{
-		log( "CompManager::addComponent() : Component already exists in the array", ERROR );
+		log( "Component already exists in the array", ERROR );
 		return false;
 	}
 
@@ -92,6 +98,7 @@ TTC bool CompManager::addComponent( NttID_t id )
 }
 TTC bool CompManager::rmvComponent( NttID_t id )
 {
+	flog( 0 );
 	if( !isUsedID( id )){ return false; }
 
 	comp_e compType = CompT::getType();
@@ -99,7 +106,7 @@ TTC bool CompManager::rmvComponent( NttID_t id )
 
 	if( comps[ compType ] == nullptr )
 	{
-		log( "CompManager::rmvComponent() : Component does not exist in the array", WARN );
+		log( "Component does not exist in the array", WARN );
 		return false;
 	}
 	comps[ compType ] = nullptr;
@@ -108,13 +115,14 @@ TTC bool CompManager::rmvComponent( NttID_t id )
 }
 TTC bool CompManager::delComponent( NttID_t id )
 {
+	flog( 0 );
 	if( !isUsedID( id )){ return false; }
 
 	comp_e compType = CompT::getType();
 	CompArr &comps = _NttMap.find( id )->second.Comps;
 	if( comps[ compType ] == nullptr )
 	{
-		log( "CompManager::delComponent() : Component does not exist in the array", ERROR );
+		log( "Component does not exist in the array", ERROR );
 		return false;
 	}
 	delete comps[ compType ];
@@ -127,6 +135,7 @@ TTC bool CompManager::delComponent( NttID_t id )
 
 TTC bool CompManager::hasThatComponent( NttID_t id, CompT *component ) const
 {
+	flog( 0 );
 	if( !isUsedID( id )){ return false; }
 
 	comp_e compType = CompT::getType();
@@ -138,6 +147,7 @@ TTC bool CompManager::hasThatComponent( NttID_t id, CompT *component ) const
 }
 TTC bool CompManager::addThatComponent( NttID_t id, CompT *component )
 {
+	flog( 0 );
 	if( !isUsedID( id )){ return false; }
 
 	comp_e compType = CompT::getType();
@@ -145,15 +155,16 @@ TTC bool CompManager::addThatComponent( NttID_t id, CompT *component )
 
 	if( comps[ compType ] != nullptr )
 	{
-		log( "CompManager::addThatComponent() : Removing Previous Component", INFO );
+		log( "Removing Previous Component", INFO );
 		delete comps[ compType ];
 	}
 
-	comps[ compType ] = *component;
+	comps[ compType ] = component;
 	return true;
 }
 TTC bool CompManager::rmvThatComponent( NttID_t id, CompT *component )
 {
+	flog( 0 );
 	if( !isUsedID( id )){ return false; }
 
 	comp_e compType = CompT::getType();
@@ -161,7 +172,7 @@ TTC bool CompManager::rmvThatComponent( NttID_t id, CompT *component )
 
 	if( comps[ compType ] == nullptr )
 	{
-		log( "CompManager::rmvThatComponent() : Component does not exist in the array", WARN );
+		log( "Component does not exist in the array", WARN );
 		return false;
 	}
 
@@ -171,6 +182,7 @@ TTC bool CompManager::rmvThatComponent( NttID_t id, CompT *component )
 }
 TTC bool CompManager::delThatComponent( NttID_t id, CompT *component )
 {
+	flog( 0 );
 	if( !isUsedID( id )){ return false; }
 
 	comp_e compType = CompT::getType();
@@ -178,7 +190,7 @@ TTC bool CompManager::delThatComponent( NttID_t id, CompT *component )
 
 	if( comps[ compType ] == nullptr )
 	{
-		log( "CompManager::delThatComponent() : Component does not exist in the array", ERROR );
+		log( "Component does not exist in the array", ERROR );
 		return false;
 	}
 
@@ -192,6 +204,7 @@ TTC bool CompManager::delThatComponent( NttID_t id, CompT *component )
 
 TTC bool CompManager::isValidComp( CompT *comp )
 {
+	flog( 0 );
 	if( comp == nullptr )
 	{
 		log( "Component is null", WARN );
@@ -204,43 +217,47 @@ TTC bool CompManager::isValidComp( CompT *comp )
 
 TTC CompT &CompManager::GetNullComp()
 {
+	flog( 0 );
 	static CompT val( false, 0 );
 	return val;
 }
 
 TTC CompT *CompManager::CompFactory()
 { // NOTE : alloc new component
+	flog( 0 );
 	CompT *newComp = new CompT( true, 0 );
 
 	if( newComp == nullptr )
 	{
-		log( "CompManager::CompFactory(1) : Failed to allocate memory for new component", ERROR );
+		log( "Failed to allocate memory for new component", ERROR );
 		return nullptr;
 	}
 	return newComp;
 }
 TTC CompT *CompManager::CompFactory( NttID_t id )
 { // NOTE : alloc new component with given ID
+	flog( 0 );
 	if( id == 0 ){ return nullptr; }
 
 	CompT *newComp = new CompT( true, id );
 
 	if( newComp == nullptr )
 	{
-		log( "CompManager::CompFactory(2) : Failed to allocate memory for new component", ERROR );
+		log( "Failed to allocate memory for new component", ERROR );
 		return nullptr;
 	}
 	return newComp;
 }
 TTC CompT *CompManager::CompFactory( CompT *component )
 { // NOTE : alloc + copy component
+	flog( 0 );
 	if( component == nullptr ){ return nullptr; }
 
 	CompT *newComp = new CompT( *component );
 
 	if( newComp == nullptr )
 	{
-		log( "CompManager::CompFactory(2) : Failed to allocate memory for new component", ERROR );
+		log( "Failed to allocate memory for new component", ERROR );
 		return nullptr;
 	}
 	return newComp;

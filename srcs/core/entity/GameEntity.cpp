@@ -5,13 +5,13 @@
 
 bool GameEntity::addToManager()
 {
-	log( "GameEntity::addToManager()", DEBUG, _id );
+	flog( _id );
 	GCM->addThatEntity( this );
 	return true;
 }
 bool GameEntity::delFromManager()
 {
-	log( "GameEntity::delFromManager()", DEBUG, _id );
+	flog( _id );
 	if ( _id == 0 ){ return false; } // NOTE : if the ID is 0, the entity is not supposed to be in the map
 
 	GCM->rmvThatEntity( this ); // TODO : make sure this doesn't lead to an infinite loop
@@ -31,29 +31,30 @@ void GameEntity::onCpy( const GameEntity &rhs )
 
 GameEntity::~GameEntity()
 {
-	log( "GameEntity::~GameEntity()", DEBUG, _id );
+	flog( _id );
 	delFromManager();
 }
 
-GameEntity::GameEntity()
+GameEntity::GameEntity() : _id( 0 )
 {
-	log( "GameEntity::GameEntity(1)", DEBUG);
+	flog( _id );
 	addToManager();
 }
 GameEntity::GameEntity( bool addEntityToManager, NttID_t id ) : _id( id ) // NOTE : should only be called by CompManager
 {
-	log( "GameEntity::GameEntity(2)", DEBUG, _id );
+	flog( _id );
 	if ( addEntityToManager ){ addToManager(); }
 }
 
-GameEntity::GameEntity( const GameEntity &rhs )
+GameEntity::GameEntity( const GameEntity &rhs ) : _id( 0 )
 {
+	flog( _id );
 	addToManager();
 	*this = rhs; // NOTE : calls the copy assignment operator
 }
 GameEntity &GameEntity::operator=( const GameEntity &rhs )
 {
-	log( "GameEntity::operator=()", DEBUG, _id );
+	flog( _id );
 	onCpy( rhs );
 	return *this;
 }
@@ -62,12 +63,12 @@ GameEntity &GameEntity::operator=( const GameEntity &rhs )
 
 NttID_t GameEntity::getID() const
 {
-	log( "GameEntity::getID()", DEBUG, _id );
+	flog( _id );
 	return _id;
 }
 bool GameEntity::setID( NttID_t id ) // NOTE : should only be called by CompManager
 {
-	log( "GameEntity::setID()", DEBUG, _id );
+	flog( _id );
 	if ( id == 0 ){ return false; }
 
 	_id = id;
@@ -76,7 +77,7 @@ bool GameEntity::setID( NttID_t id ) // NOTE : should only be called by CompMana
 
 bool GameEntity::delID() // NOTE : should only be called by CompManager
 {
-	log( "GameEntity::delID()", DEBUG, _id );
+	flog( _id );
 	if ( _id == 0 ){ return false; }
 
 	_id = 0;
@@ -85,13 +86,24 @@ bool GameEntity::delID() // NOTE : should only be called by CompManager
 
 // ================ ACCESSORS / MUTATORS ( redirects )
 
+bool GameEntity::rmvEntity()
+{
+	flog( _id );
+	return GCM->rmvEntity( _id );
+}
+bool GameEntity::delEntity()
+{
+	flog( _id );;
+	return GCM->delEntity( _id );
+}
+
 CompC_t GameEntity::getCompCount()
 {
-	log( "GameEntity::getCompCount()", DEBUG, _id );
+	flog( _id );
 	return GCM->getCompCount( _id );
 }
 CompArr &GameEntity::getCompArr()
 {
-	log( "GameEntity::getCompArr()", DEBUG, _id );
+	flog( _id );
 	return GCM->getNttCompArr( _id );
 }

@@ -7,6 +7,7 @@
 
 bool CompManager::isUsedNtt( GameEntity *Ntt ) const
 {
+	flog( 0 );
 	if( Ntt == nullptr )
 	{
 		log( "Entity is null", WARN );
@@ -26,6 +27,7 @@ bool CompManager::isUsedNtt( GameEntity *Ntt ) const
 }
 bool CompManager::isFreeNtt( GameEntity *Ntt ) const
 {
+	flog( 0 );
 	if( Ntt == nullptr )
 	{
 		log( "Entity is null", WARN );
@@ -49,26 +51,30 @@ bool CompManager::isFreeNtt( GameEntity *Ntt ) const
 NttID_t CompManager::getEntityCount(){ return _NttMap.size(); }
 GameEntity CompManager::getEntity( NttID_t id )
 {
+	flog( 0 );
 	if( !isUsedID( id )){ return NullNtt; } // NOTE : returns a null entity ( ID = 0 )
 	return *_NttMap.find( id )->second.Ntt;
 }
 
 bool CompManager::hasEntity( NttID_t id ) const
 {
+	flog( 0 );
 	if( id == 0 ){ return false; }
 	return _NttMap.find( id ) != _NttMap.end();
 }
 bool CompManager::addEntity( NttID_t id )
 {
+	flog( 0 );
 	if( !isFreeID( id )){ return false; }
 
 	_NttMap[ id ] = { NttFactory( id ), {} };
 
-	if( id >= _maxID ){ _maxID = id + 1; }
+	if( id > _maxID ){ _maxID = id; }
 	return true;
 }
 bool CompManager::rmvEntity( NttID_t id )
 {
+	flog( 0 );
 	if( !isUsedID( id )){ return false; }
 
 	ECpair &pair = _NttMap.find( id )->second;
@@ -83,6 +89,7 @@ bool CompManager::rmvEntity( NttID_t id )
 }
 bool CompManager::delEntity( NttID_t id )
 {
+	flog( 0 );
 	if( !isUsedID( id )){ return false; }
 
 	ECpair &pair = _NttMap.find( id )->second;
@@ -95,7 +102,6 @@ bool CompManager::delEntity( NttID_t id )
 			pair.Comps[ i ] = nullptr;
 		}
 	}
-
 	// NOTE: prevents the entity from trying to remove itself from the map ( aka infinite loop )
 	pair.Ntt->delID();
 
@@ -108,29 +114,33 @@ bool CompManager::delEntity( NttID_t id )
 
 bool CompManager::hasThatEntity( GameEntity *Ntt ) const
 {
+	flog( 0 );
 	if( !isUsedNtt( Ntt )){ return false; }
 	return _NttMap.find( Ntt->getID() ) != _NttMap.end();
 }
 bool CompManager::addThatEntity( GameEntity *Ntt )
 {
+	flog( 0 );
 	if( !isFreeNtt( Ntt ))
 	{
-		log( "CompManager::addThatEntity() : Entity already exists in the map", WARN );
+		log( "Entity already exists in the map", WARN );
 		return false;
 	}
 	Ntt->setID( getNewID() );
-	log( "CompManager::addThatEntity()", DEBUG, Ntt->getID() );
-
 	_NttMap[ Ntt->getID() ] = { Ntt, {} };
+
+	if( Ntt->getID() > _maxID ){ _maxID = Ntt->getID(); }
 	return true;
 }
 bool CompManager::rmvThatEntity( GameEntity *Ntt )
 {
+	flog( 0 );
 	if( !isUsedNtt( Ntt )){ return false; }
 	return rmvEntity( Ntt->getID() );
 }
 bool CompManager::delThatEntity( GameEntity *Ntt )
 {
+	flog( 0 );
 	if( !isUsedNtt( Ntt )){ return false; }
 	return delEntity( Ntt->getID() );
 }
@@ -140,6 +150,7 @@ bool CompManager::cpyEntityOver( GameEntity &src, NttID_t     dst ){ return ( cp
 bool CompManager::cpyEntityOver( NttID_t     src, GameEntity &dst ){ return ( cpyEntityOver( src,         dst.getID() )); }
 bool CompManager::cpyEntityOver( NttID_t     src, NttID_t     dst )
 { // NOTE : ( add if not there ) + copy entity and its components
+	flog( 0 );
 	if( !isUsedID( src )){ return false; }
 	if( !isUsedID( dst )){ return false; }
 
@@ -163,7 +174,7 @@ bool CompManager::cpyEntityOver( NttID_t     src, NttID_t     dst )
 				dstPair.Comps[ i ] = CompFactory( srcPair.Comps[ i ] );
 				if( dstPair.Comps[ i ] == nullptr )
 				{
-					log( "CompManager::cpyEntityOver() : Failed to allocate memory for new component", ERROR );
+					log( "Failed to allocate memory for new component", ERROR );
 					return false;
 				}
 			}
@@ -179,6 +190,7 @@ bool CompManager::cpyEntityOver( NttID_t     src, NttID_t     dst )
 bool CompManager::dupEntity( GameEntity &src ){ return dupEntity( src.getID() ); }
 bool CompManager::dupEntity( NttID_t src )
 {
+	flog( 0 );
 	if( !isUsedID( src )){ return false; }
 
 	ECpair &srcPair = _NttMap.find( src )->second;
@@ -193,7 +205,7 @@ bool CompManager::dupEntity( NttID_t src )
 			_NttMap[ newID ].Comps[ i ] = CompFactory( srcPair.Comps[ i ] );
 			if( _NttMap[ newID ].Comps[ i ] == nullptr )
 			{
-				log( "CompManager::dupEntity() : Failed to allocate memory for new component", ERROR );
+				log( "Failed to allocate memory for new component", ERROR );
 				return false;
 			}
 		}
@@ -205,37 +217,40 @@ bool CompManager::dupEntity( NttID_t src )
 
 GameEntity *CompManager::NttFactory()
 { // NOTE : alloc new entity ( ID = 0 )
+	flog( 0 );
 	GameEntity *newNtt = new GameEntity( false, 0 );
 
 	if( newNtt == nullptr )
 	{
-		log( "CompManager::NttFactory(1) : Failed to allocate memory for new entity", ERROR );
+		log( "Failed to allocate memory for new entity", ERROR );
 		return nullptr;
 	}
 	return newNtt;
 }
 GameEntity *CompManager::NttFactory( NttID_t id )
 { // NOTE : alloc new entity with given ID
+	flog( 0 );
 	if( !isValidID( id )){ return nullptr; }
 
 	GameEntity *newNtt = new GameEntity( false, id );
 
 	if( newNtt == nullptr )
 	{
-		log( "CompManager::NttFactory(2) : Failed to allocate memory for new entity", ERROR );
+		log( "Failed to allocate memory for new entity", ERROR );
 		return nullptr;
 	}
 	return newNtt;
 }
 GameEntity *CompManager::NttFactory( GameEntity *Ntt )
 { // NOTE : alloc + copy entity
+	flog( 0 );
 	if( Ntt == nullptr ){ return nullptr; }
 
 	GameEntity *newNtt = new GameEntity( *Ntt );
 
 	if( newNtt == nullptr )
 	{
-		log( "CompManager::NttFactory(3) : Failed to allocate memory for new entity", ERROR );
+		log( "Failed to allocate memory for new entity", ERROR );
 		return nullptr;
 	}
 	return newNtt;
@@ -245,6 +260,7 @@ GameEntity *CompManager::NttFactory( GameEntity *Ntt )
 
 bool CompManager::isValidNtt( GameEntity *Ntt )
 {
+	flog( 0 );
 	if( Ntt == nullptr )
 	{
 		log( "Entity is null", WARN );

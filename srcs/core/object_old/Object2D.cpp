@@ -5,7 +5,7 @@
 
 void Object2D::onAdd()
 {
-	log( "Object2D::onAdd()", DEBUG, getID() );
+	flog( getID() );
 	// _isActive = true;
 	// _isDynamic = true;
 	// _isCollide = true;
@@ -14,7 +14,7 @@ void Object2D::onAdd()
 
 void Object2D::onCpy( const Object2D &obj )
 {
-	log( "Object2D::onCpy()", DEBUG, getID() );
+	flog( getID() );
 	// _isActive = obj.getIsActive();
 	// _isDynamic = obj.getIsDynamic();
 	// _isCollide = obj.getIsCollide();
@@ -25,7 +25,7 @@ void Object2D::onCpy( const Object2D &obj )
 
 void Object2D::onDel()
 {
-	log( "Object2D::onDel()", DEBUG, getID() );
+	flog( getID() );
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
@@ -37,6 +37,7 @@ Object2D::Object2D() :
 	PhysicObject(),
 	ScriptObject()
 {
+	flog( getID() );
 	Object2D::onAdd();
 }
 
@@ -47,6 +48,7 @@ Object2D::Object2D( const Object2D &obj ) :
 	PhysicObject( obj ),
 	ScriptObject( obj )
 {
+	flog( getID() );
 	if ( this == &obj ) return;
 
 	Object2D::onAdd();
@@ -55,6 +57,7 @@ Object2D::Object2D( const Object2D &obj ) :
 
 Object2D &Object2D::operator=( const Object2D &obj )
 {
+	flog( getID() );
 	if ( this == &obj ) return *this;
 
 	BaseObject::onCpy( obj );
@@ -70,6 +73,7 @@ Object2D &Object2D::operator=( const Object2D &obj )
 
 Object2D::~Object2D() // automatic inverted call order
 {
+	flog( getID() );
 	Object2D::onDel();
 	// ScriptObject::onDel();
 	// PhysicObject::onDel();
@@ -84,7 +88,7 @@ Object2D::~Object2D() // automatic inverted call order
 
 void GenerateObject2D( Shape2 shape, Color color, bool isTangible, bool isDynamic, bool isCollide, bool isVisible, bool isActive )
 {
-	log( "GenerateObject2D()", DEBUG );
+	flog( 0 );
 
 	Object2D *obj = new Object2D; // NOTE : automatically added to the engine's object list
 

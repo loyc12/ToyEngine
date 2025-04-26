@@ -5,7 +5,7 @@
 
 void PhysicObject::onAdd()
 {
-	log( "PhysicObject::onAdd()", DEBUG, getID() );
+	flog( getID() );
 	_isDynamic = true;
 	_isCollide = true;
 
@@ -20,7 +20,7 @@ void PhysicObject::onAdd()
 
 void PhysicObject::onCpy( const PhysicObject &obj )
 {
-	log( "PhysicObject::onCpy()", DEBUG, getID() );
+	flog( getID() );
 	_isDynamic = obj.getIsDynamic();
 	_isCollide = obj.getIsCollide();
 
@@ -35,7 +35,7 @@ void PhysicObject::onCpy( const PhysicObject &obj )
 
 void PhysicObject::onDel()
 {
-	log( "PhysicObject::onDel()", DEBUG, getID() );
+	flog( getID() );
 }
 
 // ================================ CONSTRUCTORS / DESTRUCTORS
@@ -45,6 +45,7 @@ PhysicObject::PhysicObject() :
 	ShapeObject(),
 	RenderObject()
 {
+	flog( getID() );
 	PhysicObject::onAdd();
 }
 
@@ -53,6 +54,7 @@ PhysicObject::PhysicObject( const PhysicObject &obj ) :
 	ShapeObject( obj ),
 	RenderObject( obj )
 {
+	flog( getID() );
 	if ( this == &obj ) return;
 
 	PhysicObject::onAdd();
@@ -61,6 +63,7 @@ PhysicObject::PhysicObject( const PhysicObject &obj ) :
 
 PhysicObject &PhysicObject::operator=( const PhysicObject &obj )
 {
+	flog( getID() );
 	if ( this == &obj ) return *this;
 
 	BaseObject::onCpy( obj );
@@ -74,6 +77,7 @@ PhysicObject &PhysicObject::operator=( const PhysicObject &obj )
 
 PhysicObject::~PhysicObject() // automatic inverted call order
 {
+	flog( getID() );
 	PhysicObject::onDel();
 	// RenderObject::onDel();
 	// ShapeObject::onDel();
@@ -90,6 +94,7 @@ Vector2 PhysicObject::getVelocity()     const { return _vel; }
 Vector2 PhysicObject::getAcceleration() const { return _acc; }
 Vector2 PhysicObject::getForce() const
 {
+	flog( getID() );
 	Vector2 force = Vector2();
 	force.x = _mass * _acc.x;
 	force.y = _mass * _acc.y;
@@ -99,6 +104,7 @@ Vector2 PhysicObject::getForce() const
 
 Vector2 PhysicObject::getRelVelocity( const PhysicObject &obj ) const
 {
+	flog( getID() );
 	Vector2 relVel = Vector2();
 	relVel.x = _vel.x - obj.getVelocity().x;
 	relVel.y = _vel.y - obj.getVelocity().y;
@@ -106,6 +112,7 @@ Vector2 PhysicObject::getRelVelocity( const PhysicObject &obj ) const
 }
 Vector2 PhysicObject::getRelAcceleration( const PhysicObject &obj ) const
 {
+	flog( getID() );
 	Vector2 relAcc = Vector2();
 	relAcc.x = _acc.x - obj.getAcceleration().x;
 	relAcc.y = _acc.y - obj.getAcceleration().y;
@@ -113,6 +120,7 @@ Vector2 PhysicObject::getRelAcceleration( const PhysicObject &obj ) const
 }
 Vector2 PhysicObject::getRelForce( const PhysicObject &obj ) const
 {
+	flog( getID() );
 	Vector2 relForce = Vector2();
 	relForce.x = getForce().x - obj.getForce().x;
 	relForce.y = getForce().y - obj.getForce().y;
@@ -125,11 +133,13 @@ float PhysicObject::getElasticity() const { return _elas; }
 
 float PhysicObject::getDensity() const
 {
+	flog( getID() );
 	float area = max( getArea(), EPS );
 	return _mass / area;
 }
 float PhysicObject::getInertia() const
 {
+	flog( getID() );
 	float area = max( getArea(), EPS );
 	return ( _mass * area ) / 2.0f;
 }
@@ -144,18 +154,21 @@ Vector2 PhysicObject::setAcceleration( const Vector2 &acc ){ _acc = acc; return 
 
 float PhysicObject::setMass( float mass )
 {
+	flog( getID() );
 	if ( mass > 0 ){ _mass = mass; }
 	else { mass = EPS; log( "PhysicObject::setMass() : mass cannot be negative : clamping to EPS", WARN ); }
 	return mass;
 }
 float PhysicObject::setFriction( float friction )
 {
+	flog( getID() );
 	if ( friction >= 0 ){ _fric = friction; }
 	else { _fric = 0; log( "PhysicObject::setFriction() : friction cannot be negative : clamping to 0", WARN ); }
 	return _fric;
 }
 float PhysicObject::setElasticity( float elasticity )
 {
+	flog( getID() );
 	if ( elasticity >= 0 ){ _elas = elasticity; }
 	else { _elas = 0; log( "PhysicObject::setElasticity() : elasticity cannot be negative : clamping to 0", WARN ); }
 	return _elas;
@@ -172,7 +185,7 @@ float PhysicObject::moveElasticity( float delta ){ return setElasticity( _elas +
 
 Vector2 PhysicObject::applyForce( const Vector2 &force )
 {
-	log ( "PhysicObject::ApplyForce()", DEBUG, getID() );
+	flog( getID() );
 
 	Vector2 acc = Vector2();
 	acc.x = force.x / _mass;
@@ -185,7 +198,7 @@ Vector2 PhysicObject::applyForce( const Vector2 &force )
 // Applies a force in the opposite direction of the object's velocity
 Vector2 PhysicObject::applyBreak( const Vector2 &breakForce )
 {
-	log ( "PhysicObject::ApplyBreak()", DEBUG, getID() );
+	flog( getID() );
 
 	Vector2 acc = Vector2();
 	Vector2 vel = getVelocity();
@@ -207,8 +220,8 @@ Vector2 PhysicObject::applyBreak( const Vector2 &breakForce )
 
 void PhysicObject::onPhysicTick() // calculates the object's physics
 {
+	flog( getID() );
 	if ( !_isDynamic ) return;
-	log( "PhysicObject::onPhysicTick()", DEBUG, getID() );
 
 	OnPhysicCall( this ); // DEBUG ?
 
@@ -225,7 +238,6 @@ void PhysicObject::onPhysicTick() // calculates the object's physics
 
 	// apply movement
 	if ( _vel.x != 0 || _vel.y != 0 ){ movePosition( _vel ); }
-
 
 	// apply friction
 	Vector2 friction = Vector2();

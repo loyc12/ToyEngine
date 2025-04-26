@@ -31,7 +31,7 @@ class RenderObject :
 		Color getColor() const;      void setColor( Color color );
 
 	// ================================ TICK METHODS
-		bool RenderSelf();
+		bool renderSelf();
 		void onRenderTick() override; // ENTRYPOINT : (re)renders the object
 };
 
