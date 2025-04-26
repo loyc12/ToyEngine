@@ -5,15 +5,13 @@
 // called when the engine changes state
 
 void OnGameInit()
-{
-	// NOTE : do not instanciate objects here ( or do anything that requires the engine to be started )
+{ // NOTE : do not instanciate objects here ( or do anything that requires the engine to be started )
 	flog( 0 );
 }
 void OnGameStart()
-{
+{ // NOTE : this is a temporary solution, the engine should be able to load the game from a file
 	flog( 0 );
-	// NOTE : this is a temporary solution, the engine should be able to load the game from a file
-
+	/*
 	G_Point = new Object2D;
 	G_Point->setShape( Shape2::Point({ 0, 0 }));
 	G_Point->setColor( WHITE );
@@ -71,11 +69,8 @@ void OnGameStart()
 	G_Player->setShape( Shape2::Circle( { 0, 0 }, 12 ));
 	G_Player->setColor( GOLD );
 
-	G_Entity = new GameEntity;
-	G_Entity->addComponent< CompPos >();
-	G_Entity->getComponent< CompPos >().setPos({ 4, 2 });
-
 	log( "Created " + std::to_string( GNG->getObjectCount() ) + " objects", INFO );
+	*/
 }
 void OnGameResume()
 {

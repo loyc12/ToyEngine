@@ -38,7 +38,7 @@ bool CompManager::isUsedID( NttID_t id ) const
 	if( id == 0 )
 	{
 		log( "Entity ID cannot be 0", WARN );
-		return true;
+		return false;
 	}
 	if( !hasEntity( id ) )
 	{

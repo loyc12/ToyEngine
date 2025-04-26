@@ -12,7 +12,7 @@ typedef enum
 	WARN,
 	INFO,
 	DEBUG,
-	ALL,
+	FUNCT,
 } log_level_e;
 
 #define LOG_LVL DEBUG // DEBUG, INFO, WARN, ERROR ( each level excludes the previous one(s) )
@@ -32,7 +32,7 @@ typedef enum
 */
 
 #if LOG_LVL == DEBUG
-# define flog( id ) log( __FUNCTION__, ALL, id, HERE )
+# define flog( id ) log( __FUNCTION__, FUNCT, id, HERE )
 #else
 # define flog( id ) ;
 #endif

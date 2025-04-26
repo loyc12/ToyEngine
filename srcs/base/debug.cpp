@@ -25,8 +25,8 @@ bool log( ostrs msg,       log_level_e lvl, objID_t id, const char *file, int li
 bool log( string msg,      log_level_e lvl, objID_t id, const char *file, int line ) { return log( msg.c_str(), lvl, id, file, line ); }
 bool log( const char *msg, log_level_e lvl, objID_t id, const char *file, int line )
 {
-	if ( lvl > LOG_LVL )           return true;
-	if ( !SHOW_OBJ_MSG && id > 0 ) return true;
+	if ( lvl > LOG_LVL )           return false;
+	if ( !SHOW_OBJ_MSG && id > 0 ) return false;
 
 	ostream *log_out = &cout;
 
@@ -43,24 +43,26 @@ bool log( const char *msg, log_level_e lvl, objID_t id, const char *file, int li
 		else { log_out = &log_file; }
 	}
 
-	if ( LOG_TIME ) *log_out << get_time_str() << " ";
-
 	static bool use_clr = ( log_out == &cout );
+
+	if ( LOG_TIME ) *log_out << ( use_clr ? CLR_LGR : "" ) << get_time_str() << " ";
 
 	switch ( lvl )
 	{
-		case DEBUG: *log_out << ( use_clr ? CLR_BLU : "" ) << "[DEBUG] " << ( use_clr ? CLR_RST : "" ) << msg; break;
-		case INFO:  *log_out << ( use_clr ? CLR_GRN : "" ) << "[INFO]  " << ( use_clr ? CLR_RST : "" ) << msg; break;
-		case WARN:  *log_out << ( use_clr ? CLR_YEL : "" ) << "[WARN]  " << ( use_clr ? CLR_RST : "" ) << msg; break;
-		case ERROR: *log_out << ( use_clr ? CLR_RED : "" ) << "[ERROR] " << ( use_clr ? CLR_RST : "" ) << msg; break;
-		default:    *log_out << ( use_clr ? CLR_MAG : "" ) << "[?????] " << ( use_clr ? CLR_RST : "" ) << msg; break;
+		case FUNCT: *log_out << ( use_clr ? CLR_CYN : "" ) << "[FUNCT]"; break;
+		case DEBUG: *log_out << ( use_clr ? CLR_BLU : "" ) << "[DEBUG]"; break;
+		case INFO:  *log_out << ( use_clr ? CLR_GRN : "" ) << "[INFO] "; break;
+		case WARN:  *log_out << ( use_clr ? CLR_YEL : "" ) << "[WARN] "; break;
+		case ERROR: *log_out << ( use_clr ? CLR_RED : "" ) << "[ERROR]"; break;
+		default:    *log_out << ( use_clr ? CLR_MAG : "" ) << "[???]  "; break;
 	}
 
+	*log_out << ( use_clr ? CLR_LGR : "" );
+
 	if ( LOG_LINE && file != nullptr ) *log_out << " [" << file << ":" << line << "]";
+	if ( id > 0 ) *log_out << " [" << id << "]";
 
-	if ( id > 0 ) *log_out << ( use_clr ? CLR_LGR : "" ) << " [" << id << "]" << ( use_clr ? CLR_RST : "" );
-
-	*log_out << endl;
+	*log_out << ( use_clr ? CLR_RST : "" ) << " " << msg << endl;
 
 	return true;
 }

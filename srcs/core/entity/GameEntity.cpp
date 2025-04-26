@@ -20,8 +20,7 @@ bool GameEntity::delFromManager()
 }
 void GameEntity::onCpy( const GameEntity &rhs )
 {
-	log( "GameEntity::onCpy()" );
-
+	flog( _id );
 	if( this == &rhs ){ return; } // NOTE : check if the object is the same
 
 	// go through each component associated with rhs and copy their date over to thoes associated with this

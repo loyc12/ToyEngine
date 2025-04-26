@@ -18,6 +18,7 @@ void OnGameStep()
 void OnReadInputs() // only called when the game is launched
 {
 	flog( 0 );
+	/*
 	inputs_s np = GIN(); // TODO make this shit global
 
 	float moveFactor = GDTS();
@@ -33,6 +34,7 @@ void OnReadInputs() // only called when the game is launched
 
 	if ( np.SCROLL_UP   ){ GVP->scaleZoom( pow( 2.0f, moveFactor * ZOOM_SPEED )); }
 	if ( np.SCROLL_DOWN ){ GVP->scaleZoom( pow( 0.5f, moveFactor * ZOOM_SPEED )); }
+	*/
 
 }
 
@@ -43,6 +45,7 @@ void OnRunScripts() // only called when the game is launched
 
 void OnRunPhysics() // only called when the game is launched and unpaused
 {
+	/*
 	flog( 0 );
 	inputs_s np = GIN(); // TODO make this shit global
 
@@ -68,6 +71,7 @@ void OnRunPhysics() // only called when the game is launched and unpaused
 		G_Player->setVelocity( { 0.0f, 0.0f } );
 		//G_Player->setRotation( 0.0f );
 	}
+	*/
 }
 
 void OnRenderWorld() // only called when the game is launched
@@ -77,6 +81,7 @@ void OnRenderWorld() // only called when the game is launched
 
 void OnRenderUI() // only called when the game is launched
 {
+	/*
 	flog( 0 );
 	string moInfo = "Mouse  : " + to_string( ( int )GVP->getMouseWorldPos().x ) + ":" + to_string( ( int )GVP->getMouseWorldPos().y ) + " | " + to_string( ( int )GVP->getMousePos().x ) + ":" + to_string( ( int )GVP->getMousePos().y );
 	log( moInfo, INFO );
@@ -105,4 +110,5 @@ void OnRenderUI() // only called when the game is launched
 	DrawText( "TR", GetScreenWidth() - ( 2.5f * FontSizeUI ), FontSizeUI,                               FontSizeUI, WHITE );
 	DrawText( "BL", FontSizeUI,                               GetScreenHeight() - ( 2.0 * FontSizeUI ), FontSizeUI, WHITE );
 	DrawText( "BR", GetScreenWidth() - ( 2.5f * FontSizeUI ), GetScreenHeight() - ( 2.0 * FontSizeUI ), FontSizeUI, WHITE );
+ */
 }
