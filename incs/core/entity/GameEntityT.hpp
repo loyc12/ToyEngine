@@ -8,12 +8,12 @@
 extern CompManager *GCM;
 
 
-TTC CompT &GameEntity::getComponent()
+TTC CompT *GameEntity::getComponent()
 {
 	flog( _id );
 	return GCM->getComponent< CompT >( _id );
 }
-TTC CompT GameEntity::cpyComponent()
+TTC CompT *GameEntity::cpyComponent()
 {
 	flog( _id );
 	return GCM->cpyComponent< CompT >( _id );
@@ -35,20 +35,20 @@ TTC bool GameEntity::delComponent()
 	return GCM->delComponent< CompT >( _id );
 }
 
-TTC bool GameEntity::hasThatComponent( CompT &component ) const
+TTC bool GameEntity::hasThatComponent( CompT *component ) const
 {
 	flog( _id );
-	return GCM->hasThatComponent< CompT >( _id, &component );
+	return GCM->hasThatComponent< CompT >( _id, component );
 }
 TTC bool GameEntity::addThatComponent( CompT *component )
 {
 	flog( _id );
 	return GCM->addThatComponent< CompT >( _id, component );
 }
-TTC bool GameEntity::delThatComponent( CompT &component )
+TTC bool GameEntity::delThatComponent( CompT *component )
 {
 	flog( _id );
-	return GCM->delThatComponent< CompT >( _id, &component );
+	return GCM->delThatComponent< CompT >( _id, component );
 }
 
 #endif // GAME_ENTITY_TPP

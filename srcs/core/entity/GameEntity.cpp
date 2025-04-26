@@ -14,6 +14,8 @@ bool GameEntity::delFromManager()
 	flog( _id );
 	if ( _id == 0 ){ return false; } // NOTE : if the ID is 0, the entity is not supposed to be in the map
 
+	qlog( "delFromManager : Deleting entity with ID: " + std::to_string( _id ), INFO, 0 );
+
 	GCM->rmvThatEntity( this ); // TODO : make sure this doesn't lead to an infinite loop
 	_id = 0;
 	return true;
@@ -101,7 +103,7 @@ CompC_t GameEntity::getCompCount()
 	flog( _id );
 	return GCM->getCompCount( _id );
 }
-CompArr &GameEntity::getCompArr()
+CompArr *GameEntity::getCompArr()
 {
 	flog( _id );
 	return GCM->getNttCompArr( _id );

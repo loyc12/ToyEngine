@@ -36,7 +36,7 @@ class BaseComp
 	// ================================ CONSTRUCTORS / DESTRUCTORS
 		inline virtual ~BaseComp(){ onDel(); };
 
-		inline BaseComp() : _active( true ){ onAdd(); }
+		inline BaseComp() : _id( 0 ), _active( true ){ onAdd(); }
 		inline BaseComp( bool isActive, NttID_t id = 0) : _id( id ), _active( isActive ){ onAdd(); }
 
 		inline BaseComp( const BaseComp &rhs ){ *this = rhs; }

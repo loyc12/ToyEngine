@@ -29,7 +29,11 @@ class CompManager
 
 	// ================================ CORE METHODS
 		inline NttID_t getMaxID() const { return _maxID; }
-		inline NttID_t getNewID() { return     ++_maxID; }
+		inline NttID_t getNewID()
+		{
+			qlog( "getNewID : assigning new ID: " + std::to_string( _maxID + 1 ), INFO, 0 );
+			return ++_maxID;
+		}
 
 		void clearAllPairs();
 
@@ -42,18 +46,15 @@ class CompManager
 
 	// ================ CHECK METHODS
 		// NOTE : these log errors if the check fails ( returns false )
-		bool isUsedID( NttID_t id ) const; // NOTE : Checks if the ID is used in the map
-		bool isFreeID( NttID_t id ) const; // NOTE : Checks if the ID is unused in the map
+		bool isUsedNtt( GameEntity *Ntt ) const; // NOTE : Checks if the entity is is in the map
+		bool isFreeNtt( GameEntity *Ntt ) const; // NOTE : Checks if the entity is is not in the map
 
-		bool isUsedNtt( GameEntity *Ntt ) const; // NOTE : Checks if the entity is valid ( ID != 0 )
-		bool isFreeNtt( GameEntity *Ntt ) const; // NOTE : Checks if the entity is valid ( ID != 0 )
-
-		TTC bool isFreeComp( CompT *comp ) const; // NOTE : Checks if the component is valid ( ID != 0 )
-		TTC bool isUsedComp( CompT *comp ) const; // NOTE : Checks if the component is valid ( ID != 0 )
+		TTC bool isUsedComp( CompT *comp ) const; // NOTE : Checks if the component is in the map
+		TTC bool isFreeComp( CompT *comp ) const; // NOTE : Checks if the component is not in the map
 
 	// ================ ENTITY METHODS
 		NttID_t    getEntityCount();
-		GameEntity getEntity( NttID_t id );
+		GameEntity *getEntity( NttID_t id );
 
 		bool hasEntity( NttID_t id ) const;
 		bool addEntity( NttID_t id ); // NOTE : should only be called by GameEntity's AddToManager()
@@ -66,22 +67,22 @@ class CompManager
 		bool delThatEntity( GameEntity *Ntt ); // NOTE : also frees the memory of the entity
 
 		// NOTE : ( add if not there ) + copy entity and its components
-		bool cpyEntityOver( GameEntity &src, GameEntity &dst );
-		bool cpyEntityOver( GameEntity &src, NttID_t     dst );
-		bool cpyEntityOver( NttID_t     src, GameEntity &dst );
 		bool cpyEntityOver( NttID_t     src, NttID_t     dst );
+		bool cpyEntityOver( GameEntity *src, NttID_t     dst );
+		bool cpyEntityOver( NttID_t     src, GameEntity *dst );
+		bool cpyEntityOver( GameEntity *src, GameEntity *dst );
 
 		// NOTE : add + copy entity and its components
-		bool dupEntity( GameEntity &src );
 		bool dupEntity( NttID_t src );
+		bool dupEntity( GameEntity *src );
 
 	// ================ COMPONENT METHODS
-		CompArr  &getNttCompArr( GameEntity &Ntt );
-		CompArr  &getNttCompArr( NttID_t id );
+		CompArr *getNttCompArr( GameEntity *Ntt );
+		CompArr *getNttCompArr( NttID_t id );
 
 		CompC_t    getCompCount( NttID_t id ) const;
-		TTC CompT &getComponent( NttID_t id );
-		TTC CompT  cpyComponent( NttID_t id ) const;
+		TTC CompT *getComponent( NttID_t id );
+		TTC CompT *cpyComponent( NttID_t id ) const;
 
 		TTC bool hasComponent( NttID_t id ) const;
 		TTC bool addComponent( NttID_t id );
@@ -104,10 +105,6 @@ class CompManager
 		TTC static bool isValidComp( CompT *comp ); // NOTE : Checks if the component is valid ( ID != 0 )
 
 	// ================ FACTORY METHODS
-		static ECpair     &GetNullECpair(); //  NOTE : returns a null ECpair ( Ntt = nullptr, Comps = nullptr )
-		static GameEntity &GetNullEntity(); //  NOTE : returns a null entity ( ID = 0 )
-		static CompArr    &GetNullCompArr(); // NOTE : returns a null array of components ( all nullptr )
-		TTC static CompT  &GetNullComp();   //  NOTE : returns a null component of the specified type ( innactive )
 
 		TTC static CompT  *CompFactory(); //                   NOTE : allocs new component
 		TTC static CompT  *CompFactory( NttID_t id ); //       NOTE : allocs new component with given ID
@@ -123,10 +120,6 @@ class CompManager
 
 		void updateComponentByType( comp_e compType ); // NOTE : calls the onTick() method of all components of the given type in the map
 };
-
-extern ECpair			&NullECPair;
-extern GameEntity &NullNtt;
-extern CompArr    &NullCompArr;
 
 # include "./CompManagerT.hpp"
 

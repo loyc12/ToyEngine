@@ -6,45 +6,64 @@ void test_CompManager()
 {
 	flog( 0 );
 
+	GCM->addEntity( 0 );
 	GCM->addEntity( 1 );
-	GCM->addThatEntity( new GameEntity() );
+	GCM->addThatEntity( new GameEntity( false, 2 ));
+	new GameEntity();
+	GCM->addEntity( 7 );
+	new GameEntity();
+	new GameEntity( true, 5 );
 
-	GameEntity ent = GCM->getEntity( 1 );
-	ent.addThatComponent( new CompPos() );
+	qlog( "Listing entities", INFO, 0 );
+	GameEntity* ge;
+	for ( int i = 0; i < 10; ++i )
+	{
+		ge = GCM->getEntity( i );
+		if ( ge ){ qlog( "Entity ID : " + std::to_string( ge->getID() ), INFO, 0 ); }
+		else{ qlog( "No entity found with ID: " + std::to_string( i ), INFO, 0 ); }
+	}
 
-	ent = GCM->getEntity( 2 );
-	ent.addComponent< CompPos >();
-	qlog( "Entity ID: " + std::to_string( ent.getID()), INFO, 0 );
+	qlog( "Adding components to entities", INFO, 0 );
 
-	ent = GCM->getEntity( 1 );
-	CompPos pos = ent.getComponent< CompPos >();
-	qlog( "Entity ID: "     + std::to_string( ent.getID()), INFO, 0 );
-	qlog( "Component ID: "  + std::to_string( pos.getID()), INFO, 0 );
-	qlog( "Component Pos: " + std::to_string( pos.getPos().x ) + ", " + std::to_string( pos.getPos().y ), INFO, 0 );
-	ent.delComponent< CompPos >();
-	ent.addThatComponent( new CompPos( true, 1, { 2, 2 } ) );
+	GCM->getEntity( 1 )->addComponent< CompPos >();
+	GCM->getEntity( 2 )->addThatComponent( new CompPos() );
+	GCM->getEntity( 3 )->addThatComponent( new CompPos( true ));
+	GCM->addComponent< CompPos >( 5 );
+	GCM->getEntity( 7 )->addThatComponent( new CompPos( true, 8, { 1, 2 } ));
+	GCM->addThatComponent( 8, new CompPos( true, 8, { 657, 4356 } ));
 
-	pos = ent.getComponent< CompPos >();
-	qlog( "Component ID: "  + std::to_string( pos.getID()), INFO, 0 );
-	qlog( "Component Pos: " + std::to_string( pos.getPos().x ) + ", " + std::to_string( pos.getPos().y ), INFO, 0 );
+	qlog( "listing components", INFO, 0 );
+	for( int i = 0; i < 10; ++i )
+	{
+		ge = GCM->getEntity( i );
+		if ( ge )
+		{
+			qlog( "Entity ID : " + std::to_string( ge->getID() ), INFO, 0 );
 
-	ent.delEntity();
-	ent = GCM->getEntity( 1 );
+			CompPos* cp = GCM->getComponent< CompPos >( i );
 
-	GCM->delEntity( 2 );
-	ent = GCM->getEntity( 2 );
+			if ( cp )
+			{
+				qlog( "Component ID : " + std::to_string( cp->getID() ), INFO, 0 );
+				qlog( "Component Pos : " + std::to_string( cp->getPos().x ) + ", " + std::to_string( cp->getPos().y ), INFO, 0 );
+			}
+			else{ qlog( "No component found with ID: " + std::to_string( i ), INFO, 0 ); }
+
+		}
+		else{ qlog( "No entity found with ID: " + std::to_string( i ), INFO, 0 ); }
+
+	}
 }
 
 int main()
 {
 	flog( 0 );
 
-	//GNG->switchState( ES_STARTED );
-	//test_CompManager();
+	GNG->switchState( ES_STARTED );
+	test_CompManager();
 
-	GNG->switchState( ES_RUNNING );
-
-	GNG->launchLoop();
+	//GNG->switchState( ES_RUNNING );
+	//GNG->launchLoop();
 
 	GNG->switchState( ES_CLOSED );
 

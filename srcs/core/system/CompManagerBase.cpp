@@ -1,10 +1,6 @@
 #include "../../../incs/core.hpp"
 #include "../../../incs/game.hpp"
 
-ECpair     &NullECPair  = CompManager::GetNullECpair();
-GameEntity &NullNtt     = CompManager::GetNullEntity();
-CompArr    &NullCompArr = CompManager::GetNullCompArr();
-
 // ================================ CORE METHODS
 
 void CompManager::clearAllPairs() // TODO : TEST ME
@@ -26,41 +22,6 @@ void CompManager::clearAllPairs() // TODO : TEST ME
 		pair.Ntt = nullptr;
 	}
 	_NttMap.clear();
-}
-
-// ================================ ACCESSORS / MUTATORS
-
-// ================ CHECK METHODS
-
-bool CompManager::isUsedID( NttID_t id ) const
-{
-	flog( 0 );
-	if( id == 0 )
-	{
-		qlog( "isUsedID : Entity ID cannot be 0", WARN, 0 );
-		return false;
-	}
-	if( !hasEntity( id ) )
-	{
-		qlog( "isUsedID : Entity does not exist in the map", WARN, 0 );
-		return false;
-	}
-	return true;
-}
-bool CompManager::isFreeID( NttID_t id ) const
-{
-	flog( 0 );
-	if( id == 0 )
-	{
-		qlog( "isFreeID : Entity ID cannot be 0", WARN, 0 );
-		return false;
-	}
-	if( hasEntity( id ) )
-	{
-		qlog( "isFreeID : Entity already exists in the map", WARN, 0 );
-		return false;
-	}
-	return true;
 }
 
 // ================================ STATIC METHODS
@@ -89,27 +50,4 @@ bool CompManager::isValidType( comp_e type )
 		return false;
 	}
 	return true;
-}
-
-// ================================ STATIC METHODS
-
-// ================ FACTORY METHODS
-
-ECpair &CompManager::GetNullECpair()
-{
-	flog( 0 );
-	static ECpair val = { nullptr, {} };
-	return val;
-}
-GameEntity &CompManager::GetNullEntity()
-{
-	flog( 0 );
-	static GameEntity val( false, 0 );
-	return val;
-}
-CompArr &CompManager::GetNullCompArr()
-{
-	flog( 0 );
-	static CompArr val = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
-	return val;
 }

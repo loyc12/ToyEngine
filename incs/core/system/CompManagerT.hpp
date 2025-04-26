@@ -9,37 +9,12 @@
 
 // ================ CHECK METHODS
 
-TTC bool CompManager::isFreeComp( CompT *comp ) const
-{
-	flog( 0 );
-	if( comp == nullptr )
-	{
-		qlog( "isFreeComp : Component is null", DEBUG, 0 );
-		return false;
-	}
-	if( comp->getID() == 0 )
-	{
-		qlog( "isFreeComp : Component ID cannot be 0", WARN, 0 );
-		return false;
-	}
-	if( hasThatComponent( comp->getID(), comp ))
-	{
-		qlog( "isFreeComp : Component already exists in the map", DEBUG, 0 );
-		return false;
-	}
-	return true;
-}
 TTC bool CompManager::isUsedComp( CompT *comp ) const
 {
 	flog( 0 );
 	if( comp == nullptr )
 	{
 		qlog( "isUsedComp : Component is null", DEBUG, 0 );
-		return false;
-	}
-	if( comp->getID() == 0 )
-	{
-		qlog( "isUsedComp : Component ID cannot be 0", WARN, 0 );
 		return false;
 	}
 	if( !hasThatComponent( comp->getID(), comp ))
@@ -49,13 +24,29 @@ TTC bool CompManager::isUsedComp( CompT *comp ) const
 	}
 	return true;
 }
+TTC bool CompManager::isFreeComp( CompT *comp ) const
+{
+	flog( 0 );
+	if( comp == nullptr )
+	{
+		qlog( "isFreeComp : Component is null", DEBUG, 0 );
+		return false;
+	}
+	if( hasThatComponent( comp->getID(), comp ))
+	{
+		qlog( "isFreeComp : Component already exists in the map", DEBUG, 0 );
+		return false;
+	}
+	return true;
+}
+
 
 // ================ COMPONENT METHODS
 
-TTC CompT &CompManager::getComponent( NttID_t id )
+TTC CompT *CompManager::getComponent( NttID_t id )
 {
 	flog( 0 );
-	if( !isUsedID( id )){ return GetNullComp< CompT >(); } // NOTE : returns a null BaseComponent ( innactive )
+	if( !hasEntity( id )){ return nullptr; } // NOTE : returns a null BaseComponent ( innactive )
 
 	comp_e compType = CompT::getType();
 	CompArr &comps = _NttMap.find( id )->second.Comps;
@@ -63,20 +54,23 @@ TTC CompT &CompManager::getComponent( NttID_t id )
 	if( comps[ compType ] == nullptr )
 	{
 		qlog( "getComponent : Component does not exist in the array", WARN, 0 );
-		return GetNullComp< CompT >();
+		return nullptr;
 	}
-	return ( CompT& )*comps[ compType ];
+	return ( CompT* )comps[ compType ];
 }
-TTC CompT CompManager::cpyComponent( NttID_t id ) const
+TTC CompT *CompManager::cpyComponent( NttID_t id ) const
 { // NOTE : overloading of const is fine, since we are only copying the componetn via its reference, and not modifying it
 	flog( 0 );
-	return const_cast<CompManager*>( this )->getComponent< CompT >( id );
+
+	CompT* newComp;
+	&newComp = &const_cast<CompManager*>( this )->getComponent < CompT >( id );
+	return newComp;
 }
 
 TTC bool CompManager::hasComponent( NttID_t id ) const
 {
 	flog( 0 );
-	if( !isUsedID( id )){ return false; }
+	if( !hasEntity( id )){ return false; }
 
 	const CompArr &comps = _NttMap.find( id )->second.Comps;
 	return ( comps[ CompT::getType() ] != nullptr );
@@ -84,7 +78,7 @@ TTC bool CompManager::hasComponent( NttID_t id ) const
 TTC bool CompManager::addComponent( NttID_t id )
 {
 	flog( 0 );
-	if( !isUsedID( id )){ return false; }
+	if( !hasEntity( id )){ return false; }
 
 	CompArr &comps = _NttMap.find( id )->second.Comps;
 	if( comps[ CompT::getType() ] != nullptr )
@@ -99,7 +93,7 @@ TTC bool CompManager::addComponent( NttID_t id )
 TTC bool CompManager::rmvComponent( NttID_t id )
 {
 	flog( 0 );
-	if( !isUsedID( id )){ return false; }
+	if( !hasEntity( id )){ return false; }
 
 	comp_e compType = CompT::getType();
 	CompArr &comps = _NttMap.find( id )->second.Comps;
@@ -109,6 +103,9 @@ TTC bool CompManager::rmvComponent( NttID_t id )
 		qlog( "rmvComponent : Component does not exist in the array", WARN, 0 );
 		return false;
 	}
+
+	qlog( "rmvComponent : Removing component of type: " + std::to_string( compType ) + " for entity ID: " + std::to_string( id ), INFO, 0 );
+
 	comps[ compType ] = nullptr;
 
 	return true;
@@ -116,7 +113,7 @@ TTC bool CompManager::rmvComponent( NttID_t id )
 TTC bool CompManager::delComponent( NttID_t id )
 {
 	flog( 0 );
-	if( !isUsedID( id )){ return false; }
+	if( !hasEntity( id )){ return false; }
 
 	comp_e compType = CompT::getType();
 	CompArr &comps = _NttMap.find( id )->second.Comps;
@@ -125,6 +122,9 @@ TTC bool CompManager::delComponent( NttID_t id )
 		qlog( "delComponent : Component does not exist in the array", WARN, 0 );
 		return false;
 	}
+
+	qlog( "delComponent : Deleting component of type: " + std::to_string( compType ) + " for entity ID: " + std::to_string( id ), INFO, 0 );
+
 	delete comps[ compType ];
 	comps[ compType ] = nullptr;
 
@@ -136,7 +136,12 @@ TTC bool CompManager::delComponent( NttID_t id )
 TTC bool CompManager::hasThatComponent( NttID_t id, CompT *component ) const
 {
 	flog( 0 );
-	if( !isUsedID( id )){ return false; }
+	if( component == nullptr )
+	{
+		qlog( "hasThatComponent : Component is null", WARN, 0 );
+		return false;
+	}
+	if( !hasEntity( id )){ return false; }
 
 	comp_e compType = CompT::getType();
 	const CompArr &comps = _NttMap.find( id )->second.Comps;
@@ -148,7 +153,31 @@ TTC bool CompManager::hasThatComponent( NttID_t id, CompT *component ) const
 TTC bool CompManager::addThatComponent( NttID_t id, CompT *component )
 {
 	flog( 0 );
-	if( !isUsedID( id )){ return false; }
+	if ( component == nullptr )
+	{
+		qlog( "addThatComponent : Component is null", WARN, 0 );
+		return false;
+	}
+	if( id == 0 )
+	{
+		qlog( "addThatComponent : Cannot add a component to ID 0", WARN, 0 );
+		return false;
+	}
+	if( !hasEntity( id ))
+	{
+		qlog( "addThatComponent : Entity does not exist in the map", WARN, 0 );
+		return false;
+	}
+	if( hasThatComponent( id, component ))
+	{
+		qlog( "addThatComponent : Component already exists in the array", WARN, 0 );
+		return false;
+	}
+	if( id != component->getID() && component->getID() != 0 )
+	{
+		qlog( "addThatComponent : Component ID does not match entity ID", WARN, 0 );
+		return false;
+	}
 
 	comp_e compType = CompT::getType();
 	CompArr &comps = _NttMap.find( id )->second.Comps;
@@ -165,7 +194,12 @@ TTC bool CompManager::addThatComponent( NttID_t id, CompT *component )
 TTC bool CompManager::rmvThatComponent( NttID_t id, CompT *component )
 {
 	flog( 0 );
-	if( !isUsedID( id )){ return false; }
+	if( component == nullptr )
+	{
+		qlog( "hasThatComponent : Component is null", WARN, 0 );
+		return false;
+	}
+	if( !hasEntity( id )){ return false; }
 
 	comp_e compType = CompT::getType();
 	CompArr &comps = _NttMap.find( id )->second.Comps;
@@ -183,16 +217,16 @@ TTC bool CompManager::rmvThatComponent( NttID_t id, CompT *component )
 TTC bool CompManager::delThatComponent( NttID_t id, CompT *component )
 {
 	flog( 0 );
-	if( !isUsedID( id )){ return false; }
+	if( component == nullptr )
+	{
+		qlog( "hasThatComponent : Component is null", WARN, 0 );
+		return false;
+	}
+	if( !hasEntity( id )){ return false; }
+	if( !hasThatComponent( id, component )){ return false; }
 
 	comp_e compType = CompT::getType();
 	CompArr &comps = _NttMap.find( id )->second.Comps;
-
-	if( comps[ compType ] == nullptr )
-	{
-		qlog( "delThatComponent : Component does not exist in the array", WARN, 0 );
-		return false;
-	}
 
 	delete comps[ compType ];
 	comps[ compType ] = nullptr;
@@ -214,13 +248,6 @@ TTC bool CompManager::isValidComp( CompT *comp )
 }
 
 // ================ FACTORY METHODS
-
-TTC CompT &CompManager::GetNullComp()
-{
-	flog( 0 );
-	static CompT val( false, 0 );
-	return val;
-}
 
 TTC CompT *CompManager::CompFactory()
 { // NOTE : alloc new component

@@ -5,18 +5,18 @@
 
 // ================ COMPONENT METHODS
 
-CompArr &CompManager::getNttCompArr( GameEntity &Ntt ){ return getNttCompArr( Ntt.getID() ); }
-CompArr &CompManager::getNttCompArr( NttID_t id )
+CompArr *CompManager::getNttCompArr( GameEntity *Ntt ){ return getNttCompArr( Ntt->getID() ); }
+CompArr *CompManager::getNttCompArr( NttID_t id )
 {
 	flog( 0 );
-	if( !isUsedID( id )){ return NullCompArr; } // NOTE : returns a null array of components ( all nullptr )
-	return _NttMap.find( id )->second.Comps;
+	if( !hasEntity( id )){ return nullptr; } // NOTE : returns a null array of components ( all nullptr )
+	return &_NttMap.find( id )->second.Comps;
 }
 
 CompC_t CompManager::getCompCount( NttID_t id ) const
 {
 	flog( 0 );
-	if( !isUsedID( id )){ return 0; }
+	if( !hasEntity( id )){ return 0; }
 
 	const CompArr &comps = _NttMap.find( id )->second.Comps;
 

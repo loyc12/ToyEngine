@@ -38,19 +38,19 @@ class GameEntity
 		bool delEntity(); // redirects to CompManager method
 
 		CompC_t  getCompCount(); // redirects to CompManager method
-		CompArr &getCompArr(); //   redirects to CompManager method
+		CompArr *getCompArr(); //   redirects to CompManager method
 
-		TTC CompT &getComponent(); // redirects to CompManager method
-		TTC CompT  cpyComponent(); // redirects to CompManager method
+		TTC CompT *getComponent(); // redirects to CompManager method
+		TTC CompT *cpyComponent(); // redirects to CompManager method
 		TTC CompT *dupComponent(); // redirects to CompManager method
 
 		TTC bool hasComponent() const; // redirects to CompManager method
 		TTC bool addComponent(); //       redirects to CompManager method
 		TTC bool delComponent(); //       redirects to CompManager method
 
-		TTC bool hasThatComponent( CompT &component ) const; // redirects to CompManager method
+		TTC bool hasThatComponent( CompT *component ) const; // redirects to CompManager method
 		TTC bool addThatComponent( CompT *component ); //       redirects to CompManager method
-		TTC bool delThatComponent( CompT &component ); //       redirects to CompManager method
+		TTC bool delThatComponent( CompT *component ); //       redirects to CompManager method
 
 };
 typedef vector< GameEntity > NttVec;
